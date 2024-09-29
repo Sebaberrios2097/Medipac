@@ -1,7 +1,18 @@
+using Medipac.Context;
+using Medipac.Framework;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+DependencyRegistration.RegisterDependencies(builder.Services);
+
+builder.Services.AddDbContext<DbMedipac>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MediappCon"));
+});
 
 var app = builder.Build();
 
