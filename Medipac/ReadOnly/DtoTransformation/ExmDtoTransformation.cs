@@ -6,7 +6,7 @@ namespace Medipac.ReadOnly.DtoTransformation
     public static class ExmDtoTransformation
     {
         // Transformación modelo ExmCategoriaExamen
-        public static DtoExmCategoriaExamen ToDto(ExmCategoriaExamen original)
+        public static DtoExmCategoriaExamen ToDto(this ExmCategoriaExamen original)
         {
             return new()
             {
@@ -15,7 +15,7 @@ namespace Medipac.ReadOnly.DtoTransformation
                 NombreCategoria = original.NombreCategoria,
             };
         }
-        public static ExmCategoriaExamen ToOriginal(DtoExmCategoriaExamen dto)
+        public static ExmCategoriaExamen ToOriginal(this DtoExmCategoriaExamen dto)
         {
             return new()
             {
@@ -26,7 +26,7 @@ namespace Medipac.ReadOnly.DtoTransformation
         }
 
         // Transformación modelo ExmTipoExamen
-        public static DtoExmTipoExamen ToDto(ExmTipoExamen original)
+        public static DtoExmTipoExamen ToDto(this ExmTipoExamen original)
         {
             return new()
             {
@@ -37,7 +37,7 @@ namespace Medipac.ReadOnly.DtoTransformation
                 TextoAdicional = original.TextoAdicional
             };
         }
-        public static ExmTipoExamen ToDto(DtoExmTipoExamen dto)
+        public static ExmTipoExamen ToDto(this DtoExmTipoExamen dto)
         {
             return new()
             {

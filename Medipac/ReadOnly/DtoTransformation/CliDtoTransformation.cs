@@ -6,7 +6,7 @@ namespace Medipac.ReadOnly.DtoTransformation
     public static class CliDtoTransformation
     {
         // Conversión modelo CliExamenesSolicitados
-        public static DtoCliExamenesSolicitados ToDto(CliExamenesSolicitados original)
+        public static DtoCliExamenesSolicitados ToDto(this CliExamenesSolicitados original)
         {
             return new()
             {
@@ -18,7 +18,7 @@ namespace Medipac.ReadOnly.DtoTransformation
                 Estado = original.Estado,
             };
         }
-        public static CliExamenesSolicitados ToOriginal(DtoCliExamenesSolicitados dto)
+        public static CliExamenesSolicitados ToOriginal(this DtoCliExamenesSolicitados dto)
         {
             return new()
             {
@@ -32,7 +32,7 @@ namespace Medipac.ReadOnly.DtoTransformation
         }
 
         // Conversión modelo CliHistorialPaciente
-        public static DtoCliHistorialPaciente ToDto(CliHistorialPaciente original)
+        public static DtoCliHistorialPaciente ToDto(this CliHistorialPaciente original)
         {
             return new()
             {
@@ -45,7 +45,7 @@ namespace Medipac.ReadOnly.DtoTransformation
                 Historial = original.Historial,
             };
         }
-        public static CliHistorialPaciente ToDto(DtoCliHistorialPaciente dto)
+        public static CliHistorialPaciente ToDto(this DtoCliHistorialPaciente dto)
         {
             return new()
             {
@@ -60,7 +60,7 @@ namespace Medipac.ReadOnly.DtoTransformation
         }
 
         // Conversión modelo CliMedico
-        public static DtoCliMedico ToDto(CliMedico original)
+        public static DtoCliMedico ToDto(this CliMedico original)
         {
             return new()
             {
@@ -74,7 +74,7 @@ namespace Medipac.ReadOnly.DtoTransformation
                 Estado = original.Estado
             };
         }
-        public static CliMedico ToOriginal(DtoCliMedico dto)
+        public static CliMedico ToOriginal(this DtoCliMedico dto)
         {
             return new()
             {
@@ -90,7 +90,7 @@ namespace Medipac.ReadOnly.DtoTransformation
         }
 
         // Conversión modelo CliPacientes
-        public static DtoCliPacientes ToDto(CliPacientes original)
+        public static DtoCliPacientes ToDto(this CliPacientes original)
         {
             return new()
             {
@@ -106,7 +106,7 @@ namespace Medipac.ReadOnly.DtoTransformation
             };
         }
 
-        public static CliPacientes ToOriginal(DtoCliPacientes dto)
+        public static CliPacientes ToOriginal(this DtoCliPacientes dto)
         {
             return new()
             {
@@ -123,7 +123,7 @@ namespace Medipac.ReadOnly.DtoTransformation
         }
 
         // Conversión modelo CliRecetaPaciente
-        public static DtoCliRecetaPaciente ToDto(CliRecetaPaciente original)
+        public static DtoCliRecetaPaciente ToDto(this CliRecetaPaciente original)
         {
             return new()
             {
@@ -133,7 +133,7 @@ namespace Medipac.ReadOnly.DtoTransformation
                 Estado = original.Estado
             };
         }
-        public static CliRecetaPaciente ToOriginal(DtoCliRecetaPaciente dto)
+        public static CliRecetaPaciente ToOriginal(this DtoCliRecetaPaciente dto)
         {
             return new()
             {
@@ -145,7 +145,7 @@ namespace Medipac.ReadOnly.DtoTransformation
         }
 
         // Conversión modelo CliSolicitudExamen
-        public static DtoCliSolicitudExamen ToDto(CliSolicitudExamen original)
+        public static DtoCliSolicitudExamen ToDto(this CliSolicitudExamen original)
         {
             return new()
             {
@@ -155,7 +155,7 @@ namespace Medipac.ReadOnly.DtoTransformation
                 FechaSolicitud = original.FechaSolicitud,
             };
         }
-        public static CliSolicitudExamen ToOriginal(DtoCliSolicitudExamen dto)
+        public static CliSolicitudExamen ToOriginal(this DtoCliSolicitudExamen dto)
         {
             return new()
             {
