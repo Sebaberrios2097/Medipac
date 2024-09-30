@@ -5,9 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Medipac.Data.Repositories
 {
-    public class ResConvenioRepository(DbMedipac db) : IResConvenioRepository
+    public class ResConvenioRepository : IResConvenioRepository
     {
-        public readonly DbMedipac db = db;
+        private readonly DbMedipac db;
+
+        public ResConvenioRepository(DbMedipac db)
+        {
+            this.db = db;
+        }
 
         public async Task<List<ResConvenio>> GetAll()
         {
@@ -15,7 +20,7 @@ namespace Medipac.Data.Repositories
         }
 
         public async Task<ResConvenio> GetById(int id) => await db.ResConvenio
-            .FirstOrDefaultAsync(a => a.IdConvenio == id) ?? new ResConvenio();
+            .FirstOrDefaultAsync(a => a.Id == id) ?? new ResConvenio();
 
         public async Task<ResConvenio> Add(ResConvenio resconvenio)
         {

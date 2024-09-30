@@ -26,6 +26,9 @@ public partial class ComUsuario
     public DateTime FechaCreacion { get; set; }
 
     [InverseProperty("IdUsuarioNavigation")]
+    public virtual ICollection<AdmAdmin> AdmAdmin { get; set; } = new List<AdmAdmin>();
+
+    [InverseProperty("IdUsuarioNavigation")]
     public virtual ICollection<CliMedico> CliMedico { get; set; } = new List<CliMedico>();
 
     [InverseProperty("IdUsuarioNavigation")]

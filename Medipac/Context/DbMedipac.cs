@@ -16,6 +16,12 @@ public partial class DbMedipac : DbContext
     {
     }
 
+    public virtual DbSet<AdmAdmin> AdmAdmin { get; set; }
+
+    public virtual DbSet<AdmCarruselNoticias> AdmCarruselNoticias { get; set; }
+
+    public virtual DbSet<AdmNoticias> AdmNoticias { get; set; }
+
     public virtual DbSet<CliExamenesSolicitados> CliExamenesSolicitados { get; set; }
 
     public virtual DbSet<CliHistorialPaciente> CliHistorialPaciente { get; set; }
@@ -58,10 +64,31 @@ public partial class DbMedipac : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server = medipac.database.windows.net; Database = medipac; User Id = mediadmin; Password = Capstone321; TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Server = medipac.database.windows.net; Database = medipac; User Id = mediadmin; Password = Capstone321; TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AdmAdmin>(entity =>
+        {
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.AdmAdmin)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ADM_Admin_COM_Usuario");
+        });
+
+        modelBuilder.Entity<AdmCarruselNoticias>(entity =>
+        {
+            entity.HasOne(d => d.IdNoticiaNavigation).WithMany(p => p.AdmCarruselNoticias)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ADM_Carrusel_Noticias_ADM_Noticias");
+        });
+
+        modelBuilder.Entity<AdmNoticias>(entity =>
+        {
+            entity.HasOne(d => d.IdAdminNavigation).WithMany(p => p.AdmNoticias)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ADM_Noticias_ADM_Admin");
+        });
+
         modelBuilder.Entity<CliExamenesSolicitados>(entity =>
         {
             entity.Property(e => e.Estado).HasComment("Columna que representa el borrado lógico del registro.");
