@@ -3,7 +3,7 @@ using Medipac.Models;
 
 namespace Medipac.ReadOnly.DtoTransformation
 {
-    public static class ADMDtoTransformation
+    public static class AdmDtoTransformation
     {
         // Transformación modelo AdmAdmin
         public static DtoAdmAdmin ToDto(this AdmAdmin original)
