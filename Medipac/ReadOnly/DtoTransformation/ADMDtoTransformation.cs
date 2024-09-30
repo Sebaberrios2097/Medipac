@@ -1,7 +1,7 @@
 ﻿using Medipac.Data.DTO;
 using Medipac.Models;
 
-namespace Medipac.ReadOnly
+namespace Medipac.ReadOnly.DtoTransformation
 {
     public static class ADMDtoTransformation
     {
