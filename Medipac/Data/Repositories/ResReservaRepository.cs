@@ -20,7 +20,7 @@ namespace Medipac.Data.Repositories
         }
 
         public async Task<ResReserva> GetById(int id) => await db.ResReserva
-            .FirstOrDefaultAsync(a => a.Id == id) ?? new ResReserva();
+            .FirstOrDefaultAsync(a => a.IdReserva == id) ?? new ResReserva();
 
         public async Task<ResReserva> Add(ResReserva resreserva)
         {

@@ -20,7 +20,7 @@ namespace Medipac.Data.Repositories
         }
 
         public async Task<ResAgenda> GetById(int id) => await db.ResAgenda
-            .FirstOrDefaultAsync(a => a.Id == id) ?? new ResAgenda();
+            .FirstOrDefaultAsync(a => a.IdAgenda == id) ?? new ResAgenda();
 
         public async Task<ResAgenda> Add(ResAgenda resagenda)
         {

@@ -20,7 +20,7 @@ namespace Medipac.Data.Repositories
         }
 
         public async Task<CliPacientes> GetById(int id) => await db.CliPacientes
-            .FirstOrDefaultAsync(a => a.Id == id) ?? new CliPacientes();
+            .FirstOrDefaultAsync(a => a.IdPaciente == id) ?? new CliPacientes();
 
         public async Task<CliPacientes> Add(CliPacientes clipacientes)
         {

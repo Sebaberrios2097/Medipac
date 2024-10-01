@@ -20,7 +20,7 @@ namespace Medipac.Data.Repositories
         }
 
         public async Task<AdmNoticias> GetById(int id) => await db.AdmNoticias
-            .FirstOrDefaultAsync(a => a.Id == id) ?? new AdmNoticias();
+            .FirstOrDefaultAsync(a => a.IdNoticia == id) ?? new AdmNoticias();
 
         public async Task<AdmNoticias> Add(AdmNoticias admnoticias)
         {
