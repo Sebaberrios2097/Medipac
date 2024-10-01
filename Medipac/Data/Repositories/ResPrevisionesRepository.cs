@@ -20,7 +20,7 @@ namespace Medipac.Data.Repositories
         }
 
         public async Task<ResPrevisiones> GetById(int id) => await db.ResPrevisiones
-            .FirstOrDefaultAsync(a => a.Id == id) ?? new ResPrevisiones();
+            .FirstOrDefaultAsync(a => a.IdPrevision == id) ?? new ResPrevisiones();
 
         public async Task<ResPrevisiones> Add(ResPrevisiones resprevisiones)
         {

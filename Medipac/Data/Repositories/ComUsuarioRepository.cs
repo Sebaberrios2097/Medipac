@@ -20,7 +20,7 @@ namespace Medipac.Data.Repositories
         }
 
         public async Task<ComUsuario> GetById(int id) => await db.ComUsuario
-            .FirstOrDefaultAsync(a => a.Id == id) ?? new ComUsuario();
+            .FirstOrDefaultAsync(a => a.IdUsuario == id) ?? new ComUsuario();
 
         public async Task<ComUsuario> Add(ComUsuario comusuario)
         {

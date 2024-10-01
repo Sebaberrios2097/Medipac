@@ -20,7 +20,7 @@ namespace Medipac.Data.Repositories
         }
 
         public async Task<AdmCarruselNoticias> GetById(int id) => await db.AdmCarruselNoticias
-            .FirstOrDefaultAsync(a => a.Id == id) ?? new AdmCarruselNoticias();
+            .FirstOrDefaultAsync(a => a.IdCarruselNoticias == id) ?? new AdmCarruselNoticias();
 
         public async Task<AdmCarruselNoticias> Add(AdmCarruselNoticias admcarruselnoticias)
         {

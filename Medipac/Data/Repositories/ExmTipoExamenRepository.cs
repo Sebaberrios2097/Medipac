@@ -20,7 +20,7 @@ namespace Medipac.Data.Repositories
         }
 
         public async Task<ExmTipoExamen> GetById(int id) => await db.ExmTipoExamen
-            .FirstOrDefaultAsync(a => a.Id == id) ?? new ExmTipoExamen();
+            .FirstOrDefaultAsync(a => a.IdTipoExamen == id) ?? new ExmTipoExamen();
 
         public async Task<ExmTipoExamen> Add(ExmTipoExamen exmtipoexamen)
         {
