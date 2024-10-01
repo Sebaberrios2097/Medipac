@@ -37,7 +37,7 @@ namespace Medipac.ReadOnly.DtoTransformation
                 TextoAdicional = original.TextoAdicional
             };
         }
-        public static ExmTipoExamen ToDto(this DtoExmTipoExamen dto)
+        public static ExmTipoExamen ToOriginal(this DtoExmTipoExamen dto)
         {
             return new()
             {
