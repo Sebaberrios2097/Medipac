@@ -1,5 +1,6 @@
 using Medipac.Data.DTO;
 using Medipac.Data.Interfaces;
+using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Medipac.Controllers
@@ -63,7 +64,7 @@ namespace Medipac.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DtoComEstadosUsuario dto)
         {
-            if (id != dto.Id) { return NotFound(); }
+            if (id != dto.IdEstado) { return NotFound(); }
 
             comestadosusuario.Update(dto.ToOriginal());
             _ = await comestadosusuario.Save();
@@ -86,7 +87,7 @@ namespace Medipac.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var comestadosusuario = await comestadosusuario.DeleteById(id);
+            var Query = await comestadosusuario.DeleteById(id);
             var Result = await comestadosusuario.Save();
 
             return RedirectToAction(nameof(Index));

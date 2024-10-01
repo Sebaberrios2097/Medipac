@@ -1,3 +1,4 @@
+using Medipac.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,5 +20,10 @@ namespace Medipac.Data.DTO
         [Column("Fecha_Historial", TypeName = "datetime")]
         public DateTime FechaHistorial { get; set; }
         public bool Estado { get; set; }
+
+        internal CliHistorialPaciente ToOriginal()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
