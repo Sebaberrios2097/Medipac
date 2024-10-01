@@ -64,7 +64,7 @@ namespace Medipac.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DtoLogUsuario dto)
         {
-            if (id != dto.IdLogUsuario { return NotFound(); }
+            if (id != dto.IdLogUsuario ){ return NotFound(); }
 
             logusuario.Update(dto.ToOriginal());
             _ = await logusuario.Save();
