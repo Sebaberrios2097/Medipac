@@ -1,5 +1,5 @@
-using Medipac.Data.DTO;
-using Medipac.Data.Interfaces;
+using Medipac.Areas.EXM.Data.DTO;
+using Medipac.Areas.EXM.Data.Interfaces;
 using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Mvc;
 

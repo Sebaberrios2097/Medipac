@@ -1,9 +1,9 @@
 using Medipac.Models;
 using Medipac.Context;
-using Medipac.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Medipac.Areas.COM.Data.Interfaces;
 
-namespace Medipac.Data.Repositories
+namespace Medipac.Areas.COM.Data.Repositories
 {
     public class LogUsuarioRepository : ILogUsuarioRepository
     {

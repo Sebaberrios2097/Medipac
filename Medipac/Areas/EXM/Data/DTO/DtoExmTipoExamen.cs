@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Medipac.Data.DTO
+namespace Medipac.Areas.EXM.Data.DTO
 {
     public class DtoExmTipoExamen
     {

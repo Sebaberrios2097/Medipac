@@ -1,4 +1,4 @@
-﻿using Medipac.Data.DTO;
+﻿using Medipac.Areas.COM.Data.DTO;
 using Medipac.Models;
 
 namespace Medipac.ReadOnly.DtoTransformation

@@ -1,6 +1,6 @@
 using Medipac.Models;
 
-namespace Medipac.Data.Interfaces
+namespace Medipac.Areas.EXM.Data.Interfaces
 {
     public interface IExmCategoriaExamenRepository
     {

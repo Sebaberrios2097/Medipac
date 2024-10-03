@@ -1,6 +1,6 @@
 using Medipac.Models;
 
-namespace Medipac.Data.Interfaces
+namespace Medipac.Areas.COM.Data.Interfaces
 {
     public interface ILogUsuarioRepository
     {

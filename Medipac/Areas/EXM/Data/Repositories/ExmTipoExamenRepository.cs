@@ -1,9 +1,9 @@
 using Medipac.Models;
 using Medipac.Context;
-using Medipac.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Medipac.Areas.EXM.Data.Interfaces;
 
-namespace Medipac.Data.Repositories
+namespace Medipac.Areas.EXM.Data.Repositories
 {
     public class ExmTipoExamenRepository : IExmTipoExamenRepository
     {

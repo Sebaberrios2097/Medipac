@@ -29,9 +29,6 @@
     <Folder Include="Areas\CLI\Data\" />
     <Folder Include="Areas\CLI\Views\" />
     <Folder Include="Areas\COM\Views\" />
-    <Folder Include="Areas\EXM\Data\DTO\" />
-    <Folder Include="Areas\EXM\Data\Interfaces\" />
-    <Folder Include="Areas\EXM\Data\Repositories\" />
     <Folder Include="Areas\EXM\Views\" />
     <Folder Include="Areas\RES\Views\" />
   </ItemGroup>
