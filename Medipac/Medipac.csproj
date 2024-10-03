@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\CLI\Models\**" />
+    <Content Remove="Areas\CLI\Models\**" />
+    <EmbeddedResource Remove="Areas\CLI\Models\**" />
+    <None Remove="Areas\CLI\Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
@@ -15,6 +22,18 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\CLI\Controllers\" />
+    <Folder Include="Areas\CLI\Data\" />
+    <Folder Include="Areas\CLI\Views\" />
+    <Folder Include="Areas\COM\Views\" />
+    <Folder Include="Areas\EXM\Data\DTO\" />
+    <Folder Include="Areas\EXM\Data\Interfaces\" />
+    <Folder Include="Areas\EXM\Data\Repositories\" />
+    <Folder Include="Areas\EXM\Views\" />
+    <Folder Include="Areas\RES\Views\" />
   </ItemGroup>
 
 </Project>
