@@ -1,4 +1,4 @@
-﻿using Medipac.Data.DTO;
+﻿using Medipac.Areas.CLI.Data.DTO;
 using Medipac.Models;
 
 namespace Medipac.ReadOnly.DtoTransformation
@@ -66,6 +66,8 @@ namespace Medipac.ReadOnly.DtoTransformation
             {
                 IdMedico = original.IdMedico,
                 IdUsuario = original.IdUsuario,
+                Rut = original.Rut,
+                Dv = original.Dv,
                 Nombres = original.Nombres,
                 ApPaterno = original.ApPaterno,
                 ApMaterno = original.ApMaterno,
@@ -80,6 +82,8 @@ namespace Medipac.ReadOnly.DtoTransformation
             {
                 IdMedico = dto.IdMedico,
                 IdUsuario = dto.IdUsuario,
+                Rut = dto.Rut,
+                Dv = dto.Dv,
                 Nombres = dto.Nombres,
                 ApPaterno = dto.ApPaterno,
                 ApMaterno = dto.ApMaterno,

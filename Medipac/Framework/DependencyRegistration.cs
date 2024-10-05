@@ -1,5 +1,8 @@
-using Microsoft.Extensions.DependencyInjection;
-using Medipac.Data.Interfaces;
+using Medipac.Areas.ADM.Data.Interfaces;
+using Medipac.Areas.CLI.Data.Interfaces;
+using Medipac.Areas.COM.Data.Interfaces;
+using Medipac.Areas.EXM.Data.Interfaces;
+using Medipac.Areas.RES.Data.Interfaces;
 using Medipac.Data.Repositories;
 
 namespace Medipac.Framework
@@ -27,7 +30,9 @@ namespace Medipac.Framework
             services.AddScoped<ICliMedicoRepository, CliMedicoRepository>();
             services.AddScoped<ICliRecetaPacienteRepository, CliRecetaPacienteRepository>();
             services.AddScoped<IComEstadosUsuarioRepository, ComEstadosUsuarioRepository>();
-            services.AddScoped<ICliSolicitudExamenRepository, CliSolicitudExamenRepository>();
+            services.AddScoped<IAdmAdminRepository, AdmAdminRepository>();
+            services.AddScoped<IAdmCarruselNoticiasRepository, AdmCarruselNoticiasRepository>();
+            services.AddScoped<IAdmNoticiasRepository, AdmNoticiasRepository>();
         }
     }
 }

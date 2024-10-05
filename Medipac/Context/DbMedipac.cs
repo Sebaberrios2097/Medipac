@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Medipac.Models;
+﻿using Medipac.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Medipac.Context;

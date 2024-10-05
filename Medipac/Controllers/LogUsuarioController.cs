@@ -1,5 +1,5 @@
-using Medipac.Data.DTO;
-using Medipac.Data.Interfaces;
+using Medipac.Areas.COM.Data.DTO;
+using Medipac.Areas.COM.Data.Interfaces;
 using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -64,7 +64,7 @@ namespace Medipac.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DtoLogUsuario dto)
         {
-            if (id != dto.IdLogUsuario { return NotFound(); }
+            if (id != dto.IdLogUsuario) { return NotFound(); }
 
             logusuario.Update(dto.ToOriginal());
             _ = await logusuario.Save();

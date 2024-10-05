@@ -1,0 +1,143 @@
+﻿<!-- Modal Redireccion -->
+<div class="modal fade" id="Mdl_Mensaje" tabindex="-1" role="dialog" aria-labelledby="Mdl_Redireccion" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header bg-pag">
+                <h5 class="modal-title text-white" id="MdlR_Titulo"></h5>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div id=""> <p id="MdlR_Mensaje"></p></div>
+                <div class="row justify-content-end">
+                    <div class="col-3">
+                        <button type="button" id="MdlR_Lnk_Cerrar" class="btn btn-light w-100" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" id="MdlR_Lnk_Redireccion" data-url="" class="btn btn-light w-100" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Mdl_General" tabindex="-1" role="dialog" aria-labelledby="Mdl_General">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header bg-pag">
+                <h5 class="modal-title text-white" id="MdlG_Titulo"></h5>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div id="MdlG_body"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade " id="Mdl_GeneralXL" tabindex="-1" role="dialog" aria-labelledby="Mdl_GeneralXL">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header bg-pag">
+                <h5 class="modal-title text-white" id="MdlG_TituloXL"></h5>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div id="MdlG_bodyXL"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var Div_Error = "<div class='col-md-10 col-md-offset-1'><h1>&nbsp;</h1><div class='alert alert-danger'id='Error_Carga'><h4><span class='fa fa-exclamation-triangle'></span>&nbsp;Ha sucedido un error</h4><h5>Se produjo un error en la carga de datos, por favor intente cargar nuevamente</h5></div></div>";
+    var Div_Cargando = "<div class='progress mt-3'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-label='Animated striped example' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 100%'>Cargando...</div></div>";
+
+    function ModalGeneral(titulo, url) {
+        document.getElementById("MdlG_Titulo").innerHTML = titulo;
+        $('#Mdl_General').modal('show');
+        CargarDiv("MdlG_body", url);
+    }
+
+    function ModalGeneralXL(titulo, url) {
+        document.getElementById("MdlG_TituloXL").innerHTML = titulo;
+        $('#Mdl_GeneralXL').modal('show');
+        CargarDiv("MdlG_bodyXL", url);
+    }
+
+    function Resultado(response, divload, urldivload) {
+        $("#Mdl_General").modal("hide");
+        $("#Mdl_GeneralXL").modal("hide");
+        RespuestaModal(response);
+        if (response.operacion) { CargarDiv(divload, urldivload); }
+
+    }
+
+    function RespuestaModal(response) {
+        var Icono = "";
+        $("#MdlR_Lnk_Redireccion").hide();
+        $("#MdlR_Lnk_Cerrar").hide();
+        Redireccion = false;
+        switch (response.tipo) {
+            case "ok":
+                Icono = "<span class='fa fa-check'></span>&nbsp;Operación Exitosa";
+                break;
+            case "E":
+                Icono = "<span class='fa fa-times'></span>&nbsp;Error";
+                break;
+            case "A":
+                Icono = "<span class='fa fa-exclamation-triangle'></span>&nbsp;Advertencia";
+                break;
+            case "R":
+                Icono = "<span class='fa fa-check'></span>&nbsp;Operación Exitosa";
+                Redireccion = true;
+            default:
+                break;
+        }
+
+        if (Redireccion) {
+            document.getElementById("MdlR_Titulo").innerHTML = Icono;
+            document.getElementById("MdlR_Mensaje").innerHTML = response.mensaje;
+            $("#MdlR_Lnk_Redireccion").attr("data-url", response.url);
+            $("#MdlR_Lnk_Redireccion").show();
+            $('#Mdl_Mensaje').modal('show');
+
+        } else {
+            document.getElementById("MdlR_Titulo").innerHTML = Icono;
+            document.getElementById("MdlR_Mensaje").innerHTML = response.mensaje;
+            $("#MdlR_Lnk_Cerrar").show();
+            $("#Mdl_Mensaje").modal('show');
+        }
+    }
+
+    function Modal_Molesto() {
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    }
+
+    function Bloquea_Boton() {
+        $(".btn-loading").attr("disabled", "disabled");
+        $(".btn-disabled").attr("disabled", "disabled");
+        $(".btn-loading").attr("data-nombre", $(".btn-loading").attr("value"));
+        $(".btn-loading").attr("value", "Cargando...");
+    }
+
+    function CargarDiv(div, url) {
+        $("#" + div).html(Div_Cargando);
+        $("#" + div).load(url, function (responseTxt, statusTxt, xhr) {
+            if (statusTxt == "error")
+                $("#" + div).html(Div_Error);
+        });
+    }
+
+    $("#MdlR_Lnk_Redireccion").click(function () {
+        var id = $(this).data("url");
+        window.location.href = id;
+    });
+</script>
+

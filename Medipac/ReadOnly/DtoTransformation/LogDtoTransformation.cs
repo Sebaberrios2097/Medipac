@@ -1,4 +1,4 @@
-﻿using Medipac.Data.DTO;
+﻿using Medipac.Areas.COM.Data.DTO;
 using Medipac.Models;
 
 namespace Medipac.ReadOnly.DtoTransformation
@@ -6,7 +6,7 @@ namespace Medipac.ReadOnly.DtoTransformation
     public static class LogDtoTransformation
     {
         // Transformación modelo LogUsuario
-        public static DtoLogUsuario ToDto(this LogUsuario original) 
+        public static DtoLogUsuario ToDto(this LogUsuario original)
         {
 
             return new()
