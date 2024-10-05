@@ -1,5 +1,9 @@
 using Medipac.Areas.CLI.Data.DTO;
 using Medipac.Areas.CLI.Data.Interfaces;
+using Medipac.Areas.COM.Data.DTO;
+using Medipac.Areas.COM.Data.Interfaces;
+using Medipac.Models;
+using Medipac.ReadOnly;
 using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +13,13 @@ namespace Medipac.Areas.CLI.Controllers
     public class CliMedicoController : Controller
     {
         private readonly ICliMedicoRepository climedico;
+        private readonly IComUsuarioRepository comUsuario;
 
-        public CliMedicoController(ICliMedicoRepository climedico)
+        public CliMedicoController(ICliMedicoRepository climedico,
+                                   IComUsuarioRepository comUsuario)
         {
             this.climedico = climedico;
+            this.comUsuario = comUsuario;
         }
 
         public async Task<ActionResult> Index()
@@ -29,15 +36,33 @@ namespace Medipac.Areas.CLI.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            ViewBag.Estado = DropDownList.Estado;
+
+            return PartialView();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(DtoCliMedico Dto)
         {
+            ComUsuario newUsuario = new()
+            {
+                Usuario = $"{Dto.Nombres[..3].ToLower()}.{Dto.ApPaterno.ToLower()}",
+                Password = Dto.Rut.ToString(),
+                FechaCreacion = DateTime.Now,
+                IdUsuario = Dto.IdUsuario,
+                IdEstado = 2
+
+            };
+
+            var Query2 = await comUsuario.Add(newUsuario);
+            var usuarioMedico = await comUsuario.GetById(newUsuario.IdUsuario);
+            Dto.IdUsuario = usuarioMedico.IdUsuario;
+            Dto.Dv = GetFunctions.CalcularDvRut(Dto.Rut);
+
             var Query = await climedico.Add(Dto.ToOriginal());
             var Result = await climedico.Save();
+
 
             if (Result > 0)
             {

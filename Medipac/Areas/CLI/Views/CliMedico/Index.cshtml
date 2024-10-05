@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Medipac.Areas.CLI.Data.DTO.DtoCliMedico>
+
+@{
+    ViewData["Tittle"] = "Lista de Médicos";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+
+<h1 class="mt-3">@ViewData["Tittle"]</h1>
+<hr />
+<div class="card">
+    <div class="card-header">
+        <a id="BtnAgregar" class="btn btn-success">Agregar Médico</a>
+        <a class="btn btn-primary">Volver</a>
+    </div>
+    <div class="card-body">
+        <table id="myTable" class="table">
+            <thead>
+                <tr>
+
+                    <th>Nombres</th>
+                    <th>Apellido Paterno</th>
+                    <th>Apellido Materno</th>
+                    <th>Rut</th>
+                    <th>Celular</th>
+                    <th>Correo</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.IdUsuario</td>
+                        <td>@item.Nombres</td>
+                        <td>@item.ApPaterno</td>
+                        <td>@item.ApMaterno</td>
+                        <td>@item.Rut</td>
+                        <td>@item.Fono</td>
+                        <td>@item.Correo</td>
+                        <td>@item.Estado</td>
+                        <td>
+                            <a href="javascript:void(0);"
+                               onclick="ModalGeneralXL('Editar Proceso', '@Url.Action("Edit", "CliMedico", new { id = @item.IdMedico })');"
+                               class="btn btn-primary btn-sm me-2">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.IdMedico" class="btn btn-info btn-sm me-2"><i class="bi bi-list-columns-reverse"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+    </div>
+</div>
+
+<script>
+    var table = new DataTable('#myTable', {
+        language: {
+            url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-CL.json',
+        },
+    });
+    $("#BtnAgregar").click(function () {
+
+        var idMedico = '@ViewData["IdMedico"]';
+        ModalGeneral('Crear Proceso', '@Url.Action("Create", "CliMedico")' + '?idMedico=' + idMedico);
+    });
+</script>
