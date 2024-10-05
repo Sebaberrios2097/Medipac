@@ -91,6 +91,8 @@ namespace Medipac.Areas.CLI.Controllers
                 return NotFound();
             }
 
+            ViewBag.Estado = DropDownList.Estado;
+
             var Query = await climedico.GetById(id);
 
             if (Query == null) { return NotFound(); }

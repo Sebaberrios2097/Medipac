@@ -1,0 +1,89 @@
+﻿@model Medipac.Areas.CLI.Data.DTO.DtoCliMedico
+
+@using (Html.BeginForm("Edit", "CliMedico"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.IdMedico)
+
+    <div class="modal-body">
+        <div class="mt-3">
+            <h5>Rut sin dígito verificador</h5>
+            @Html.EditorFor(model => model.Rut, new
+                {
+                    htmlAttributes = new
+                    {
+                        @class = "form-control"
+                    }
+                })
+        </div>
+        <div class="mt-3">
+            <h5>Nombres</h5>
+            @Html.EditorFor(model => model.Nombres, new
+                {
+                    htmlAttributes = new
+                    {
+                        @class = "form-control"
+                    }
+                })
+        </div>
+        <div class="mt-3">
+            <h5>Apellido Paterno</h5>
+            @Html.EditorFor(model => model.ApPaterno, new
+                {
+                    htmlAttributes = new
+                    {
+                        @class = "form-control"
+                    }
+                })
+        </div>
+        <div class="mt-3">
+            <h5>Apellido Materno</h5>
+            @Html.EditorFor(model => model.ApMaterno, new
+                {
+                    htmlAttributes = new
+                    {
+                        @class = "form-control"
+                    }
+                })
+        </div>
+        <div class="mt-3">
+            <h5>Teléfono</h5>
+            @Html.EditorFor(model => model.Fono, new
+                {
+                    htmlAttributes = new
+                    {
+                        @class = "form-control"
+                    }
+                })
+        </div>
+        <div class="mt-3">
+            <h5>Correo</h5>
+            @Html.EditorFor(model => model.Correo, new
+                {
+                    htmlAttributes = new
+                    {
+                        @class = "form-control"
+                    }
+                })
+        </div>
+        <div class="mt-3">
+            <h5>Estado</h5>
+            @Html.DropDownListFor(model => model.Estado, new SelectList(ViewBag.Estado, "Key", "Value"), "Seleccione...", new { @class = "form-control" })
+        </div>
+        @*         <div class="mt-3">
+    <h5>Estado</h5>
+    @Html.DropDownListFor(model => model.IdEstadoProceso, (SelectList)ViewBag.Estado, "Seleccione...", new { @class = "form-control" })
+    </div> *@
+
+    </div>
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</a>
+            </div>
+            <div class="col">
+                <input type="submit" class="btn btn-primary" value="Guardar">
+            </div>
+        </div>
+    </div>
+}

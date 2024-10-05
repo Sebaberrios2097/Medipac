@@ -39,6 +39,31 @@
                 <ul class="nav nav-pills flex-column mb-auto">
 
                     <li>
+                        <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover" data-bs-toggle="collapse" data-bs-target="#collapse-armed" aria-expanded="false">
+                            <i class="bi bi-newspaper" style="padding-right:10px"></i>
+                            Gestión del Área Médica
+                        </button>
+                        <div class="collapse" id="collapse-armed">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                <li><a asp-area="CLI" asp-controller="CliMedico" asp-action="Index" class="nav-link text-white rounded">Lista de Médicos</a></li>
+                                <li><a href="#" class="nav-link text-white rounded">Gestionar Especialidades</a></li>
+                                <li><a href="#" class="nav-link text-white rounded">Especialidades por Médico</a></li>
+                                <li><a href="#" class="nav-link text-white rounded">Administrar Tipos Exámenes</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover" data-bs-toggle="collapse" data-bs-target="#collapse-arpac" aria-expanded="false">
+                            <i class="bi bi-newspaper" style="padding-right:10px"></i>
+                            Gestión del Área de Pacientes
+                        </button>
+                        <div class="collapse" id="collapse-arpac">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                <li><a href="#" class="nav-link text-white rounded">Buscar Pacientes</a></li>
+                                @* <li><a href="#" class="nav-link text-white rounded">Gestionar Carruseles</a></li> *@
+                            </ul>
+                        </div>
+                    <li>
                         <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
                             <i class="bi bi-newspaper" style="padding-right:10px"></i>
                             Noticias
@@ -49,6 +74,7 @@
                                 <li><a href="#" class="nav-link text-white rounded">Gestionar Carruseles</a></li>
                             </ul>
                         </div>
+                    </li>
                     </li>
                     <li class="nav-item">
                         <a asp-area="COM" asp-controller="ComUsuario" asp-action="Index" class="nav-link text-white" aria-current="page">
