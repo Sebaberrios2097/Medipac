@@ -1,6 +1,6 @@
 ﻿@model Medipac.Areas.RES.Data.DTO.DtoResEspecialidades
 
-@using (Html.BeginForm("Create", "ResEspecialidades"))
+@using (Html.BeginForm("Edit", "ResEspecialidades"))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.IdEspecialidad)

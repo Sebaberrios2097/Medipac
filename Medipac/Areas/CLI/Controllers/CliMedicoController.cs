@@ -23,6 +23,7 @@ namespace Medipac.Areas.CLI.Controllers
 
         public async Task<ActionResult> Index()
         {
+            ViewData["ActivePage"] = "Lista de Médicos";
             var Query = await climedico.GetAll();
             var listDto = Query.Select(item =>
             {

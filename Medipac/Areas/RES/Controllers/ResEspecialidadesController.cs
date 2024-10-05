@@ -19,6 +19,7 @@ namespace Medipac.Areas.RES.Controllers
 
         public async Task<ActionResult> Index()
         {
+            ViewData["ActivePage"] = "GestionarEspecialidades";
             var Query = await resespecialidades.GetAll();
             return PartialView(Query.Select(item => item.ToDto()).ToList());
         }
@@ -56,6 +57,8 @@ namespace Medipac.Areas.RES.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Estado = DropDownList.Estado;
 
             var Query = await resespecialidades.GetById(id);
 
