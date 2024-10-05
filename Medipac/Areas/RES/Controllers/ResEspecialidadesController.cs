@@ -1,7 +1,9 @@
 using Medipac.Areas.RES.Data.DTO;
 using Medipac.Areas.RES.Data.Interfaces;
+using Medipac.ReadOnly;
 using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Medipac.Areas.RES.Controllers
 {
@@ -29,6 +31,7 @@ namespace Medipac.Areas.RES.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.Estado = DropDownList.Estado;
             return View();
         }
 
@@ -93,5 +96,8 @@ namespace Medipac.Areas.RES.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
+
     }
 }

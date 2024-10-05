@@ -1,0 +1,37 @@
+﻿@model Medipac.Areas.RES.Data.DTO.DtoResEspecialidades
+
+@using (Html.BeginForm("Create", "ResEspecialidades"))
+{
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(model => model.IdEspecialidad)
+
+	<div class="modal-body">
+		<div class="mt-3">
+			<h5>Nombre</h5>
+			@Html.EditorFor(model => model.Nombre, new
+				{
+					htmlAttributes = new
+					{
+						@class = "form-control"
+					}
+				})
+
+		</div>
+		<div class="mt-3">
+			<h5>Nombre</h5>
+			@Html.DropDownListFor(model => model.Estado, new SelectList(ViewBag.Estado, "Key", "Value"), "Seleccione...", new
+			{
+			@class="form-control"
+			})
+
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<div class="row">
+			<div class="col"><a class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</a></div>
+			<div class="col"><input type="submit" class="btn btn-primary" value="Guardar"/></div>
+		</div>
+	</div>
+
+}

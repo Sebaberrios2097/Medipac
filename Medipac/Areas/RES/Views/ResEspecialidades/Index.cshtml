@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Medipac.Areas.RES.Data.DTO.DtoResEspecialidades>
+
+@{
+	ViewData["Tittle"] = "Listar Especialidades";
+	Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+
+<h1 class="mt-3">@ViewData["Tittle"]</h1>
+
+<hr />
+
+<div class="card">
+	<div class="card-header">
+		<a id="BtnAgregar" class="btn btn-success">
+			Crear Nueva Especialidad
+		</a>
+	</div>
+	<div class="card-body">
+		<table id="myTable" class="table">
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Estado</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td>@item.Nombre</td>
+						<td>@(item.Estado ? "Activo" : "Inactivo")</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+	<div class="card-footer"></div>
+</div>
+
+<script>
+	var table = new DataTable('#myTable', {
+		language: {
+			url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-CL.json',
+		},
+	});
+	$("#BtnAgregar").click(function () {
+
+		ModalGeneral('Crear Médico', '@Url.Action("Create", "ResEspecialidades")');
+	});
+</script>
