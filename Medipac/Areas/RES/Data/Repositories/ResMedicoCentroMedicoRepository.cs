@@ -1,9 +1,9 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.RES.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.RES.Data.Repositories
+namespace Medipac.Data.Repositories
 {
     public class ResMedicoCentroMedicoRepository : IResMedicoCentroMedicoRepository
     {
@@ -24,22 +24,28 @@ namespace Medipac.Areas.RES.Data.Repositories
 
         public async Task<ResMedicoCentroMedico> Add(ResMedicoCentroMedico resmedicocentromedico)
         {
-            db.ResMedicoCentroMedico.Add(resmedicocentromedico);
-            await Save();
+            _ = await db.ResMedicoCentroMedico.AddAsync(resmedicocentromedico);
             return resmedicocentromedico;
         }
 
         public void Update(ResMedicoCentroMedico resmedicocentromedico)
         {
-            db.Entry(resmedicocentromedico).State = EntityState.Modified;
+            _ = db.ResMedicoCentroMedico.Update(resmedicocentromedico);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var resmedicocentromedico = await GetById(id);
-            if (resmedicocentromedico == null) return false;
-            db.ResMedicoCentroMedico.Remove(resmedicocentromedico);
-            return true;
+            var entity = await db.ResMedicoCentroMedico.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.ResMedicoCentroMedico.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()

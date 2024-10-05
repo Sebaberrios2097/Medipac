@@ -1,13 +1,19 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.CLI.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.CLI.Data.Repositories
+
+namespace Medipac.Data.Repositories
 {
-    public class CliMedicoRepository(DbMedipac db) : ICliMedicoRepository
+    public class CliMedicoRepository : ICliMedicoRepository
     {
-        public readonly DbMedipac db = db;
+        private readonly DbMedipac db;
+
+        public CliMedicoRepository(DbMedipac db)
+        {
+            this.db = db;
+        }
 
         public async Task<List<CliMedico>> GetAll()
         {
@@ -19,22 +25,28 @@ namespace Medipac.Areas.CLI.Data.Repositories
 
         public async Task<CliMedico> Add(CliMedico climedico)
         {
-            db.CliMedico.Add(climedico);
-            await Save();
+            _ = await db.CliMedico.AddAsync(climedico);
             return climedico;
         }
 
         public void Update(CliMedico climedico)
         {
-            db.Entry(climedico).State = EntityState.Modified;
+            _ = db.CliMedico.Update(climedico);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var climedico = await GetById(id);
-            if (climedico == null) return false;
-            db.CliMedico.Remove(climedico);
-            return true;
+            var entity = await db.CliMedico.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.CliMedico.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()

@@ -1,13 +1,18 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.CLI.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.CLI.Data.Repositories
+namespace Medipac.Data.Repositories
 {
-    public class CliHistorialPacienteRepository(DbMedipac db) : ICliHistorialPacienteRepository
+    public class CliHistorialPacienteRepository : ICliHistorialPacienteRepository
     {
-        public readonly DbMedipac db = db;
+        private readonly DbMedipac db;
+
+        public CliHistorialPacienteRepository(DbMedipac db)
+        {
+            this.db = db;
+        }
 
         public async Task<List<CliHistorialPaciente>> GetAll()
         {
@@ -19,22 +24,28 @@ namespace Medipac.Areas.CLI.Data.Repositories
 
         public async Task<CliHistorialPaciente> Add(CliHistorialPaciente clihistorialpaciente)
         {
-            db.CliHistorialPaciente.Add(clihistorialpaciente);
-            await Save();
+            _ = await db.CliHistorialPaciente.AddAsync(clihistorialpaciente);
             return clihistorialpaciente;
         }
 
         public void Update(CliHistorialPaciente clihistorialpaciente)
         {
-            db.Entry(clihistorialpaciente).State = EntityState.Modified;
+            _ = db.CliHistorialPaciente.Update(clihistorialpaciente);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var clihistorialpaciente = await GetById(id);
-            if (clihistorialpaciente == null) return false;
-            db.CliHistorialPaciente.Remove(clihistorialpaciente);
-            return true;
+            var entity = await db.CliHistorialPaciente.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.CliHistorialPaciente.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()

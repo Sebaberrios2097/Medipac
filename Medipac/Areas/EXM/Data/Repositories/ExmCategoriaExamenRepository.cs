@@ -1,9 +1,9 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.EXM.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.EXM.Data.Repositories
+namespace Medipac.Data.Repositories
 {
     public class ExmCategoriaExamenRepository : IExmCategoriaExamenRepository
     {
@@ -24,22 +24,28 @@ namespace Medipac.Areas.EXM.Data.Repositories
 
         public async Task<ExmCategoriaExamen> Add(ExmCategoriaExamen exmcategoriaexamen)
         {
-            db.ExmCategoriaExamen.Add(exmcategoriaexamen);
-            await Save();
+            _ = await db.ExmCategoriaExamen.AddAsync(exmcategoriaexamen);
             return exmcategoriaexamen;
         }
 
         public void Update(ExmCategoriaExamen exmcategoriaexamen)
         {
-            db.Entry(exmcategoriaexamen).State = EntityState.Modified;
+            _ = db.ExmCategoriaExamen.Update(exmcategoriaexamen);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var exmcategoriaexamen = await GetById(id);
-            if (exmcategoriaexamen == null) return false;
-            db.ExmCategoriaExamen.Remove(exmcategoriaexamen);
-            return true;
+            var entity = await db.ExmCategoriaExamen.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.ExmCategoriaExamen.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()

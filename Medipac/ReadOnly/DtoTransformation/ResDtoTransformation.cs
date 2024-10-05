@@ -62,7 +62,7 @@ namespace Medipac.ReadOnly.DtoTransformation
         }
 
         // Transformación modelo ResConvenio
-        public static DtoResConvenio ToDto(this ResConvenio original) 
+        public static DtoResConvenio ToDto(this ResConvenio original)
         {
             return new()
             {
@@ -79,7 +79,7 @@ namespace Medipac.ReadOnly.DtoTransformation
             {
                 Estado = dto.Estado,
                 IdConvenio = dto.IdConvenio,
-                Nombre= dto.Nombre,
+                Nombre = dto.Nombre,
                 Tipo = dto.Tipo
             };
         }
@@ -91,7 +91,7 @@ namespace Medipac.ReadOnly.DtoTransformation
             {
                 Estado = original.Estado,
                 IdEspecialidad = original.IdEspecialidad,
-                Nombre = original.Nombre  
+                Nombre = original.Nombre
             };
         }
 

@@ -1,9 +1,9 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.COM.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.COM.Data.Repositories
+namespace Medipac.Data.Repositories
 {
     public class ComUsuarioRepository : IComUsuarioRepository
     {
@@ -24,22 +24,28 @@ namespace Medipac.Areas.COM.Data.Repositories
 
         public async Task<ComUsuario> Add(ComUsuario comusuario)
         {
-            db.ComUsuario.Add(comusuario);
-            await Save();
+            _ = await db.ComUsuario.AddAsync(comusuario);
             return comusuario;
         }
 
         public void Update(ComUsuario comusuario)
         {
-            db.Entry(comusuario).State = EntityState.Modified;
+            _ = db.ComUsuario.Update(comusuario);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var comusuario = await GetById(id);
-            if (comusuario == null) return false;
-            db.ComUsuario.Remove(comusuario);
-            return true;
+            var entity = await db.ComUsuario.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.ComUsuario.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()

@@ -1,13 +1,19 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.CLI.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.CLI.Data.Repositories
+
+namespace Medipac.Data.Repositories
 {
-    public class CliSolicitudExamenRepository(DbMedipac db) : ICliSolicitudExamenRepository
+    public class CliSolicitudExamenRepository : ICliSolicitudExamenRepository
     {
-        public readonly DbMedipac db = db;
+        private readonly DbMedipac db;
+
+        public CliSolicitudExamenRepository(DbMedipac db)
+        {
+            this.db = db;
+        }
 
         public async Task<List<CliSolicitudExamen>> GetAll()
         {
@@ -19,22 +25,28 @@ namespace Medipac.Areas.CLI.Data.Repositories
 
         public async Task<CliSolicitudExamen> Add(CliSolicitudExamen clisolicitudexamen)
         {
-            db.CliSolicitudExamen.Add(clisolicitudexamen);
-            await Save();
+            _ = await db.CliSolicitudExamen.AddAsync(clisolicitudexamen);
             return clisolicitudexamen;
         }
 
         public void Update(CliSolicitudExamen clisolicitudexamen)
         {
-            db.Entry(clisolicitudexamen).State = EntityState.Modified;
+            _ = db.CliSolicitudExamen.Update(clisolicitudexamen);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var clisolicitudexamen = await GetById(id);
-            if (clisolicitudexamen == null) return false;
-            db.CliSolicitudExamen.Remove(clisolicitudexamen);
-            return true;
+            var entity = await db.CliSolicitudExamen.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.CliSolicitudExamen.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()

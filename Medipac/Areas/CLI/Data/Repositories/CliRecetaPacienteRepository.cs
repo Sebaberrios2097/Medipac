@@ -1,13 +1,19 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.CLI.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.CLI.Data.Repositories
+
+namespace Medipac.Data.Repositories
 {
-    public class CliRecetaPacienteRepository(DbMedipac db) : ICliRecetaPacienteRepository
+    public class CliRecetaPacienteRepository : ICliRecetaPacienteRepository
     {
-        public readonly DbMedipac db = db;
+        private readonly DbMedipac db;
+
+        public CliRecetaPacienteRepository(DbMedipac db)
+        {
+            this.db = db;
+        }
 
         public async Task<List<CliRecetaPaciente>> GetAll()
         {
@@ -19,22 +25,28 @@ namespace Medipac.Areas.CLI.Data.Repositories
 
         public async Task<CliRecetaPaciente> Add(CliRecetaPaciente clirecetapaciente)
         {
-            db.CliRecetaPaciente.Add(clirecetapaciente);
-            await Save();
+            _ = await db.CliRecetaPaciente.AddAsync(clirecetapaciente);
             return clirecetapaciente;
         }
 
         public void Update(CliRecetaPaciente clirecetapaciente)
         {
-            db.Entry(clirecetapaciente).State = EntityState.Modified;
+            _ = db.CliRecetaPaciente.Update(clirecetapaciente);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var clirecetapaciente = await GetById(id);
-            if (clirecetapaciente == null) return false;
-            db.CliRecetaPaciente.Remove(clirecetapaciente);
-            return true;
+            var entity = await db.CliRecetaPaciente.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.CliRecetaPaciente.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()

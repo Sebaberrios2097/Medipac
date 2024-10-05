@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Medipac.Models;
+﻿using Medipac.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Medipac.Context;
@@ -62,6 +60,10 @@ public partial class DbMedipac : DbContext
 
     public virtual DbSet<ResReserva> ResReserva { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server = medipac.database.windows.net; Database = medipac; User Id = mediadmin; Password = Capstone321; TrustServerCertificate=True;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AdmAdmin>(entity =>
@@ -113,7 +115,6 @@ public partial class DbMedipac : DbContext
 
         modelBuilder.Entity<CliMedico>(entity =>
         {
-            entity.Property(e => e.Dv).IsFixedLength();
             entity.Property(e => e.Estado).HasComment("Columna que representa el borrado lógico del registro.");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.CliMedico)

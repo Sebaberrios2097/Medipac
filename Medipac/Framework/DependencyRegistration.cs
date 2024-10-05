@@ -1,13 +1,9 @@
-using Medipac.Areas.EXM.Data.Interfaces;
-using Medipac.Areas.EXM.Data.Repositories;
-using Medipac.Areas.COM.Data.Interfaces;
-using Medipac.Areas.COM.Data.Repositories;
-using Medipac.Areas.RES.Data.Interfaces;
-using Medipac.Areas.RES.Data.Repositories;
-using Medipac.Areas.CLI.Data.Interfaces;
-using Medipac.Areas.CLI.Data.Repositories;
 using Medipac.Areas.ADM.Data.Interfaces;
-using Medipac.Areas.ADM.Data.Repositories;
+using Medipac.Areas.CLI.Data.Interfaces;
+using Medipac.Areas.COM.Data.Interfaces;
+using Medipac.Areas.EXM.Data.Interfaces;
+using Medipac.Areas.RES.Data.Interfaces;
+using Medipac.Data.Repositories;
 
 namespace Medipac.Framework
 {

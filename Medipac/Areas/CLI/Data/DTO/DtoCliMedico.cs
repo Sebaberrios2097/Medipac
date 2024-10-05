@@ -29,5 +29,7 @@ namespace Medipac.Areas.CLI.Data.DTO
         [StringLength(100)]
         public string Correo { get; set; } = null!;
         public bool Estado { get; set; }
+
+        public string RutFormateado { get; set; } = null!;
     }
 }

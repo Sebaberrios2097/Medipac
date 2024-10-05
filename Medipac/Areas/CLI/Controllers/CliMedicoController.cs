@@ -1,6 +1,5 @@
 using Medipac.Areas.CLI.Data.DTO;
 using Medipac.Areas.CLI.Data.Interfaces;
-using Medipac.Areas.COM.Data.DTO;
 using Medipac.Areas.COM.Data.Interfaces;
 using Medipac.Models;
 using Medipac.ReadOnly;
@@ -25,7 +24,14 @@ namespace Medipac.Areas.CLI.Controllers
         public async Task<ActionResult> Index()
         {
             var Query = await climedico.GetAll();
-            return PartialView(Query.Select(item => item.ToDto()).ToList());
+            var listDto = Query.Select(item =>
+            {
+                var dto = item.ToDto();
+                dto.RutFormateado = GetFunctions.FormatearRut(dto.Rut, dto.Dv);
+                return dto;
+            }).ToList();
+
+            return PartialView(listDto);
         }
 
         public async Task<ActionResult> Details(int id)
@@ -51,20 +57,26 @@ namespace Medipac.Areas.CLI.Controllers
                 Password = Dto.Rut.ToString(),
                 FechaCreacion = DateTime.Now,
                 IdUsuario = Dto.IdUsuario,
-                IdEstado = 2
+                IdEstado = 2 // Estado 'Activo' por defecto.
 
             };
 
-            var Query2 = await comUsuario.Add(newUsuario);
+            // Guardar usuario
+            var guardarUsuario = await comUsuario.Add(newUsuario);
+            var ResultGuardarUsuario = await comUsuario.Save();
+
+            // Obtener Id del usuario creado y dárselo al médico
             var usuarioMedico = await comUsuario.GetById(newUsuario.IdUsuario);
             Dto.IdUsuario = usuarioMedico.IdUsuario;
+            
+            // Generar digito verificador del rut y almacenarlo
             Dto.Dv = GetFunctions.CalcularDvRut(Dto.Rut);
 
             var Query = await climedico.Add(Dto.ToOriginal());
             var Result = await climedico.Save();
 
 
-            if (Result > 0)
+            if (Result > 0 && ResultGuardarUsuario > 0)
             {
                 return RedirectToAction(nameof(Index));
             }

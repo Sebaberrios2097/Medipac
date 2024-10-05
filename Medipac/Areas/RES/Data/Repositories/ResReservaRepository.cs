@@ -1,9 +1,9 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.RES.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.RES.Data.Repositories
+namespace Medipac.Data.Repositories
 {
     public class ResReservaRepository : IResReservaRepository
     {
@@ -24,22 +24,28 @@ namespace Medipac.Areas.RES.Data.Repositories
 
         public async Task<ResReserva> Add(ResReserva resreserva)
         {
-            db.ResReserva.Add(resreserva);
-            await Save();
+            _ = await db.ResReserva.AddAsync(resreserva);
             return resreserva;
         }
 
         public void Update(ResReserva resreserva)
         {
-            db.Entry(resreserva).State = EntityState.Modified;
+            _ = db.ResReserva.Update(resreserva);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var resreserva = await GetById(id);
-            if (resreserva == null) return false;
-            db.ResReserva.Remove(resreserva);
-            return true;
+            var entity = await db.ResReserva.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.ResReserva.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()

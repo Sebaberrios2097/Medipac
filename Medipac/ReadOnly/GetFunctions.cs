@@ -28,5 +28,11 @@
                 return suma.ToString();
             }
         }
+
+        public static string FormatearRut(int rut, string dv)
+        {
+            string rutFormateado = rut.ToString("N0", new System.Globalization.CultureInfo("es-CL"));
+            return $"{rutFormateado}-{dv}";
+        }
     }
 }

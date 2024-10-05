@@ -1,13 +1,19 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.CLI.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.CLI.Data.Repositories
+
+namespace Medipac.Data.Repositories
 {
-    public class CliPacientesRepository(DbMedipac db) : ICliPacientesRepository
+    public class CliPacientesRepository : ICliPacientesRepository
     {
-        public readonly DbMedipac db = db;
+        private readonly DbMedipac db;
+
+        public CliPacientesRepository(DbMedipac db)
+        {
+            this.db = db;
+        }
 
         public async Task<List<CliPacientes>> GetAll()
         {
@@ -19,22 +25,28 @@ namespace Medipac.Areas.CLI.Data.Repositories
 
         public async Task<CliPacientes> Add(CliPacientes clipacientes)
         {
-            db.CliPacientes.Add(clipacientes);
-            await Save();
+            _ = await db.CliPacientes.AddAsync(clipacientes);
             return clipacientes;
         }
 
         public void Update(CliPacientes clipacientes)
         {
-            db.Entry(clipacientes).State = EntityState.Modified;
+            _ = db.CliPacientes.Update(clipacientes);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var clipacientes = await GetById(id);
-            if (clipacientes == null) return false;
-            db.CliPacientes.Remove(clipacientes);
-            return true;
+            var entity = await db.CliPacientes.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.CliPacientes.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()

@@ -1,9 +1,9 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.ADM.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.ADM.Data.Repositories
+namespace Medipac.Data.Repositories
 {
     public class AdmAdminRepository : IAdmAdminRepository
     {
@@ -24,22 +24,28 @@ namespace Medipac.Areas.ADM.Data.Repositories
 
         public async Task<AdmAdmin> Add(AdmAdmin admadmin)
         {
-            db.AdmAdmin.Add(admadmin);
-            await Save();
+            _ = await db.AdmAdmin.AddAsync(admadmin);
             return admadmin;
         }
 
         public void Update(AdmAdmin admadmin)
         {
-            db.Entry(admadmin).State = EntityState.Modified;
+            _ = db.AdmAdmin.Update(admadmin);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var admadmin = await GetById(id);
-            if (admadmin == null) return false;
-            db.AdmAdmin.Remove(admadmin);
-            return true;
+            var entity = await db.AdmAdmin.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.AdmAdmin.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()

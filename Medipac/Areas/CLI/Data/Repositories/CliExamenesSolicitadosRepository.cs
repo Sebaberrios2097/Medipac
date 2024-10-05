@@ -1,13 +1,18 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.CLI.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.CLI.Data.Repositories
+namespace Medipac.Data.Repositories
 {
-    public class CliExamenesSolicitadosRepository(DbMedipac db) : ICliExamenesSolicitadosRepository
+    public class CliExamenesSolicitadosRepository : ICliExamenesSolicitadosRepository
     {
-        public readonly DbMedipac db = db;
+        private readonly DbMedipac db;
+
+        public CliExamenesSolicitadosRepository(DbMedipac db)
+        {
+            this.db = db;
+        }
 
         public async Task<List<CliExamenesSolicitados>> GetAll()
         {
@@ -19,22 +24,28 @@ namespace Medipac.Areas.CLI.Data.Repositories
 
         public async Task<CliExamenesSolicitados> Add(CliExamenesSolicitados cliexamenessolicitados)
         {
-            db.CliExamenesSolicitados.Add(cliexamenessolicitados);
-            await Save();
+            _ = await db.CliExamenesSolicitados.AddAsync(cliexamenessolicitados);
             return cliexamenessolicitados;
         }
 
         public void Update(CliExamenesSolicitados cliexamenessolicitados)
         {
-            db.Entry(cliexamenessolicitados).State = EntityState.Modified;
+            _ = db.CliExamenesSolicitados.Update(cliexamenessolicitados);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var cliexamenessolicitados = await GetById(id);
-            if (cliexamenessolicitados == null) return false;
-            db.CliExamenesSolicitados.Remove(cliexamenessolicitados);
-            return true;
+            var entity = await db.CliExamenesSolicitados.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.CliExamenesSolicitados.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()

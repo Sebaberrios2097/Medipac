@@ -1,9 +1,9 @@
-using Medipac.Models;
-using Medipac.Context;
-using Microsoft.EntityFrameworkCore;
 using Medipac.Areas.ADM.Data.Interfaces;
+using Medipac.Context;
+using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Medipac.Areas.ADM.Data.Repositories
+namespace Medipac.Data.Repositories
 {
     public class AdmCarruselNoticiasRepository : IAdmCarruselNoticiasRepository
     {
@@ -24,22 +24,28 @@ namespace Medipac.Areas.ADM.Data.Repositories
 
         public async Task<AdmCarruselNoticias> Add(AdmCarruselNoticias admcarruselnoticias)
         {
-            db.AdmCarruselNoticias.Add(admcarruselnoticias);
-            await Save();
+            _ = await db.AdmCarruselNoticias.AddAsync(admcarruselnoticias);
             return admcarruselnoticias;
         }
 
         public void Update(AdmCarruselNoticias admcarruselnoticias)
         {
-            db.Entry(admcarruselnoticias).State = EntityState.Modified;
+            _ = db.AdmCarruselNoticias.Update(admcarruselnoticias);
         }
 
         public async Task<bool> DeleteById(int id)
         {
-            var admcarruselnoticias = await GetById(id);
-            if (admcarruselnoticias == null) return false;
-            db.AdmCarruselNoticias.Remove(admcarruselnoticias);
-            return true;
+            var entity = await db.AdmCarruselNoticias.FindAsync(id);
+            if (entity != null)
+            {
+                _ = db.AdmCarruselNoticias.Remove(entity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task<int> Save()
