@@ -1,3 +1,4 @@
+using Medipac.Areas.RES.Data.DTO;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -31,5 +32,7 @@ namespace Medipac.Areas.CLI.Data.DTO
         public bool Estado { get; set; }
 
         public string RutFormateado { get; set; } = null!;
+
+        public List<int>? SelectedEspecialidades { get; set; }
     }
 }

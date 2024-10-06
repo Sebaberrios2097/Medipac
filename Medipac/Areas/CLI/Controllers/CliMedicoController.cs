@@ -1,6 +1,8 @@
 using Medipac.Areas.CLI.Data.DTO;
 using Medipac.Areas.CLI.Data.Interfaces;
 using Medipac.Areas.COM.Data.Interfaces;
+using Medipac.Areas.RES.Data.DTO;
+using Medipac.Areas.RES.Data.Interfaces;
 using Medipac.Models;
 using Medipac.ReadOnly;
 using Medipac.ReadOnly.DtoTransformation;
@@ -13,12 +15,15 @@ namespace Medipac.Areas.CLI.Controllers
     {
         private readonly ICliMedicoRepository climedico;
         private readonly IComUsuarioRepository comUsuario;
+        private readonly IResEspecialidadesRepository resEspecialidades;
 
         public CliMedicoController(ICliMedicoRepository climedico,
-                                   IComUsuarioRepository comUsuario)
+                                   IComUsuarioRepository comUsuario,
+                                   IResEspecialidadesRepository resEspecialidades)
         {
             this.climedico = climedico;
             this.comUsuario = comUsuario;
+            this.resEspecialidades = resEspecialidades;
         }
 
         public async Task<ActionResult> Index()
@@ -75,7 +80,6 @@ namespace Medipac.Areas.CLI.Controllers
 
             var Query = await climedico.Add(Dto.ToOriginal());
             var Result = await climedico.Save();
-
 
             if (Result > 0 && ResultGuardarUsuario > 0)
             {

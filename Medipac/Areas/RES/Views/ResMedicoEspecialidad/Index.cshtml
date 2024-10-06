@@ -1,7 +1,7 @@
-﻿@model IEnumerable<Medipac.Areas.RES.Data.DTO.DtoResEspecialidades>
+﻿@model IEnumerable<Medipac.Areas.RES.Data.DTO.DtoResMedicoEspecialidad>
 
 @{
-	ViewData["Tittle"] = "Listar Especialidades";
+	ViewData["Tittle"] = "Especialidades por Médico";
 	Layout = "~/Views/Shared/_LayoutAdm.cshtml";
 }
 
@@ -11,9 +11,9 @@
 
 <div class="card shadow-lg">
 	<div class="card-header d-flex justify-content-between align-items-center">
-		<h5 class="card-title mb-0">Listado de Especialidades</h5>
+		<h5 class="card-title mb-0">Médicos por especialidad</h5>
 		<a id="BtnAgregar" class="btn btn-success">
-			<i class="bi bi-plus-circle"></i> Crear Nueva Especialidad
+			<i class="bi bi-plus-circle"></i> Enlazar Médico-Especialidad
 		</a>
 	</div>
 	<div class="card-body">
@@ -29,15 +29,12 @@
 				@foreach (var item in Model)
 				{
 					<tr>
-						<td>@item.Nombre</td>
-						<td>
-							<span class="badge @((item.Estado ? "text-bg-success" : "text-bg-danger"))">
-								@(item.Estado ? "Activo" : "Inactivo")
-							</span>
-						</td>
+						<td>@(item.DtoCliMedico.Nombres ?? "Desconocido")</td>
+						<td>@(item.DtoResEspecialidades.Nombre ?? "Desconocido")</td>
+
 						<td class="text-center">
 							<a href="javascript:void(0);"
-							   onclick="ModalGeneral('Editar Especialidad', '@Url.Action("Edit", "ResEspecialidades", new { id = @item.IdEspecialidad })');"
+							   onclick="ModalGeneral('Editar Especialidad', '@Url.Action("Edit", "ResMedicoEspecialidad", new { id = @item.IdMedicoEspecialidad })');"
 							   class="btn btn-outline-primary btn-sm me-2">
 								<i class="bi bi-pencil-square"></i>
 							</a>
@@ -59,6 +56,6 @@
 		},
 	});
 	$("#BtnAgregar").click(function () {
-		ModalGeneral('Crear Especialidad', '@Url.Action("Create", "ResEspecialidades")');
+		ModalGeneral('Crear Especialidad', '@Url.Action("Create", "ResMedicoEspecialidad")');
 	});
 </script>

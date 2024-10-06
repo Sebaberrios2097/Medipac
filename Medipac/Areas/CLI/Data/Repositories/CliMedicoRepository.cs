@@ -20,8 +20,7 @@ namespace Medipac.Data.Repositories
             return await db.CliMedico.ToListAsync();
         }
 
-        public async Task<CliMedico> GetById(int id) => await db.CliMedico
-            .FirstOrDefaultAsync(a => a.IdMedico == id) ?? new CliMedico();
+        public async Task<CliMedico> GetById(int id) => await db.CliMedico.FirstOrDefaultAsync(a => a.IdMedico == id) ?? new CliMedico();
 
         public async Task<CliMedico> Add(CliMedico climedico)
         {

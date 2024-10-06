@@ -387,3 +387,20 @@ html {
         overflow-y: hidden;
     }
 }
+
+/*Quitar spinner defs campos imput*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Para Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.btn-exportar-excel{
+    background-color:#198754;
+    color: white;
+}

@@ -104,6 +104,39 @@ html {
     line-height: 1.25;
 }
 
+/* Ocultar el sidebar en pantallas pequeñas y mostrar el botón de hamburguesa */
+@media (max-width: 767.98px) {
+    #sidebarMenu {
+        display: none; /* Sidebar oculto por defecto */
+    }
+
+    .navbar-toggler {
+        display: inline-block; /* Mostrar el botón de hamburguesa */
+    }
+}
+
+/* Mostrar el sidebar en pantallas grandes (>=768px) y ocultar el botón de hamburguesa */
+@media (min-width: 768px) {
+    #sidebarMenu {
+        display: block !important; /* Mostrar el sidebar */
+    }
+
+    .navbar-toggler {
+        display: none; /* Ocultar el botón de hamburguesa */
+    }
+}
+
+/* Mostrar el sidebar en pantallas pequeñas cuando esté expandido */
+.collapse.show {
+    display: block; /* Mostrar el sidebar cuando esté colapsado en pantallas pequeñas */
+}
+
+.bg-pag {
+    background-color: #34495e !important;
+}
+
+
+
 /* Nuevos estilos agregados para los botones */
 
 .nav-main .nav-link {

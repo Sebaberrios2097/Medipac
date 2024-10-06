@@ -16,7 +16,10 @@ namespace Medipac.Data.Repositories
 
         public async Task<List<ResMedicoEspecialidad>> GetAll()
         {
-            return await db.ResMedicoEspecialidad.ToListAsync();
+            return await db.ResMedicoEspecialidad
+                .Include(a => a.IdEspecialidadNavigation)
+                .Include(a => a.IdMedicoNavigation)
+                .ToListAsync();
         }
 
         public async Task<ResMedicoEspecialidad> GetById(int id) => await db.ResMedicoEspecialidad

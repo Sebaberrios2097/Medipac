@@ -1,7 +1,9 @@
+using Medipac.Areas.CLI.Data.Interfaces;
 using Medipac.Areas.RES.Data.DTO;
 using Medipac.Areas.RES.Data.Interfaces;
 using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Medipac.Areas.RES.Controllers
 {
@@ -9,14 +11,22 @@ namespace Medipac.Areas.RES.Controllers
     public class ResMedicoEspecialidadController : Controller
     {
         private readonly IResMedicoEspecialidadRepository resmedicoespecialidad;
+        private readonly ICliMedicoRepository cliMedico;
+        private readonly IResEspecialidadesRepository resEspecialidades;
 
-        public ResMedicoEspecialidadController(IResMedicoEspecialidadRepository resmedicoespecialidad)
+
+		public ResMedicoEspecialidadController(IResMedicoEspecialidadRepository resmedicoespecialidad,
+                                               ICliMedicoRepository cliMedico,
+                                               IResEspecialidadesRepository resEspecialidades)
         {
             this.resmedicoespecialidad = resmedicoespecialidad;
-        }
+            this.cliMedico = cliMedico;
+            this.resEspecialidades = resEspecialidades;
+		}
 
         public async Task<ActionResult> Index()
         {
+            ViewData["ActivePage"] = "GestionarMedicoEspecialidades";
             var Query = await resmedicoespecialidad.GetAll();
             return PartialView(Query.Select(item => item.ToDto()).ToList());
         }
@@ -27,9 +37,11 @@ namespace Medipac.Areas.RES.Controllers
             return View(Query.ToDto());
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            return View();
+            ViewBag.Especialidad = new SelectList(await resEspecialidades.GetAll(), "IdEspecialidad", "Nombre");
+            ViewBag.Medico = new SelectList(await cliMedico.GetAll(), "IdMedico", "Nombres");
+            return PartialView();
         }
 
         [HttpPost]

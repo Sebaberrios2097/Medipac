@@ -148,12 +148,23 @@ namespace Medipac.ReadOnly.DtoTransformation
         // Transformación modelo ResMedicoEspecialidad
         public static DtoResMedicoEspecialidad ToDto(this ResMedicoEspecialidad original)
         {
-            return new()
+            var Query =  new DtoResMedicoEspecialidad()
             {
                 IdEspecialidad = original.IdEspecialidad,
                 IdMedico = original.IdMedico,
                 IdMedicoEspecialidad = original.IdMedicoEspecialidad,
             };
+
+            if(original.IdMedicoNavigation != null)
+            {
+                Query.DtoCliMedico = original.IdMedicoNavigation.ToDto();
+            }
+            if(original.IdEspecialidadNavigation != null)
+            {
+                Query.DtoResEspecialidades = original.IdEspecialidadNavigation.ToDto();
+            }
+
+            return Query;
         }
 
         public static ResMedicoEspecialidad ToOriginal(this DtoResMedicoEspecialidad dto)
