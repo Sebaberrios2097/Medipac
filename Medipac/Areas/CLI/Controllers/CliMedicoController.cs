@@ -49,8 +49,7 @@ namespace Medipac.Areas.CLI.Controllers
         public ActionResult Create()
         {
             ViewBag.Estado = DropDownList.Estado;
-
-            return PartialView();
+            return View();
         }
 
         [HttpPost]
@@ -74,7 +73,7 @@ namespace Medipac.Areas.CLI.Controllers
             // Obtener Id del usuario creado y dárselo al médico
             var usuarioMedico = await comUsuario.GetById(newUsuario.IdUsuario);
             Dto.IdUsuario = usuarioMedico.IdUsuario;
-            
+
             // Generar digito verificador del rut y almacenarlo
             Dto.Dv = GetFunctions.CalcularDvRut(Dto.Rut);
 
@@ -102,7 +101,7 @@ namespace Medipac.Areas.CLI.Controllers
 
             if (Query == null) { return NotFound(); }
 
-            return PartialView(Query.ToDto());
+            return View(Query.ToDto());
         }
 
         [HttpPost]

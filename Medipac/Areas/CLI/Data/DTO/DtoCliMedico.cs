@@ -1,4 +1,5 @@
 using Medipac.Areas.RES.Data.DTO;
+using Medipac.Models;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,23 +9,21 @@ namespace Medipac.Areas.CLI.Data.DTO
     public class DtoCliMedico
     {
         [Key]
-        [Column("Id_Medico")]
         public int IdMedico { get; set; }
-        [Column("Id_Usuario")]
         public int IdUsuario { get; set; }
         public int Rut { get; set; }
 
         [StringLength(1)]
-        [Unicode(false)]
         public string Dv { get; set; } = null!;
         [StringLength(100)]
         public string Nombres { get; set; } = null!;
-        [Column("Ap_Paterno")]
+        [Display(Name = "Apellido Paterno")]
         [StringLength(50)]
         public string ApPaterno { get; set; } = null!;
-        [Column("Ap_Materno")]
+        [Display(Name = "Apellido Materno")]
         [StringLength(50)]
         public string? ApMaterno { get; set; }
+        [Display(Name = "Teléfono")]
         [StringLength(20)]
         public string Fono { get; set; } = null!;
         [StringLength(100)]
@@ -33,6 +32,6 @@ namespace Medipac.Areas.CLI.Data.DTO
 
         public string RutFormateado { get; set; } = null!;
 
-        public List<int>? SelectedEspecialidades { get; set; }
+        public List<DtoResMedicoEspecialidad>? DtoResMedicoEspecialidad { get; set; }
     }
 }
