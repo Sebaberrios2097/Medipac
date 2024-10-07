@@ -32,6 +32,6 @@ namespace Medipac.Areas.CLI.Data.DTO
 
         public string RutFormateado { get; set; } = null!;
 
-        public List<DtoResMedicoEspecialidad>? DtoResMedicoEspecialidad { get; set; }
+        public List<int> EspecialidadesSeleccionadas{ get; set; } = new List<int>();
     }
 }

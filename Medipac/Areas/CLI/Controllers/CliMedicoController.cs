@@ -7,6 +7,7 @@ using Medipac.Models;
 using Medipac.ReadOnly;
 using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Medipac.Areas.CLI.Controllers
 {
@@ -16,14 +17,17 @@ namespace Medipac.Areas.CLI.Controllers
         private readonly ICliMedicoRepository climedico;
         private readonly IComUsuarioRepository comUsuario;
         private readonly IResEspecialidadesRepository resEspecialidades;
+        private readonly IResMedicoEspecialidadRepository resMedicoEspecialidad;
 
         public CliMedicoController(ICliMedicoRepository climedico,
                                    IComUsuarioRepository comUsuario,
-                                   IResEspecialidadesRepository resEspecialidades)
+                                   IResEspecialidadesRepository resEspecialidades,
+                                   IResMedicoEspecialidadRepository resMedicoEspecialidad)
         {
             this.climedico = climedico;
             this.comUsuario = comUsuario;
             this.resEspecialidades = resEspecialidades;
+            this.resMedicoEspecialidad = resMedicoEspecialidad;
         }
 
         public async Task<ActionResult> Index()
@@ -46,11 +50,18 @@ namespace Medipac.Areas.CLI.Controllers
             return View(Query.ToDto());
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            // Cargar los estados (asegurarse de que DropDownList.Estado esté bien definido)
             ViewBag.Estado = DropDownList.Estado;
+
+            // Cargar las especialidades disponibles
+            var especialidades = await resEspecialidades.GetAll(); // Asegúrate de tener un método GetAll() en tu repositorio de especialidades.
+            ViewBag.Especialidades = especialidades.Select(e => new { e.IdEspecialidad, e.Nombre }).ToList();
+
             return View();
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -59,7 +70,7 @@ namespace Medipac.Areas.CLI.Controllers
             ComUsuario newUsuario = new()
             {
                 Usuario = $"{Dto.Nombres[..3].ToLower()}.{Dto.ApPaterno.ToLower()}",
-                Password = Dto.Rut.ToString(),
+                Password = Dto.Rut.ToString(),  
                 FechaCreacion = DateTime.Now,
                 IdUsuario = Dto.IdUsuario,
                 IdEstado = 2 // Estado 'Activo' por defecto.
@@ -80,7 +91,22 @@ namespace Medipac.Areas.CLI.Controllers
             var Query = await climedico.Add(Dto.ToOriginal());
             var Result = await climedico.Save();
 
-            if (Result > 0 && ResultGuardarUsuario > 0)
+            // Guardar especialidades seleccionadas
+            if (Result > 0 && Dto.EspecialidadesSeleccionadas != null && Dto.EspecialidadesSeleccionadas.Any())
+            {
+                foreach (var especialidadId in Dto.EspecialidadesSeleccionadas)
+                {
+                    var medicoEspecialidad = new ResMedicoEspecialidad
+                    {
+                        IdMedico = Query.IdMedico,
+                        IdEspecialidad = especialidadId
+                    };
+                    await resMedicoEspecialidad.Add(medicoEspecialidad);
+                }
+                await resMedicoEspecialidad.Save();
+            }
+
+            if (Result > 0)
             {
                 return RedirectToAction(nameof(Index));
             }

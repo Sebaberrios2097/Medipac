@@ -38,8 +38,8 @@
                             @class = "form-select"
                         })
                 </div>
-
             </div>
+
             <div class="row mt-3">
                 <div class="col">
                     @Html.LabelFor(model => model.Nombres)
@@ -75,6 +75,7 @@
                         })
                 </div>
             </div>
+
             <div class="row mt-3">
                 <div class="col">
                     @Html.LabelFor(model => model.Fono)
@@ -99,10 +100,27 @@
                         })
                 </div>
             </div>
-            <div class="row">
 
-            </div>
+            @if (ViewBag.Especialidades != null)
+            {
+                <div class="row mt-3">
+                    <div class="col">
+                        @Html.Label("Especialidades", "Especialidades")
+                        @Html.ListBoxFor(model => model.EspecialidadesSeleccionadas, new SelectList(ViewBag.Especialidades, "IdEspecialidad", "Nombre"), new
+                            {
+                                @class = "form-control",
+                                @multiple = "multiple"
+                            })
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p class="text-danger">Error al cargar las especialidades. Por favor, intente de nuevo.</p>
+            }
+
         </div>
+
         <div class="card-footer">
             <div class="row">
                 <div class="col">
@@ -110,20 +128,20 @@
                 </div>
                 <div class="col">
                     <input type="submit" class="btn btn-primary" value="Guardar">
-                </div>  
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         document.getElementById("Rut").addEventListener("input", function (event) {
-        // Eliminar cualquier carácter que no sea un número
-        this.value = this.value.replace(/\D/g, '');
+            // Eliminar cualquier carácter que no sea un número
+            this.value = this.value.replace(/\D/g, '');
 
-        // Limitar a 8 caracteres
-        if (this.value.length > 8) {
-        this.value = this.value.slice(0, 8);
-        }
+            // Limitar a 8 caracteres
+            if (this.value.length > 8) {
+                this.value = this.value.slice(0, 8);
+            }
         });
     </script>
 }
