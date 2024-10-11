@@ -1,5 +1,5 @@
-using Medipac.Areas.ADM.Data.DTO;
-using Medipac.Areas.ADM.Data.Interfaces;
+using Medipac.Data.ADM.DTO;
+using Medipac.Data.ADM.Interfaces;
 using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,7 +34,7 @@ namespace Medipac.Areas.ADM.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(DtoAdmNoticias Dto)
+        public async Task<ActionResult> Create(DtoNoticias Dto)
         {
             var Query = await admnoticias.Add(Dto.ToOriginal());
             var Result = await admnoticias.Save();
@@ -63,7 +63,7 @@ namespace Medipac.Areas.ADM.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DtoAdmNoticias dto)
+        public async Task<IActionResult> Edit(int id, DtoNoticias dto)
         {
             if (id != dto.IdNoticia) { return NotFound(); }
 

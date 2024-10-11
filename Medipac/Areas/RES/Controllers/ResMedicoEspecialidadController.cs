@@ -15,14 +15,14 @@ namespace Medipac.Areas.RES.Controllers
         private readonly IResEspecialidadesRepository resEspecialidades;
 
 
-		public ResMedicoEspecialidadController(IResMedicoEspecialidadRepository resmedicoespecialidad,
+        public ResMedicoEspecialidadController(IResMedicoEspecialidadRepository resmedicoespecialidad,
                                                ICliMedicoRepository cliMedico,
                                                IResEspecialidadesRepository resEspecialidades)
         {
             this.resmedicoespecialidad = resmedicoespecialidad;
             this.cliMedico = cliMedico;
             this.resEspecialidades = resEspecialidades;
-		}
+        }
 
         public async Task<ActionResult> Index()
         {

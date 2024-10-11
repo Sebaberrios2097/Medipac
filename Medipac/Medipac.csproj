@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="Areas\CLI\Controllers\" />
     <Folder Include="Areas\CLI\Data\" />
-    <Folder Include="Areas\EXM\Views\" />
   </ItemGroup>
 
   <ItemGroup>

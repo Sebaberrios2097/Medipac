@@ -16,12 +16,6 @@ public partial class ResReserva
     [Column("Id_Medico")]
     public int IdMedico { get; set; }
 
-    [Column("Id_Centro_Medico")]
-    public int IdCentroMedico { get; set; }
-
-    [Column("Id_Prevision")]
-    public int IdPrevision { get; set; }
-
     [Column(TypeName = "datetime")]
     public DateTime Fecha { get; set; }
 
@@ -33,10 +27,6 @@ public partial class ResReserva
     [Column("Fecha_Creacion", TypeName = "datetime")]
     public DateTime FechaCreacion { get; set; }
 
-    [ForeignKey("IdCentroMedico")]
-    [InverseProperty("ResReserva")]
-    public virtual ResCentroMedico IdCentroMedicoNavigation { get; set; } = null!;
-
     [ForeignKey("IdMedico")]
     [InverseProperty("ResReserva")]
     public virtual CliMedico IdMedicoNavigation { get; set; } = null!;
@@ -44,8 +34,4 @@ public partial class ResReserva
     [ForeignKey("IdPaciente")]
     [InverseProperty("ResReserva")]
     public virtual CliPacientes IdPacienteNavigation { get; set; } = null!;
-
-    [ForeignKey("IdPrevision")]
-    [InverseProperty("ResReserva")]
-    public virtual ResPrevisiones IdPrevisionNavigation { get; set; } = null!;
 }

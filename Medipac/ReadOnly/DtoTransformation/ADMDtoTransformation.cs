@@ -1,4 +1,4 @@
-﻿using Medipac.Areas.ADM.Data.DTO;
+﻿using Medipac.Data.ADM.DTO;
 using Medipac.Models;
 
 namespace Medipac.ReadOnly.DtoTransformation
@@ -6,81 +6,108 @@ namespace Medipac.ReadOnly.DtoTransformation
     public static class AdmDtoTransformation
     {
         // Transformación modelo AdmAdmin
-        public static DtoAdmAdmin ToDto(this AdmAdmin original)
+        public static AdmNoticias ToOriginal(this DtoNoticias dto)
         {
-            return new()
-            {
-                IdAdmin = original.IdAdmin,
-                IdUsuario = original.IdUsuario,
-            };
-        }
 
-        public static AdmAdmin ToOriginal(this DtoAdmAdmin dto)
-        {
             return new()
+
             {
-                IdAdmin = dto.IdAdmin,
+
+                IdNoticia = dto.IdNoticia,
+
                 IdUsuario = dto.IdUsuario,
-            };
-        }
 
-        // Transformación modelo AdmCarruselNoticias
-        public static DtoAdmCarruselNoticias ToDto(this AdmCarruselNoticias original)
-        {
-            return new()
-            {
-                IdCarruselNoticias = original.IdCarruselNoticias,
-                IdNoticia = original.IdNoticia,
-                Nombre = original.Nombre,
-                Titulo = original.Titulo,
-                Subtitulo = original.Subtitulo,
-                UrlImagen = original.UrlImagen,
-                Activo = original.Activo,
-            };
-        }
-        public static AdmCarruselNoticias ToOriginal(this DtoAdmCarruselNoticias dto)
-        {
-            return new()
-            {
-                IdCarruselNoticias = dto.IdCarruselNoticias,
-                IdNoticia = dto.IdNoticia,
-                Nombre = dto.Nombre,
                 Titulo = dto.Titulo,
-                Subtitulo = dto.Subtitulo,
-                UrlImagen = dto.UrlImagen,
-                Activo = dto.Activo,
-            };
-        }
 
-        // Transformación modelo ADMNoticias
-        public static DtoAdmNoticias ToDto(this AdmNoticias original)
-        {
-            return new()
-            {
-                IdNoticia = original.IdNoticia,
-                IdAdmin = original.IdAdmin,
-                Titulo = original.Titulo,
-                Subtitulo = original.Subtitulo,
-                UrlImagen = original.UrlImagen,
-                Contenido = original.Contenido,
-                FechaPublicacion = original.FechaPublicacion,
-                Activo = original.Activo,
-            };
-        }
-
-        public static AdmNoticias ToOriginal(this DtoAdmNoticias dto)
-        {
-            return new()
-            {
-                IdNoticia = dto.IdNoticia,
-                IdAdmin = dto.IdAdmin,
-                Titulo = dto.Titulo,
                 Subtitulo = dto.Subtitulo,
-                UrlImagen = dto.UrlImagen,
+
                 Contenido = dto.Contenido,
+
                 FechaPublicacion = dto.FechaPublicacion,
-                Activo = dto.Activo,
+
+                UrlImagen = dto.UrlImagen,
+
+                Activo = dto.Activo
+
             };
+
+        }
+
+        public static DtoNoticias ToDto(this AdmNoticias original)
+        {
+
+            return new()
+
+            {
+
+                IdNoticia = original.IdNoticia,
+
+                IdUsuario = original.IdUsuario,
+
+                Titulo = original.Titulo,
+
+                Subtitulo = original.Subtitulo,
+
+                Contenido = original.Contenido,
+
+                FechaPublicacion = original.FechaPublicacion,
+
+                UrlImagen = original.UrlImagen,
+
+                Activo = original.Activo
+
+            };
+
+        }
+
+        public static AdmCarruselNoticias ToOriginal(this DtoCarruselNoticias dto)
+        {
+
+            return new()
+
+            {
+
+                IdCarruselNoticias = dto.IdCarruselNoticias,
+
+                IdNoticia = dto.IdNoticia,
+
+                Nombre = dto.Nombre,
+
+                Titulo = dto.Titulo,
+
+                Subtitulo = dto.Subtitulo,
+
+                UrlImagen = dto.UrlImagen,
+
+                Activo = dto.Activo
+
+            };
+
+        }
+
+        public static DtoCarruselNoticias ToDto(this AdmCarruselNoticias original)
+        {
+
+            return new()
+
+            {
+
+                IdCarruselNoticias = original.IdCarruselNoticias,
+
+                IdNoticia = original.IdNoticia,
+
+                Nombre = original.Nombre,
+
+                Titulo = original.Titulo,
+
+                Subtitulo = original.Subtitulo,
+
+                UrlImagen = original.UrlImagen,
+
+                Activo = original.Activo
+
+            };
+
         }
 
     }

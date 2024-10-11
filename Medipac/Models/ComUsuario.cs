@@ -22,8 +22,11 @@ public partial class ComUsuario
     [Column("Fecha_Creacion", TypeName = "datetime")]
     public DateTime FechaCreacion { get; set; }
 
+    [Column("Is_Admin")]
+    public bool IsAdmin { get; set; }
+
     [InverseProperty("IdUsuarioNavigation")]
-    public virtual ICollection<AdmAdmin> AdmAdmin { get; set; } = new List<AdmAdmin>();
+    public virtual ICollection<AdmNoticias> AdmNoticias { get; set; } = new List<AdmNoticias>();
 
     [InverseProperty("IdUsuarioNavigation")]
     public virtual ICollection<CliMedico> CliMedico { get; set; } = new List<CliMedico>();

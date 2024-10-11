@@ -14,13 +14,9 @@ public partial class DbMedipac : DbContext
     {
     }
 
-    public virtual DbSet<AdmAdmin> AdmAdmin { get; set; }
-
     public virtual DbSet<AdmCarruselNoticias> AdmCarruselNoticias { get; set; }
 
     public virtual DbSet<AdmNoticias> AdmNoticias { get; set; }
-
-    public virtual DbSet<CliExamenesSolicitados> CliExamenesSolicitados { get; set; }
 
     public virtual DbSet<CliHistorialPaciente> CliHistorialPaciente { get; set; }
 
@@ -30,33 +26,17 @@ public partial class DbMedipac : DbContext
 
     public virtual DbSet<CliRecetaPaciente> CliRecetaPaciente { get; set; }
 
-    public virtual DbSet<CliSolicitudExamen> CliSolicitudExamen { get; set; }
-
     public virtual DbSet<ComEstadosUsuario> ComEstadosUsuario { get; set; }
 
     public virtual DbSet<ComUsuario> ComUsuario { get; set; }
-
-    public virtual DbSet<ExmCategoriaExamen> ExmCategoriaExamen { get; set; }
-
-    public virtual DbSet<ExmTipoExamen> ExmTipoExamen { get; set; }
 
     public virtual DbSet<LogUsuario> LogUsuario { get; set; }
 
     public virtual DbSet<ResAgenda> ResAgenda { get; set; }
 
-    public virtual DbSet<ResCentroMedico> ResCentroMedico { get; set; }
-
-    public virtual DbSet<ResConvenio> ResConvenio { get; set; }
-
     public virtual DbSet<ResEspecialidades> ResEspecialidades { get; set; }
 
-    public virtual DbSet<ResMedicoCentroMedico> ResMedicoCentroMedico { get; set; }
-
-    public virtual DbSet<ResMedicoConvenio> ResMedicoConvenio { get; set; }
-
     public virtual DbSet<ResMedicoEspecialidad> ResMedicoEspecialidad { get; set; }
-
-    public virtual DbSet<ResPrevisiones> ResPrevisiones { get; set; }
 
     public virtual DbSet<ResReserva> ResReserva { get; set; }
 
@@ -66,13 +46,6 @@ public partial class DbMedipac : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AdmAdmin>(entity =>
-        {
-            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.AdmAdmin)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ADM_Admin_COM_Usuario");
-        });
-
         modelBuilder.Entity<AdmCarruselNoticias>(entity =>
         {
             entity.HasOne(d => d.IdNoticiaNavigation).WithMany(p => p.AdmCarruselNoticias)
@@ -82,22 +55,9 @@ public partial class DbMedipac : DbContext
 
         modelBuilder.Entity<AdmNoticias>(entity =>
         {
-            entity.HasOne(d => d.IdAdminNavigation).WithMany(p => p.AdmNoticias)
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.AdmNoticias)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ADM_Noticias_ADM_Admin");
-        });
-
-        modelBuilder.Entity<CliExamenesSolicitados>(entity =>
-        {
-            entity.Property(e => e.Estado).HasComment("Columna que representa el borrado lógico del registro.");
-
-            entity.HasOne(d => d.IdSolicitudExamenNavigation).WithMany(p => p.CliExamenesSolicitados)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CLI_Examenes_Solicitados_CLI_Solicitud_Examen");
-
-            entity.HasOne(d => d.IdTipoExamenNavigation).WithMany(p => p.CliExamenesSolicitados)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CLI_Examenes_Solicitados_EXM_Tipo_Examen");
+                .HasConstraintName("FK_ADM_Noticias_COM_Usuario");
         });
 
         modelBuilder.Entity<CliHistorialPaciente>(entity =>
@@ -115,6 +75,7 @@ public partial class DbMedipac : DbContext
 
         modelBuilder.Entity<CliMedico>(entity =>
         {
+            entity.Property(e => e.Dv).IsFixedLength();
             entity.Property(e => e.Estado).HasComment("Columna que representa el borrado lógico del registro.");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.CliMedico)
@@ -140,13 +101,6 @@ public partial class DbMedipac : DbContext
                 .HasConstraintName("FK_CLI_Receta_Paciente_CLI_Historial_Paciente");
         });
 
-        modelBuilder.Entity<CliSolicitudExamen>(entity =>
-        {
-            entity.HasOne(d => d.IdHistorialPacienteNavigation).WithMany(p => p.CliSolicitudExamen)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CLI_Solicitud_Examen_CLI_Historial_Paciente");
-        });
-
         modelBuilder.Entity<ComEstadosUsuario>(entity =>
         {
             entity.Property(e => e.Estado).HasComment("Columna que representa el borrado lógico del registro.");
@@ -157,13 +111,6 @@ public partial class DbMedipac : DbContext
             entity.HasOne(d => d.IdEstadoNavigation).WithMany(p => p.ComUsuario)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_COM_Usuario_COM_Estados_Usuario");
-        });
-
-        modelBuilder.Entity<ExmTipoExamen>(entity =>
-        {
-            entity.HasOne(d => d.IdCategoriaExamenNavigation).WithMany(p => p.ExmTipoExamen)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_EXM_Tipo_Examen_EXM_Categoria_Examen");
         });
 
         modelBuilder.Entity<LogUsuario>(entity =>
@@ -180,41 +127,9 @@ public partial class DbMedipac : DbContext
                 .HasConstraintName("FK_RES_Agenda_CLI_Medico");
         });
 
-        modelBuilder.Entity<ResCentroMedico>(entity =>
-        {
-            entity.Property(e => e.Estado).HasComment("Columna que representa el borrado lógico del registro.");
-        });
-
-        modelBuilder.Entity<ResConvenio>(entity =>
-        {
-            entity.Property(e => e.Estado).HasComment("Columna que representa el borrado lógico del registro.");
-        });
-
         modelBuilder.Entity<ResEspecialidades>(entity =>
         {
             entity.Property(e => e.Estado).HasComment("Columna que representa el borrado lógico del registro.");
-        });
-
-        modelBuilder.Entity<ResMedicoCentroMedico>(entity =>
-        {
-            entity.HasOne(d => d.IdCentroMedicoNavigation).WithMany(p => p.ResMedicoCentroMedico)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RES_Medico_Centro_Medico_RES_Centro_Medico");
-
-            entity.HasOne(d => d.IdMedicoNavigation).WithMany(p => p.ResMedicoCentroMedico)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RES_Medico_Centro_Medico_CLI_Medico");
-        });
-
-        modelBuilder.Entity<ResMedicoConvenio>(entity =>
-        {
-            entity.HasOne(d => d.IdConvenioNavigation).WithMany(p => p.ResMedicoConvenio)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RES_Medico_Convenio_RES_Convenio");
-
-            entity.HasOne(d => d.IdMedicoNavigation).WithMany(p => p.ResMedicoConvenio)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RES_Medico_Convenio_CLI_Medico1");
         });
 
         modelBuilder.Entity<ResMedicoEspecialidad>(entity =>
@@ -228,18 +143,9 @@ public partial class DbMedipac : DbContext
                 .HasConstraintName("FK_RES_Medico_Especialidad_CLI_Medico");
         });
 
-        modelBuilder.Entity<ResPrevisiones>(entity =>
-        {
-            entity.Property(e => e.Estado).HasComment("Columna que representa el borrado lógico del registro.");
-        });
-
         modelBuilder.Entity<ResReserva>(entity =>
         {
             entity.Property(e => e.Estado).HasComment("Columna que representa el borrado lógico del registro.");
-
-            entity.HasOne(d => d.IdCentroMedicoNavigation).WithMany(p => p.ResReserva)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RES_Reserva_RES_Centro_Medico");
 
             entity.HasOne(d => d.IdMedicoNavigation).WithMany(p => p.ResReserva)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -248,10 +154,6 @@ public partial class DbMedipac : DbContext
             entity.HasOne(d => d.IdPacienteNavigation).WithMany(p => p.ResReserva)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_RES_Reserva_CLI_Pacientes");
-
-            entity.HasOne(d => d.IdPrevisionNavigation).WithMany(p => p.ResReserva)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RES_Reserva_RES_Previsiones");
         });
 
         OnModelCreatingPartial(modelBuilder);

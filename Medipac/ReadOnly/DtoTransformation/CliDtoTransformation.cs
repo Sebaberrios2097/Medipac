@@ -5,31 +5,6 @@ namespace Medipac.ReadOnly.DtoTransformation
 {
     public static class CliDtoTransformation
     {
-        // Conversión modelo CliExamenesSolicitados
-        public static DtoCliExamenesSolicitados ToDto(this CliExamenesSolicitados original)
-        {
-            return new()
-            {
-                IdExamenesSolicitados = original.IdExamenesSolicitados,
-                IdSolicitudExamen = original.IdSolicitudExamen,
-                IdTipoExamen = original.IdTipoExamen,
-                Descripcion = original.Descripcion,
-                FechaCreacion = original.FechaCreacion,
-                Estado = original.Estado,
-            };
-        }
-        public static CliExamenesSolicitados ToOriginal(this DtoCliExamenesSolicitados dto)
-        {
-            return new()
-            {
-                IdExamenesSolicitados = dto.IdExamenesSolicitados,
-                IdSolicitudExamen = dto.IdSolicitudExamen,
-                IdTipoExamen = dto.IdTipoExamen,
-                Descripcion = dto.Descripcion,
-                FechaCreacion = dto.FechaCreacion,
-                Estado = dto.Estado,
-            };
-        }
 
         // Conversión modelo CliHistorialPaciente
         public static DtoCliHistorialPaciente ToDto(this CliHistorialPaciente original)
@@ -145,28 +120,6 @@ namespace Medipac.ReadOnly.DtoTransformation
                 IdRecetaPaciente = dto.IdRecetaPaciente,
                 Receta = dto.Receta,
                 Estado = dto.Estado
-            };
-        }
-
-        // Conversión modelo CliSolicitudExamen
-        public static DtoCliSolicitudExamen ToDto(this CliSolicitudExamen original)
-        {
-            return new()
-            {
-                IdSolicitudExamen = original.IdSolicitudExamen,
-                IdHistorialPaciente = original.IdHistorialPaciente,
-                FechaCreacion = original.FechaCreacion,
-                FechaSolicitud = original.FechaSolicitud,
-            };
-        }
-        public static CliSolicitudExamen ToOriginal(this DtoCliSolicitudExamen dto)
-        {
-            return new()
-            {
-                IdSolicitudExamen = dto.IdSolicitudExamen,
-                IdHistorialPaciente = dto.IdHistorialPaciente,
-                FechaCreacion = dto.FechaCreacion,
-                FechaSolicitud = dto.FechaSolicitud,
             };
         }
     }

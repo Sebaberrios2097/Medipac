@@ -1,8 +1,7 @@
-using Medipac.Areas.ADM.Data.Interfaces;
 using Medipac.Areas.CLI.Data.Interfaces;
 using Medipac.Areas.COM.Data.Interfaces;
-using Medipac.Areas.EXM.Data.Interfaces;
 using Medipac.Areas.RES.Data.Interfaces;
+using Medipac.Data.ADM.Interfaces;
 using Medipac.Data.Repositories;
 
 namespace Medipac.Framework
@@ -11,28 +10,20 @@ namespace Medipac.Framework
     {
         public static void RegisterDependencies(IServiceCollection services)
         {
-            services.AddScoped<IComUsuarioRepository, ComUsuarioRepository>();
-            services.AddScoped<IExmCategoriaExamenRepository, ExmCategoriaExamenRepository>();
-            services.AddScoped<ILogUsuarioRepository, LogUsuarioRepository>();
-            services.AddScoped<IExmTipoExamenRepository, ExmTipoExamenRepository>();
-            services.AddScoped<IResAgendaRepository, ResAgendaRepository>();
-            services.AddScoped<IResCentroMedicoRepository, ResCentroMedicoRepository>();
-            services.AddScoped<IResConvenioRepository, ResConvenioRepository>();
-            services.AddScoped<IResEspecialidadesRepository, ResEspecialidadesRepository>();
-            services.AddScoped<IResMedicoCentroMedicoRepository, ResMedicoCentroMedicoRepository>();
-            services.AddScoped<IResMedicoConvenioRepository, ResMedicoConvenioRepository>();
-            services.AddScoped<IResMedicoEspecialidadRepository, ResMedicoEspecialidadRepository>();
-            services.AddScoped<IResPrevisionesRepository, ResPrevisionesRepository>();
-            services.AddScoped<IResReservaRepository, ResReservaRepository>();
-            services.AddScoped<ICliHistorialPacienteRepository, CliHistorialPacienteRepository>();
-            services.AddScoped<ICliExamenesSolicitadosRepository, CliExamenesSolicitadosRepository>();
-            services.AddScoped<ICliPacientesRepository, CliPacientesRepository>();
-            services.AddScoped<ICliMedicoRepository, CliMedicoRepository>();
-            services.AddScoped<ICliRecetaPacienteRepository, CliRecetaPacienteRepository>();
-            services.AddScoped<IComEstadosUsuarioRepository, ComEstadosUsuarioRepository>();
-            services.AddScoped<IAdmAdminRepository, AdmAdminRepository>();
-            services.AddScoped<IAdmCarruselNoticiasRepository, AdmCarruselNoticiasRepository>();
-            services.AddScoped<IAdmNoticiasRepository, AdmNoticiasRepository>();
+            _ = services.AddScoped<IComUsuarioRepository, ComUsuarioRepository>();
+            _ = services.AddScoped<ILogUsuarioRepository, LogUsuarioRepository>();
+            _ = services.AddScoped<IResAgendaRepository, ResAgendaRepository>();
+            _ = services.AddScoped<IResEspecialidadesRepository, ResEspecialidadesRepository>();
+            _ = services.AddScoped<IResMedicoEspecialidadRepository, ResMedicoEspecialidadRepository>();
+            _ = services.AddScoped<IResReservaRepository, ResReservaRepository>();
+            _ = services.AddScoped<ICliHistorialPacienteRepository, CliHistorialPacienteRepository>();
+            _ = services.AddScoped<ICliPacientesRepository, CliPacientesRepository>();
+            _ = services.AddScoped<ICliMedicoRepository, CliMedicoRepository>();
+            _ = services.AddScoped<ICliRecetaPacienteRepository, CliRecetaPacienteRepository>();
+            _ = services.AddScoped<IComEstadosUsuarioRepository, ComEstadosUsuarioRepository>();
+            _ = services.AddScoped<IAdmNoticiasRepository, AdmNoticiasRepository>();
+            _ = services.AddScoped<IAdmCarruselNoticiasRepository, AdmCarruselNoticiasRepository>();
+
         }
     }
 }

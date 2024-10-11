@@ -1,6 +1,5 @@
 using Medipac.Context;
 using Medipac.Framework;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -37,27 +37,27 @@ namespace Medipac.ReadOnly
             return $"{rutFormateado}-{dv}";
         }
 
-		public static class MenuHelper
-		{
-			// Método para verificar si el área, controlador y acción son activos
-			public static string IsActive(ViewContext viewContext, string area, string controller, string action)
-			{
-				string activeClass = "active";
+        public static class MenuHelper
+        {
+            // Método para verificar si el área, controlador y acción son activos
+            public static string IsActive(ViewContext viewContext, string area, string controller, string action)
+            {
+                string activeClass = "active";
 
-				string currentArea = viewContext.RouteData.Values["area"]?.ToString();
-				string currentController = viewContext.RouteData.Values["controller"]?.ToString();
-				string currentAction = viewContext.RouteData.Values["action"]?.ToString();
+                string currentArea = viewContext.RouteData.Values["area"]?.ToString();
+                string currentController = viewContext.RouteData.Values["controller"]?.ToString();
+                string currentAction = viewContext.RouteData.Values["action"]?.ToString();
 
-				// Comparar área, controlador y acción actuales con los pasados
-				if (string.Equals(currentArea, area, StringComparison.OrdinalIgnoreCase) &&
-					string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase) &&
-					string.Equals(currentAction, action, StringComparison.OrdinalIgnoreCase))
-				{
-					return activeClass;
-				}
+                // Comparar área, controlador y acción actuales con los pasados
+                if (string.Equals(currentArea, area, StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(currentAction, action, StringComparison.OrdinalIgnoreCase))
+                {
+                    return activeClass;
+                }
 
-				return string.Empty; // Si no es activo, devolver cadena vacía
-			}
-		}
-	}
+                return string.Empty; // Si no es activo, devolver cadena vacía
+            }
+        }
+    }
 }

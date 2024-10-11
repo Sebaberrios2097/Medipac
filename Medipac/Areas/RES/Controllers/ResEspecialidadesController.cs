@@ -3,7 +3,6 @@ using Medipac.Areas.RES.Data.Interfaces;
 using Medipac.ReadOnly;
 using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Medipac.Areas.RES.Controllers
 {

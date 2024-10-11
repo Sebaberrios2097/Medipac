@@ -26,12 +26,4 @@ public partial class CliExamenesSolicitados
     /// Columna que representa el borrado lógico del registro.
     /// </summary>
     public bool Estado { get; set; }
-
-    [ForeignKey("IdSolicitudExamen")]
-    [InverseProperty("CliExamenesSolicitados")]
-    public virtual CliSolicitudExamen IdSolicitudExamenNavigation { get; set; } = null!;
-
-    [ForeignKey("IdTipoExamen")]
-    [InverseProperty("CliExamenesSolicitados")]
-    public virtual ExmTipoExamen IdTipoExamenNavigation { get; set; } = null!;
 }

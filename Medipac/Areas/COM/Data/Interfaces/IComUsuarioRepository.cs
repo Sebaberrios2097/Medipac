@@ -1,4 +1,3 @@
-using Medipac.Areas.COM.Data.DTO;
 using Medipac.Models;
 
 namespace Medipac.Areas.COM.Data.Interfaces

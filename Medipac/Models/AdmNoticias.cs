@@ -10,8 +10,8 @@ public partial class AdmNoticias
     [Column("Id_Noticia")]
     public int IdNoticia { get; set; }
 
-    [Column("Id_Admin")]
-    public int IdAdmin { get; set; }
+    [Column("Id_Usuario")]
+    public int IdUsuario { get; set; }
 
     [StringLength(100)]
     public string Titulo { get; set; } = null!;
@@ -33,7 +33,7 @@ public partial class AdmNoticias
     [InverseProperty("IdNoticiaNavigation")]
     public virtual ICollection<AdmCarruselNoticias> AdmCarruselNoticias { get; set; } = new List<AdmCarruselNoticias>();
 
-    [ForeignKey("IdAdmin")]
+    [ForeignKey("IdUsuario")]
     [InverseProperty("AdmNoticias")]
-    public virtual AdmAdmin IdAdminNavigation { get; set; } = null!;
+    public virtual ComUsuario IdUsuarioNavigation { get; set; } = null!;
 }

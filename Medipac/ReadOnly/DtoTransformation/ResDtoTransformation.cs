@@ -34,56 +34,6 @@ namespace Medipac.ReadOnly.DtoTransformation
             };
         }
 
-        // Transformación modelo ResCentroMedico
-        public static DtoResCentroMedico ToDto(this ResCentroMedico original)
-        {
-            return new()
-            {
-                Correo = original.Correo,
-                Direccion = original.Direccion,
-                Estado = original.Estado,
-                IdCentroMedico = original.IdCentroMedico,
-                Nombre = original.Nombre,
-                Telefono = original.Telefono
-            };
-        }
-
-        public static ResCentroMedico ToOriginal(this DtoResCentroMedico dto)
-        {
-            return new()
-            {
-                Correo = dto.Correo,
-                Direccion = dto.Direccion,
-                Estado = dto.Estado,
-                IdCentroMedico = dto.IdCentroMedico,
-                Nombre = dto.Nombre,
-                Telefono = dto.Telefono
-            };
-        }
-
-        // Transformación modelo ResConvenio
-        public static DtoResConvenio ToDto(this ResConvenio original)
-        {
-            return new()
-            {
-                Estado = original.Estado,
-                IdConvenio = original.IdConvenio,
-                Nombre = original.Nombre,
-                Tipo = original.Tipo
-            };
-        }
-
-        public static ResConvenio ToOriginal(this DtoResConvenio dto)
-        {
-            return new()
-            {
-                Estado = dto.Estado,
-                IdConvenio = dto.IdConvenio,
-                Nombre = dto.Nombre,
-                Tipo = dto.Tipo
-            };
-        }
-
         // Transformación modelo ResEspecialidades
         public static DtoResEspecialidades ToDto(this ResEspecialidades original)
         {
@@ -104,62 +54,22 @@ namespace Medipac.ReadOnly.DtoTransformation
                 Nombre = dto.Nombre
             };
         }
-        // Transformación modelo ResMedicoCentroMedico
-        public static DtoResMedicoCentroMedico ToDto(this ResMedicoCentroMedico original)
-        {
-            return new()
-            {
-                IdCentroMedico = original.IdCentroMedico,
-                IdMedico = original.IdMedico,
-                IdMedicoCentroMedico = original.IdMedicoCentroMedico
-            };
-        }
-
-        public static ResMedicoCentroMedico ToOriginal(this DtoResMedicoCentroMedico dto)
-        {
-            return new()
-            {
-                IdCentroMedico = dto.IdCentroMedico,
-                IdMedico = dto.IdMedico,
-                IdMedicoCentroMedico = dto.IdMedicoCentroMedico
-            };
-        }
-        // Transformación modelo ResMedicoConvenio
-        public static DtoResMedicoConvenio ToDto(this ResMedicoConvenio original)
-        {
-            return new()
-            {
-                IdConvenio = original.IdConvenio,
-                IdMedico = original.IdMedico,
-                IdMedicoConvenio = original.IdConvenio
-            };
-        }
-
-        public static ResMedicoConvenio ToOriginal(this DtoResMedicoConvenio dto)
-        {
-            return new()
-            {
-                IdConvenio = dto.IdConvenio,
-                IdMedico = dto.IdMedico,
-                IdMedicoConvenio = dto.IdMedicoConvenio
-            };
-        }
 
         // Transformación modelo ResMedicoEspecialidad
         public static DtoResMedicoEspecialidad ToDto(this ResMedicoEspecialidad original)
         {
-            var Query =  new DtoResMedicoEspecialidad()
+            var Query = new DtoResMedicoEspecialidad()
             {
                 IdEspecialidad = original.IdEspecialidad,
                 IdMedico = original.IdMedico,
                 IdMedicoEspecialidad = original.IdMedicoEspecialidad,
             };
 
-            if(original.IdMedicoNavigation != null)
+            if (original.IdMedicoNavigation != null)
             {
                 Query.DtoCliMedico = original.IdMedicoNavigation.ToDto();
             }
-            if(original.IdEspecialidadNavigation != null)
+            if (original.IdEspecialidadNavigation != null)
             {
                 Query.DtoResEspecialidades = original.IdEspecialidadNavigation.ToDto();
             }
@@ -176,26 +86,6 @@ namespace Medipac.ReadOnly.DtoTransformation
                 IdMedicoEspecialidad = dto.IdMedicoEspecialidad
             };
         }
-        // Transformación modelo ResPrevisiones
-        public static DtoResPrevisiones ToDto(this ResPrevisiones original)
-        {
-            return new()
-            {
-                Estado = original.Estado,
-                IdPrevision = original.IdPrevision,
-                Nombre = original.Nombre
-            };
-        }
-
-        public static ResPrevisiones ToOriginal(this DtoResPrevisiones dto)
-        {
-            return new()
-            {
-                Estado = dto.Estado,
-                IdPrevision = dto.IdPrevision,
-                Nombre = dto.Nombre
-            };
-        }
         // Transformación modelo ResReserva
         public static DtoResReserva ToDto(this ResReserva original)
         {
@@ -204,10 +94,8 @@ namespace Medipac.ReadOnly.DtoTransformation
                 Estado = original.Estado,
                 Fecha = original.Fecha,
                 FechaCreacion = original.FechaCreacion,
-                IdCentroMedico = original.IdCentroMedico,
                 IdMedico = original.IdMedico,
                 IdPaciente = original.IdPaciente,
-                IdPrevision = original.IdPrevision,
                 IdReserva = original.IdReserva,
             };
         }
@@ -219,10 +107,8 @@ namespace Medipac.ReadOnly.DtoTransformation
                 Estado = dto.Estado,
                 Fecha = dto.Fecha,
                 FechaCreacion = dto.FechaCreacion,
-                IdCentroMedico = dto.IdCentroMedico,
                 IdMedico = dto.IdMedico,
                 IdPaciente = dto.IdPaciente,
-                IdPrevision = dto.IdPrevision,
                 IdReserva = dto.IdReserva
             };
         }

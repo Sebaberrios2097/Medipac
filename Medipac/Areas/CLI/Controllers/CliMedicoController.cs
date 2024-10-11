@@ -1,13 +1,11 @@
 using Medipac.Areas.CLI.Data.DTO;
 using Medipac.Areas.CLI.Data.Interfaces;
 using Medipac.Areas.COM.Data.Interfaces;
-using Medipac.Areas.RES.Data.DTO;
 using Medipac.Areas.RES.Data.Interfaces;
 using Medipac.Models;
 using Medipac.ReadOnly;
 using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Medipac.Areas.CLI.Controllers
 {
@@ -70,7 +68,7 @@ namespace Medipac.Areas.CLI.Controllers
             ComUsuario newUsuario = new()
             {
                 Usuario = $"{Dto.Nombres[..3].ToLower()}.{Dto.ApPaterno.ToLower()}",
-                Password = Dto.Rut.ToString(),  
+                Password = Dto.Rut.ToString(),
                 FechaCreacion = DateTime.Now,
                 IdUsuario = Dto.IdUsuario,
                 IdEstado = 2 // Estado 'Activo' por defecto.
