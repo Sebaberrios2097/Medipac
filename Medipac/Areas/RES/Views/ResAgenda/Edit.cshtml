@@ -1,0 +1,27 @@
+﻿@model Medipac.Areas.RES.Data.DTO.DtoResAgenda
+
+<h2>Editar Cita Médica</h2>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label for="Fecha">Fecha de la cita</label>
+        <input type="date" asp-for="Fecha" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="HoraInicio">Hora de inicio</label>
+        <input type="time" asp-for="HoraInicio" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="HoraFin">Hora de fin</label>
+        <input type="time" asp-for="HoraFin" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Disponible">Disponible</label>
+        <input type="checkbox" asp-for="Disponible" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+</form>
