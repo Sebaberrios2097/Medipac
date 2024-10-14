@@ -1,7 +1,7 @@
 ﻿@model Medipac.Areas.CLI.Data.DTO.DtoCliMedico
 
 @{
-    ViewData["Tittle"] = "Agregar Médico";
+    ViewData["Tittle"] = "Editar Médico";
     Layout = "~/Views/Shared/_LayoutAdm.cshtml";
 }
 
@@ -13,6 +13,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.IdMedico)
+    @Html.HiddenFor(model => model.IdUsuario)
 
     <div class="card shadow-lg">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -38,8 +39,8 @@
                             @class = "form-select"
                         })
                 </div>
-
             </div>
+
             <div class="row mt-3">
                 <div class="col">
                     @Html.LabelFor(model => model.Nombres)
@@ -75,6 +76,7 @@
                         })
                 </div>
             </div>
+
             <div class="row mt-3">
                 <div class="col">
                     @Html.LabelFor(model => model.Fono)
@@ -99,9 +101,27 @@
                         })
                 </div>
             </div>
-            <div class="row">
-            </div>
+
+            @if (ViewBag.Especialidades != null)
+            {
+                <div class="row mt-3">
+                    <div class="col">
+                        @Html.Label("Especialidades", "Especialidades")
+                        @Html.ListBoxFor(model => model.EspecialidadesSeleccionadas, new SelectList(ViewBag.Especialidades, "IdEspecialidad", "Nombre", Model.EspecialidadesSeleccionadas), new
+                            {
+                                @class = "form-control select2",
+                                @multiple = "multiple"
+                            })
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p class="text-danger">Error al cargar las especialidades. Por favor, intente de nuevo.</p>
+            }
+
         </div>
+
         <div class="card-footer">
             <div class="row">
                 <div class="col">
@@ -113,16 +133,25 @@
             </div>
         </div>
     </div>
+}
 
-    <script>
-        document.getElementById("Rut").addEventListener("input", function (event) {
+
+<script>
+    document.getElementById("Rut").addEventListener("input", function (event) {
         // Eliminar cualquier carácter que no sea un número
         this.value = this.value.replace(/\D/g, '');
 
         // Limitar a 8 caracteres
         if (this.value.length > 8) {
-        this.value = this.value.slice(0, 8);
+            this.value = this.value.slice(0, 8);
         }
+    });
+
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: "Seleccione especialidades",
+            allowClear: true
         });
-    </script>
-}
+    });
+
+</script>

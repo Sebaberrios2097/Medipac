@@ -108,7 +108,7 @@
                         @Html.Label("Especialidades", "Especialidades")
                         @Html.ListBoxFor(model => model.EspecialidadesSeleccionadas, new SelectList(ViewBag.Especialidades, "IdEspecialidad", "Nombre"), new
                             {
-                                @class = "form-control",
+                                @class = "form-control select2",
                                 @multiple = "multiple"
                             })
                     </div>
@@ -132,16 +132,24 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.getElementById("Rut").addEventListener("input", function (event) {
-            // Eliminar cualquier carácter que no sea un número
-            this.value = this.value.replace(/\D/g, '');
-
-            // Limitar a 8 caracteres
-            if (this.value.length > 8) {
-                this.value = this.value.slice(0, 8);
-            }
-        });
-    </script>
 }
+
+<script>
+    document.getElementById("Rut").addEventListener("input", function (event) {
+        // Eliminar cualquier carácter que no sea un número
+        this.value = this.value.replace(/\D/g, '');
+
+        // Limitar a 8 caracteres
+        if (this.value.length > 8) {
+            this.value = this.value.slice(0, 8);
+        }
+    });
+
+            $(document).ready(function() {
+                $('.select2').select2({
+                    placeholder: "Seleccione especialidades",
+                    allowClear: true
+                });
+            });
+
+</script>

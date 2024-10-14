@@ -13,6 +13,7 @@
     <!-- DataTables CSS (Eliminamos duplicados y cargamos la versión correcta de DataTables) -->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" asp-append-version="true" />
 
     <!-- Otros estilos personalizados -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&display=swap" asp-append-version="true" />
@@ -44,6 +45,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <!-- Script personalizado del sitio -->
     <script src="~/js/site.js"></script>
 
@@ -65,20 +68,16 @@
                     <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover"
                             data-bs-toggle="collapse"
                             data-bs-target="#collapse-armed"
-                            aria-expanded="@((ViewData["ActivePage"] as string) == "Lista de Médicos" ||
-                                             (ViewData["ActivePage"] as string) == "GestionarEspecialidades" ||
-                                             (ViewData["ActivePage"] as string) == "GestionarMedicoEspecialidades" ? "true" : "false")">
+                            aria-expanded="@((ViewData["ActivePage"] as string) == "Lista de Medicos" ||
+                                             (ViewData["ActivePage"] as string) == "GestionarEspecialidades" ? "true" : "false")">
                         <i class="bi bi-newspaper" style="padding-right:10px"></i>
                         Gestión del Área Médica
                     </button>
-                    <div class="collapse @((ViewData["ActivePage"] as string) == "Lista de Médicos" ||
-                                           (ViewData["ActivePage"] as string) == "GestionarEspecialidades" ||
-                                           (ViewData["ActivePage"] as string) == "GestionarMedicoEspecialidades" ? "show" : "" )" id="collapse-armed">
+                    <div class="collapse @((ViewData["ActivePage"] as string) == "Lista de Medicos" ||
+                                           (ViewData["ActivePage"] as string) == "GestionarEspecialidades" ? "show" : "" )" id="collapse-armed">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a asp-area="CLI" asp-controller="CliMedico" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Lista de Médicos" ? "active" : "")">Lista de Médicos</a></li>
+                            <li><a asp-area="CLI" asp-controller="CliMedico" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Lista de Medicos" ? "active" : "")">Lista de Médicos</a></li>
                             <li><a asp-area="RES" asp-controller="ResEspecialidades" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarEspecialidades" ? "active" : "")">Gestionar Especialidades</a></li>
-                            <li><a asp-area="RES" asp-controller="ResMedicoEspecialidad" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarMedicoEspecialidades" ? "active" : "")">Especialidades por Médico</a></li>
-                            <li><a asp-area="" asp-controller="" asp-action="" class="nav-link text-white rounded">Administrar Tipos Exámenes</a></li>
                         </ul>
                     </div>
                 </li>

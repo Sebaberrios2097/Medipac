@@ -1,3 +1,4 @@
+using Humanizer;
 using Medipac.Areas.CLI.Data.DTO;
 using Medipac.Areas.CLI.Data.Interfaces;
 using Medipac.Areas.COM.Data.Interfaces;
@@ -30,17 +31,21 @@ namespace Medipac.Areas.CLI.Controllers
 
         public async Task<ActionResult> Index()
         {
-            ViewData["ActivePage"] = "Lista de Médicos";
+            ViewData["ActivePage"] = "Lista de Medicos";
             var Query = await climedico.GetAll();
             var listDto = Query.Select(item =>
             {
                 var dto = item.ToDto();
                 dto.RutFormateado = GetFunctions.FormatearRut(dto.Rut, dto.Dv);
+                dto.NombresEspecialidades = item.ResMedicoEspecialidad.Select(e => e.IdEspecialidadNavigation.Nombre).ToList();
+
+
                 return dto;
             }).ToList();
 
             return PartialView(listDto);
         }
+
 
         public async Task<ActionResult> Details(int id)
         {
@@ -50,6 +55,7 @@ namespace Medipac.Areas.CLI.Controllers
 
         public async Task<ActionResult> Create()
         {
+            ViewData["ActivePage"] = "Lista de Medicos";
             // Cargar los estados (asegurarse de que DropDownList.Estado esté bien definido)
             ViewBag.Estado = DropDownList.Estado;
 
@@ -119,26 +125,82 @@ namespace Medipac.Areas.CLI.Controllers
                 return NotFound();
             }
 
+            ViewData["ActivePage"] = "Lista de Medicos";
             ViewBag.Estado = DropDownList.Estado;
 
+            // Obtener el médico con sus especialidades
             var Query = await climedico.GetById(id);
 
-            if (Query == null) { return NotFound(); }
+            if (Query == null)
+            {
+                return NotFound();
+            }
 
-            return View(Query.ToDto());
+            // Cargar todas las especialidades disponibles para el dropdown
+            var especialidades = await resEspecialidades.GetAll();
+            ViewBag.Especialidades = especialidades
+                .Select(e => new { e.IdEspecialidad, e.Nombre })
+                .ToList();
+
+            // Obtener los IDs y nombres de las especialidades seleccionadas
+            var espSelIds = Query.ResMedicoEspecialidad
+                                 .Select(m => m.IdEspecialidad)
+                                 .ToList();
+
+            var espSelNombres = Query.ResMedicoEspecialidad
+                                     .Select(m => m.IdEspecialidadNavigation.Nombre)
+                                     .ToList();
+
+            // Mapear al DTO y asignar las especialidades seleccionadas
+            var queryDto = Query.ToDto();
+            queryDto.EspecialidadesSeleccionadas = espSelIds;  // Asignar los IDs
+            queryDto.NombresEspecialidades = espSelNombres;    // Asignar los nombres
+
+            return View(queryDto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DtoCliMedico dto)
         {
-            if (id != dto.IdMedico) { return NotFound(); }
+            if (id != dto.IdMedico)
+            {
+                return NotFound();
+            }
 
+            // Generar dígito verificador del RUT y almacenarlo
+            dto.Dv = GetFunctions.CalcularDvRut(dto.Rut);
+
+            // Obtener el médico con sus relaciones actuales de especialidades
+            var medico = await climedico.GetById(id);
+
+            if (medico == null)
+            {
+                return NotFound();
+            }
+
+            // Eliminar las especialidades actuales del médico
+            medico.ResMedicoEspecialidad.Clear();
+
+            // Agregar las nuevas especialidades seleccionadas
+            foreach (var especialidadId in dto.EspecialidadesSeleccionadas)
+            {
+                medico.ResMedicoEspecialidad.Add(new ResMedicoEspecialidad
+                {
+                    IdMedico = medico.IdMedico,
+                    IdEspecialidad = especialidadId
+                });
+            }
+
+            // Actualizar los datos del médico (sin perder las relaciones de especialidades)
             climedico.Update(dto.ToOriginal());
+
+            // Guardar los cambios en la base de datos
             _ = await climedico.Save();
 
             return RedirectToAction(nameof(Index));
         }
+
 
         public async Task<IActionResult> Delete(int id)
         {

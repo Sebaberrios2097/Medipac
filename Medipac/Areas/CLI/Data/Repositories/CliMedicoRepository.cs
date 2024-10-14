@@ -17,10 +17,16 @@ namespace Medipac.Data.Repositories
 
         public async Task<List<CliMedico>> GetAll()
         {
-            return await db.CliMedico.ToListAsync();
+            return await db.CliMedico
+                .Include(m => m.ResMedicoEspecialidad)
+                .ThenInclude(m => m.IdEspecialidadNavigation)
+                .ToListAsync();
         }
 
-        public async Task<CliMedico> GetById(int id) => await db.CliMedico.FirstOrDefaultAsync(a => a.IdMedico == id) ?? new CliMedico();
+        public async Task<CliMedico> GetById(int id) => await db.CliMedico
+                                                                .Include(m => m.ResMedicoEspecialidad)
+                                                                .ThenInclude(m => m.IdEspecialidadNavigation)
+                                                                .FirstOrDefaultAsync(a => a.IdMedico == id) ?? new CliMedico();
 
         public async Task<CliMedico> Add(CliMedico climedico)
         {

@@ -1,3 +1,4 @@
+using Medipac.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Medipac.Areas.CLI.Data.DTO
@@ -29,5 +30,6 @@ namespace Medipac.Areas.CLI.Data.DTO
         public string RutFormateado { get; set; } = null!;
 
         public List<int> EspecialidadesSeleccionadas { get; set; } = new List<int>();
+        public List<string> NombresEspecialidades { get; set; } = new List<string>(); // Nombres de las especialidades
     }
 }
