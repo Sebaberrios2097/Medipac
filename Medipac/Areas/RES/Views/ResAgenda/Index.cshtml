@@ -14,8 +14,8 @@
                 <span><strong>Hora:</strong> @cita.HoraInicio - @cita.HoraFin</span>
                 <span><strong>Estado:</strong> @(cita.Disponible ? "Disponible" : "No Disponible")</span>
             </div>
-            <a href="/RES/ResAgenda/Edit/@cita.IdAgenda" class="btn-info">Editar</a>
-            <a href="/RES/ResAgenda/Delete/@cita.IdAgenda" class="btn-danger">Eliminar</a>
+            <a href="@Url.Action("Edit", "ResAgenda", new { id = cita.IdAgenda})" class="btn-info">Editar</a>
+            <a href="@Url.Action("Delete", "ResAgenda", new { id = cita.IdAgenda})" class="btn-danger">Eliminar</a>
         </div>
     }
 </div>
