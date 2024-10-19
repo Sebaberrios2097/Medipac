@@ -15,7 +15,6 @@
     @* Scripts *@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-
 </head>
 <body>
     <header>
@@ -29,11 +28,27 @@
                 <a class="text-white" asp-area="ADM" asp-controller="AdmCarruselNoticias" asp-action="Index">Administración</a>
                 <a class="text-white">Sobre Nosotros</a>
             </div>
-            <a href="/login" class="login-btn">
-                <i class="fas fa-user"></i> Iniciar Sesión
-            </a>
+
+            @* Verificar si el usuario está autenticado *@
+            @using Microsoft.AspNetCore.Identity
+            @inject SignInManager<ComUsuario> SignInManager
+            @inject UserManager<ComUsuario> UserManager
+
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <a class="login-btn" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="~/">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </a>
+            }
+            else
+            {
+                <a class="login-btn" asp-area="Identity" asp-page="/Account/Login">
+                    <i class="fas fa-user"></i> Iniciar Sesión
+                </a>
+            }
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -87,6 +102,8 @@
             <p>&copy; 2023 Centro Médico. Todos los derechos reservados. | <a href="/privacidad">Política de Privacidad</a> | <a href="/terminos">Términos de Uso</a></p>
         </div>
     </footer>
+
+    @* Scripts *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

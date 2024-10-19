@@ -1,8 +1,10 @@
 using Medipac.Context;
 using Medipac.Framework;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Medipac.Models;
+using Medipac.ReadOnly;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // Registrar dependencias personalizadas
+builder.Services.AddTransient<IEmailSender, FakeEmailSender>();
 DependencyRegistration.RegisterDependencies(builder.Services);
 
-// Configurar DbContext con la cadena de conexión
+// Configurar DbContext con la cadena de conexiÃ³n
 builder.Services.AddDbContext<DbMedipac>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("MediappCon"));
@@ -20,34 +23,11 @@ builder.Services.AddDbContext<DbMedipac>(options =>
 
 // Configurar Identity
 builder.Services.AddIdentity<ComUsuario, IdentityRole<int>>()
-    .AddEntityFrameworkStores<DbMedipac>()  // Utilizar el DbContext para Identity
+    .AddEntityFrameworkStores<DbMedipac>()
     .AddDefaultTokenProviders();
 
-// Configurar las opciones de Identity (opcional)
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    // Configurar reglas de password (puedes ajustar estas opciones a tu gusto)
-    options.Password.RequireDigit = true;
-    options.Password.RequiredLength = 6;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireLowercase = false;
-
-    // Configurar opciones de bloqueo
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.AllowedForNewUsers = true;
-
-    // Configurar opciones de usuario
-    options.User.RequireUniqueEmail = true;
-});
-
-// Configurar la cookie de autenticación
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Account/AccessDenied";
-});
+// Agregar Razor Pages (Necesario para Identity)
+builder.Services.AddRazorPages();  // << Agregar esta lÃ­nea
 
 var app = builder.Build();
 
@@ -63,9 +43,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Middleware de autenticación y autorización
-app.UseAuthentication();  // Asegúrate de llamar a este antes de UseAuthorization
+app.UseAuthentication();  // AsegÃºrate de que esto estÃ© antes de UseAuthorization
 app.UseAuthorization();
+
+// Mapeo de rutas para las pÃ¡ginas Razor (incluyendo Identity)
+app.MapRazorPages(); // << Esto habilita las Razor Pages
 
 app.MapControllerRoute(
     name: "areas",

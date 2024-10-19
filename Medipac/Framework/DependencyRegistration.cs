@@ -3,6 +3,7 @@ using Medipac.Areas.COM.Data.Interfaces;
 using Medipac.Areas.RES.Data.Interfaces;
 using Medipac.Data.ADM.Interfaces;
 using Medipac.Data.Repositories;
+using Medipac.ReadOnly;
 
 namespace Medipac.Framework
 {
@@ -23,7 +24,6 @@ namespace Medipac.Framework
             _ = services.AddScoped<IComEstadosUsuarioRepository, ComEstadosUsuarioRepository>();
             _ = services.AddScoped<IAdmNoticiasRepository, AdmNoticiasRepository>();
             _ = services.AddScoped<IAdmCarruselNoticiasRepository, AdmCarruselNoticiasRepository>();
-
         }
     }
 }
