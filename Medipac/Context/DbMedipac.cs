@@ -1,9 +1,11 @@
 ﻿using Medipac.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Medipac.Context;
 
-public partial class DbMedipac : DbContext
+public partial class DbMedipac : IdentityDbContext<ComUsuario, IdentityRole<int>, int>
 {
     public DbMedipac()
     {
@@ -40,12 +42,9 @@ public partial class DbMedipac : DbContext
 
     public virtual DbSet<ResReserva> ResReserva { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server = medipac.database.windows.net; Database = medipac; User Id = mediadmin; Password = Capstone321; TrustServerCertificate=True;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<AdmCarruselNoticias>(entity =>
         {
             entity.HasOne(d => d.IdNoticiaNavigation).WithMany(p => p.AdmCarruselNoticias)

@@ -71,24 +71,6 @@ namespace Medipac.Areas.CLI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(DtoCliMedico Dto)
         {
-            ComUsuario newUsuario = new()
-            {
-                Usuario = $"{Dto.Nombres[..3].ToLower()}.{Dto.ApPaterno.ToLower()}",
-                Password = Dto.Rut.ToString(),
-                FechaCreacion = DateTime.Now,
-                IdUsuario = Dto.IdUsuario,
-                IdEstado = 2 // Estado 'Activo' por defecto.
-
-            };
-
-            // Guardar usuario
-            var guardarUsuario = await comUsuario.Add(newUsuario);
-            var ResultGuardarUsuario = await comUsuario.Save();
-
-            // Obtener Id del usuario creado y dárselo al médico
-            var usuarioMedico = await comUsuario.GetById(newUsuario.IdUsuario);
-            Dto.IdUsuario = usuarioMedico.IdUsuario;
-
             // Generar digito verificador del rut y almacenarlo
             Dto.Dv = GetFunctions.CalcularDvRut(Dto.Rut);
 
