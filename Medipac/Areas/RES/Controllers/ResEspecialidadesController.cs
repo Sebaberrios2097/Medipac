@@ -2,11 +2,13 @@ using Medipac.Areas.RES.Data.DTO;
 using Medipac.Areas.RES.Data.Interfaces;
 using Medipac.ReadOnly;
 using Medipac.ReadOnly.DtoTransformation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Medipac.Areas.RES.Controllers
 {
     [Area("RES")]
+    [Authorize(Roles = "Administrador")]
     public class ResEspecialidadesController : Controller
     {
         private readonly IResEspecialidadesRepository resespecialidades;

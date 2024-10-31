@@ -3,7 +3,6 @@ using Medipac.Areas.COM.Data.Interfaces;
 using Medipac.Areas.RES.Data.Interfaces;
 using Medipac.Data.ADM.Interfaces;
 using Medipac.Data.Repositories;
-using Medipac.ReadOnly;
 
 namespace Medipac.Framework
 {
