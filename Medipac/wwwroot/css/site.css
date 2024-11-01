@@ -1,3 +1,22 @@
+/* Contenedor principal de la página */
+html, body {
+    height: 100%; /* Asegura que el html y el body ocupen el 100% del viewport */
+    margin: 0;
+}
+
+.wrapper {
+    min-height: 55%; /* Asegura que el contenedor ocupe al menos toda la pantalla */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Contenido principal */
+.content {
+    flex: 1;
+    margin-bottom: 40px; /* Ajusta este valor según el espacio que desees */
+}
+
+
 /* Navbar Styles */
 .navbar {
     background: linear-gradient(-45deg, #3498db, #2c3e50, #2980b9, #34495e);
@@ -146,9 +165,9 @@ footer {
     background: linear-gradient(135deg, #2c3e50, #34495e);
     color: white;
     padding: 50px 0 20px;
+    box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
     position: relative;
     width: 100%;
-    box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
 }
 
 .footer-content {
@@ -322,6 +341,26 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+/* Tamaño estándar carrusel de noticias */
+.carousel-inner img {
+    height: 500px; /* Ajusta según sea necesario */
+    object-fit: cover;
+}
+
+/* Aplica el fondo opaco al contenedor de texto */
+.text-overlay {
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo negro con 60% de opacidad */
+    padding: 15px;
+    border-radius: 8px; /* Bordes redondeados opcionales */
+}
+
+    /* Opcional: Ajusta el color y tamaño del texto */
+    .text-overlay h5, .text-overlay p {
+        color: #ffffff; /* Texto blanco */
+    }
+
+
+
 input[type="number"] {
     -moz-appearance: textfield;
 }
@@ -330,6 +369,14 @@ input[type="number"] {
 
 /* Contenedor de la tarjeta de inicio de sesión */
 .login-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+.reg-container {
     max-width: 600px;
     margin: 2rem auto;
     padding: 2rem;
@@ -441,3 +488,17 @@ input[type="number"] {
 }
 
 /* Fin Vista Login */
+
+.admin-home-tit {
+    background: linear-gradient(135deg, #1E3E62 0%, #2c3e50 100%);
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    /* text-align: center; */
+    display: flex;
+    justify-content: center;
+}
+
+.bg-header-modal {
+    background: linear-gradient(135deg, #1E3E62 0%, #2c3e50 100%);
+}

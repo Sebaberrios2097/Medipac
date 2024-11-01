@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-namespace Medipac.Data.ADM.DTO
+namespace Medipac.Areas.ADM.Data.DTO
 {
     public class DtoCarruselNoticias
     {
@@ -15,5 +15,8 @@ namespace Medipac.Data.ADM.DTO
         [StringLength(500)]
         public string? UrlImagen { get; set; }
         public bool Activo { get; set; }
+
+        public DtoNoticias? DtoNoticias { get; set; }
+        public string? NombreNoticia {get; set;}
     }
 }

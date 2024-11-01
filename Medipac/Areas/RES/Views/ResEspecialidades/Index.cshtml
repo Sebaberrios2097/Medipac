@@ -38,7 +38,10 @@
 						<td class="text-center">
 							<a href="javascript:void(0);"
 							   onclick="ModalGeneral('Editar Especialidad', '@Url.Action("Edit", "ResEspecialidades", new { id = @item.IdEspecialidad })');"
-							   class="btn btn-outline-primary btn-sm me-2">
+							   class="btn btn-outline-primary btn-sm me-2"
+							   data-bs-toggle="tooltip"
+							   data-bs-placement="top"
+							   title="Editar">
 								<i class="bi bi-pencil-square"></i>
 							</a>
 						</td>
@@ -48,7 +51,7 @@
 		</table>
 	</div>
 	<div class="card-footer text-muted text-center">
-		@* Total de Especialidades: @Model.Count() *@
+		Total de Especialidades: @Model.Count()
 	</div>
 </div>
 
@@ -61,4 +64,8 @@
 	$("#BtnAgregar").click(function () {
 		ModalGeneral('Crear Especialidad', '@Url.Action("Create", "ResEspecialidades")');
 	});
+
+	    // Inicializar tooltips de Bootstrap
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 </script>

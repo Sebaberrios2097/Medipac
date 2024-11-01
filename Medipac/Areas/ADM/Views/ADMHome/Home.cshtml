@@ -1,0 +1,54 @@
+﻿@* @model Medipac.Areas.ADM.ViewModels.AdminDasboardViewModel *@
+
+@{
+    ViewData["Title"] = "Inicio Administración";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="admin-home-tit my-4">Panel de Administración</h1>
+
+    <!-- Enlaces rápidos -->
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <a href="/ADM/Usuarios" class="text-decoration-none">
+                <div class="card h-100 shadow-sm text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Gestionar Usuarios</h5>
+                        <p class="card-text text-secondary">Administración de usuarios</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 mb-4">
+            <a href="/ADM/Roles" class="text-decoration-none">
+                <div class="card h-100 shadow-sm text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Gestionar Roles</h5>
+                        <p class="card-text text-secondary">Administración de roles de usuario</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 mb-4">
+            <a href="/ADM/AdmNoticias" class="text-decoration-none">
+                <div class="card h-100 shadow-sm text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Gestionar Noticias</h5>
+                        <p class="card-text text-secondary">Administración de noticias</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 mb-4">
+            <a href="/ADM/AdmCarruselNoticias" class="text-decoration-none">
+                <div class="card h-100 shadow-sm text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Gestionar Carrusel</h5>
+                        <p class="card-text text-secondary">Administración del carrusel de noticias</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

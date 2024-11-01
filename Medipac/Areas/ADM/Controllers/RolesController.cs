@@ -18,10 +18,18 @@ namespace Medipac.Areas.ADM.Controllers
             _userManager = userManager;
         }
         // Listar todos los roles
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewData["ActivePage"] = "GestionarRoles";
             var roles = _roleManager.Roles.ToList();
+            var usuariosPorRol = new Dictionary<string, int>();
+
+            foreach (var role in roles)
+            {
+                var userInRole = await _userManager.GetUsersInRoleAsync(role.Name);
+                usuariosPorRol[role.Name] = userInRole.Count();
+            }
+            ViewBag.UsuariosPorRol = usuariosPorRol;
             return View(roles);
         }
 

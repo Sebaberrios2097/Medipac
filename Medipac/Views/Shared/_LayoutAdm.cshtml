@@ -41,6 +41,9 @@
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
 
+    <!-- TinyMCE campo de texto enriquecido -->
+    <script src="https://cdn.tiny.cloud/1/bnfqphxhs1w1t6p9zd2bddmlp6c22r9vrk2ow1ytt3bzbfkq/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
     <!-- Dependencies for exporting (JSZip, PDFMake) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
@@ -53,8 +56,12 @@
 
 
 </head>
+
 <body>
     <main>
+        @using Microsoft.AspNetCore.Identity
+        @inject SignInManager<ComUsuario> SignInManager
+        @inject UserManager<ComUsuario> UserManager
         <!-- Botón para mostrar el sidebar en pantallas pequeñas -->
         <button class="navbar-toggler d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -62,30 +69,60 @@
 
         <!-- Sidebar -->
         <div class="d-flex flex-column flex-shrink-0 p-3 bg-pag collapse vh-100 position-relative" id="sidebarMenu">
-            <a href="/" class="navbar-logo text-white">Panel de Gestión</a>
+            <a href="/" class="navbar-logo text-white"><i class="bi bi-heart-pulse-fill me-1"></i> Centro Médico</a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
-                <!-- Administración General -->
-                <li>
-                    <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapse-admin"
-                            aria-expanded="@((ViewData["ActivePage"] as string) == "GestionarMedicos" ||
-                             (ViewData["ActivePage"] as string) == "GestionarEspecialidades" ||
-                             (ViewData["ActivePage"] as string) == "GestionarRoles" ? "true" : "false")">
-                        <i class="bi bi-newspaper" style="padding-right:10px"></i>
-                        Administración
-                    </button>
-                    <div class="collapse @((ViewData["ActivePage"] as string) == "GestionarMedicos" ||
-                           (ViewData["ActivePage"] as string) == "GestionarEspecialidades" ||
-                           (ViewData["ActivePage"] as string) == "GestionarRoles" ? "show" : "" )" id="collapse-admin">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a asp-area="CLI" asp-controller="CliMedico" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarMedicos" ? "active" : "")">Gestionar Médicos</a></li>
-                            <li><a asp-area="RES" asp-controller="ResEspecialidades" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarEspecialidades" ? "active" : "")">Gestionar Especialidades</a></li>
-                            <li><a asp-area="ADM" asp-controller="Roles" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarRoles" ? "active" : "")">Gestionar Roles</a></li>
-                        </ul>
-                    </div>
-                </li>
+                
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrador"))
+                {
+                    <!-- Administración General -->
+                    <li>
+                        <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapse-admin"
+                                aria-expanded="@((ViewData["ActivePage"] as string) == "GestionarMedicos" ||
+                                 (ViewData["ActivePage"] as string) == "GestionarEspecialidades" ||
+                                 (ViewData["ActivePage"] as string) == "GestionarRoles" ||
+                                 (ViewData["ActivePage"] as string) == "GestionarSliders" ||
+                                 (ViewData["ActivePage"] as string) == "GestionarNoticias" ||
+                                 (ViewData["ActivePage"] as string) == "GestionarUsuarios" ? "true" : "false")">
+                            <i class="bi bi-newspaper" style="padding-right:10px"></i>
+                            Administración
+                        </button>
+                        <div class="collapse @((ViewData["ActivePage"] as string) == "GestionarMedicos" ||
+                               (ViewData["ActivePage"] as string) == "GestionarEspecialidades" ||
+                               (ViewData["ActivePage"] as string) == "GestionarRoles" ||
+                               (ViewData["ActivePage"] as string) == "GestionarSliders" ||
+                               (ViewData["ActivePage"] as string) == "GestionarNoticias" ||
+                               (ViewData["ActivePage"] as string) == "GestionarUsuarios" ? "show" : "" )" id="collapse-admin">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                <li><a asp-area="CLI" asp-controller="CliMedico" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarMedicos" ? "active" : "")">Gestionar Médicos</a></li>
+                                <li><a asp-area="RES" asp-controller="ResEspecialidades" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarEspecialidades" ? "active" : "")">Gestionar Especialidades</a></li>
+                                <li><a asp-area="ADM" asp-controller="AdmNoticias" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarNoticias" ? "active" : "")">Gestionar Noticias</a></li>
+                                <li><a asp-area="ADM" asp-controller="AdmCarruselNoticias" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarSliders" ? "active" : "")">Gestionar Sliders de noticias</a></li>
+                                <li><a asp-area="ADM" asp-controller="Roles" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarRoles" ? "active" : "")">Gestionar Roles</a></li>
+                                <li><a asp-area="ADM" asp-controller="Usuarios" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarUsuarios" ? "active" : "")">Gestionar Usuarios</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                }
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Medico"))
+                {
+                    <li>
+                        <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover mt-2"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapse-medico"
+                                aria-expanded="@((ViewData["ActivePage"] as string) == "GestionarMedicos" ? "true" : "false")">
+                            <i class="bi bi-newspaper" style="padding-right:10px"></i>
+                            Médico
+                        </button>
+                        <div class="collapse @((ViewData["ActivePage"] as string) == "GestionarMedicos" ? "show" : "" )" id="collapse-medico">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                <li><a asp-area="CLI" asp-controller="CliMedico" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarMedicos" ? "active" : "")">Gestionar Médicos</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                }
             </ul>
 
             <!-- Colocar el botón al final del sidebar -->
@@ -98,8 +135,6 @@
                 </li>
             </ul>
         </div>
-
-
 
         <!-- Contenido principal -->
         <div class="container-fluid overflow-auto vh-100">

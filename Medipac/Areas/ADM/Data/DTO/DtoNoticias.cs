@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-namespace Medipac.Data.ADM.DTO
+namespace Medipac.Areas.ADM.Data.DTO
 {
     public class DtoNoticias
     {
@@ -11,9 +11,9 @@ namespace Medipac.Data.ADM.DTO
         [StringLength(100)]
         public string Subtitulo { get; set; } = null!;
         public string Contenido { get; set; } = null!;
-        public DateTime FechaPublicacion { get; set; }
+        public DateTime FechaPublicacion { get; set; } = DateTime.Now;
         [StringLength(500)]
-        public string UrlImagen { get; set; } = null!;
+        public string? UrlImagen { get; set; }
         public bool Activo { get; set; }
     }
 }

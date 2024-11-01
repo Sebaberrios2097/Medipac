@@ -13,75 +13,80 @@
 
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a href="/" class="navbar-brand">
-                    <i class="fas fa-heartbeat"></i> Centro Médico
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a href="/" class="nav-link">Inicio</a>
-                        </li>
-                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrador"))
-                        {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="ADM" asp-controller="AdmCarruselNoticias" asp-action="Index">Administración</a>
-                        </li>                            
-                        }
-                        <li class="nav-item">
-                            <a href="/sobre-nosotros" class="nav-link">Sobre Nosotros</a>
-                        </li>
-                    </ul>
 
-                    @* Verificar si el usuario está autenticado *@
-                    @using Microsoft.AspNetCore.Identity
-                    @inject SignInManager<ComUsuario> SignInManager
-                    @inject UserManager<ComUsuario> UserManager
-
-                    <ul class="navbar-nav ms-auto">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-user-circle"></i> @UserManager.GetUserName(User)
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Mi Perfil</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                                            <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-                        else
-                        {
+    <div class="wrapper d-flex flex-column win-vh-100">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
+                    <a href="/" class="navbar-brand">
+                        <i class="fas fa-heartbeat"></i> Centro Médico
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarContent">
+                        <ul class="navbar-nav me-auto">
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
-                                    <i class="fas fa-user"></i> Iniciar Sesión
-                                </a>
+                                <a href="/" class="nav-link">Inicio</a>
                             </li>
-                        }
-                    </ul>
+                            <li class="nav-item">
+                                <a href="/sobre-nosotros" class="nav-link">Sobre Nosotros</a>
+                            </li>
+                            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrador"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="ADM" asp-controller="AdmHome" asp-action="Home">Administración</a>
+                                </li>
+                            }
+                        </ul>
+
+                        @* Verificar si el usuario está autenticado *@
+                        @using Microsoft.AspNetCore.Identity
+                        @inject SignInManager<ComUsuario> SignInManager
+                        @inject UserManager<ComUsuario> UserManager
+
+                        <ul class="navbar-nav ms-auto">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-user-circle"></i> @UserManager.GetUserName(User)
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Mi Perfil</a></li>
+                                        @if (User.IsInRole("Medico"))
+                                        {
+                                            <li><a class="dropdown-item" asp-area="CLI" asp-controller="CliHome" asp-action="Home">Panel de Médico</a></li>
+                                        }
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                                <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
+                                        <i class="fas fa-user"></i> Iniciar Sesión
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
-
-
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            </nav>
+        </header>
+        <div class="content flex-grow-1">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
     </div>
+
 
     @await Html.PartialAsync("Mensajes")
 

@@ -1,6 +1,7 @@
-﻿@model IEnumerable<Medipac.Areas.ADM.Data.DTO.DtoCarruselNoticias>
+﻿@model IEnumerable<Medipac.Areas.ADM.Data.DTO.DtoNoticias>
+
 @{
-    ViewData["Title"] = "Sliders de Noticias";
+    ViewData["Title"] = "Listado de Noticias";
     Layout = "~/Views/Shared/_LayoutAdm.cshtml";
 }
 
@@ -9,18 +10,18 @@
 
 <div class="card shadow-lg">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="card-title mb-0">Listado de Sliders</h5>
-        <a href="@Url.Action("Create", "AdmCarruselNoticias")" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i> Agregar Slider
+        <h5 class="card-title mb-0">Listado de Noticias</h5>
+        <a href="@Url.Action("Create", "AdmNoticias")" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Agregar Noticia
         </a>
     </div>
     <div class="card-body">
-        <table id="slidersTable" class="table table-striped table-hover">
+        <table id="noticiasTable" class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th>Nombre</th>
                     <th>Título</th>
                     <th>Subtítulo</th>
+                    <th>Fecha de Publicación</th>
                     <th>Imagen</th>
                     <th>Estado</th>
                     <th class="text-center">Acciones</th>
@@ -30,13 +31,13 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.Nombre</td>
                         <td>@item.Titulo</td>
                         <td>@item.Subtitulo</td>
+                        <td>@item.FechaPublicacion.ToString("dd/MM/yyyy")</td>
                         <td>
                             @if (!string.IsNullOrEmpty(item.UrlImagen))
                             {
-                                <img src="@item.UrlImagen" alt="@item.Nombre" width="80" height="40" class="img-thumbnail" />
+                                <img src="@item.UrlImagen" alt="@item.Titulo" width="80" height="40" class="img-thumbnail" />
                             }
                             else
                             {
@@ -49,14 +50,16 @@
                             </span>
                         </td>
                         <td class="text-center">
-                            <a href="@Url.Action("Edit", "AdmCarruselNoticias", new { id = item.IdCarruselNoticias })"
-                               class="btn btn-outline-primary btn-sm me-2">
-                                <i class="bi bi-pencil-square"></i> Editar
+                            <a href="@Url.Action("Edit", "AdmNoticias", new { id = item.IdNoticia })"
+                               class="btn btn-outline-primary btn-sm me-2"
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Editar noticia">
+                                <i class="bi bi-pencil-square"></i>
                             </a>
                             <a href="javascript:void(0);"
-                               onclick="ModalGeneral('Eliminar Slider', '@Url.Action("Delete", "AdmCarruselNoticias", new { id = item.IdCarruselNoticias })');"
-                               class="btn btn-outline-danger btn-sm">
-                                <i class="bi bi-trash"></i> Eliminar
+                               onclick="ModalGeneral('Eliminar Noticia', '@Url.Action("Delete", "AdmNoticias", new { id = item.IdNoticia })');"
+                               class="btn btn-outline-danger btn-sm"
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar noticia">
+                                <i class="bi bi-trash"></i>
                             </a>
                         </td>
                     </tr>
@@ -65,16 +68,20 @@
         </table>
     </div>
     <div class="card-footer text-muted text-center">
-        Total de Sliders: @Model.Count()
+        Total de Noticias: @Model.Count()
     </div>
 </div>
 
 <script>
-        $(document).ready(function() {
-        $('#slidersTable').DataTable({
+    $(document).ready(function () {
+        $('#noticiasTable').DataTable({
             language: {
                 url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-                }
+            }
         });
+
+        // Inicializar tooltips de Bootstrap
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     });
 </script>

@@ -1,4 +1,5 @@
 using Medipac.Models;
+using System.Collections.Generic;
 
 namespace Medipac.Areas.COM.Data.Interfaces
 {

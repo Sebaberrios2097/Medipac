@@ -1,0 +1,18 @@
+﻿@model Medipac.Models.ComUsuario
+
+@using (Html.BeginForm("Bloquear", "Usuarios"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(c => c.Id)
+
+    <div class="modal-body">
+        <div class="mb-3">
+            <h5>¿Estás seguro que deseas desbloquear a @Model.UserName?</h5>
+        </div>
+    </div>
+
+    <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <input type="submit" class="btn btn-success" value="Desbloquear" />
+    </div>
+}

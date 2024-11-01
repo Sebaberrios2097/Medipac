@@ -29,6 +29,11 @@ builder.Services.AddIdentity<ComUsuario, IdentityRole<int>>()
 // Agregar Razor Pages (Necesario para Identity)
 builder.Services.AddRazorPages();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/Home/AccessDenied"; // Redirige a la página de Acceso Denegado
+});
+
 var app = builder.Build();
 
 // Llamar a la función para inicializar roles y el usuario administrador
