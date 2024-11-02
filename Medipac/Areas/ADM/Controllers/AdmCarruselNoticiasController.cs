@@ -1,22 +1,28 @@
-using Medipac.Data.ADM.DTO;
+using Medipac.Areas.ADM.Data.DTO;
 using Medipac.Data.ADM.Interfaces;
 using Medipac.ReadOnly.DtoTransformation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Medipac.Areas.ADM.Controllers
 {
     [Area("ADM")]
+    [Authorize(Roles = "Administrador")]
     public class AdmCarruselNoticiasController : Controller
     {
         private readonly IAdmCarruselNoticiasRepository admcarruselnoticias;
+        private readonly IAdmNoticiasRepository admnoticiasrepository;
 
-        public AdmCarruselNoticiasController(IAdmCarruselNoticiasRepository admcarruselnoticias)
+        public AdmCarruselNoticiasController(IAdmCarruselNoticiasRepository admcarruselnoticias,
+                                             IAdmNoticiasRepository admnoticiasrepository)
         {
             this.admcarruselnoticias = admcarruselnoticias;
+            this.admnoticiasrepository = admnoticiasrepository;
         }
 
         public async Task<ActionResult> Index()
         {
+            ViewData["ActivePage"] = "GestionarSliders";
             var Query = await admcarruselnoticias.GetAll();
             return PartialView(Query.Select(item => item.ToDto()).ToList());
         }
@@ -27,8 +33,10 @@ namespace Medipac.Areas.ADM.Controllers
             return View(Query.ToDto());
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            var noticias = await admnoticiasrepository.GetAll();
+            ViewBag.Noticias = noticias.Select(e => new { e.IdNoticia, e.Titulo }).ToList();
             return View();
         }
 
@@ -54,11 +62,14 @@ namespace Medipac.Areas.ADM.Controllers
                 return NotFound();
             }
 
+            var noticias = await admnoticiasrepository.GetAll();
+            ViewBag.Noticias = noticias.Select(e => new { e.IdNoticia, e.Titulo }).ToList();
+
             var Query = await admcarruselnoticias.GetById(id);
 
             if (Query == null) { return NotFound(); }
 
-            return PartialView(Query.ToDto());
+            return View(Query.ToDto());
         }
 
         [HttpPost]

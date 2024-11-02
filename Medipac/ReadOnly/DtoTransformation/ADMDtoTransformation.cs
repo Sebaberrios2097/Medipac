@@ -1,4 +1,4 @@
-﻿using Medipac.Data.ADM.DTO;
+﻿using Medipac.Areas.ADM.Data.DTO;
 using Medipac.Models;
 
 namespace Medipac.ReadOnly.DtoTransformation
@@ -88,7 +88,7 @@ namespace Medipac.ReadOnly.DtoTransformation
         public static DtoCarruselNoticias ToDto(this AdmCarruselNoticias original)
         {
 
-            return new()
+            var Query = new DtoCarruselNoticias()
 
             {
 
@@ -107,6 +107,13 @@ namespace Medipac.ReadOnly.DtoTransformation
                 Activo = original.Activo
 
             };
+
+            if (original.IdNoticiaNavigation != null)
+            {
+                Query.DtoNoticias = original.IdNoticiaNavigation.ToDto();
+            }
+
+            return Query;
 
         }
 

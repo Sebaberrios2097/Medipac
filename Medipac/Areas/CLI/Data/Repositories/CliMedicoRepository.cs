@@ -28,6 +28,11 @@ namespace Medipac.Data.Repositories
                                                                 .ThenInclude(m => m.IdEspecialidadNavigation)
                                                                 .FirstOrDefaultAsync(a => a.IdMedico == id) ?? new CliMedico();
 
+        public async Task<CliMedico> GetByUserId(string id)
+        {
+            var idToInt = int.Parse(id);
+            return await db.CliMedico.Where(c => c.IdUsuario == idToInt).FirstOrDefaultAsync() ?? new CliMedico();
+        }
         public async Task<CliMedico> Add(CliMedico climedico)
         {
             _ = await db.CliMedico.AddAsync(climedico);

@@ -1,43 +1,34 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Medipac.Models;
-
-[Table("COM_Usuario")]
-public partial class ComUsuario
+namespace Medipac.Models
 {
-    [Key]
-    [Column("Id_Usuario")]
-    public int IdUsuario { get; set; }
+    public partial class ComUsuario : IdentityUser<int> // Indicamos que la llave primaria es de tipo int
+    {
+        [Column("Id_Estado")]
+        public int IdEstado { get; set; }
 
-    [Column("Id_Estado")]
-    public int IdEstado { get; set; }
+        [Column("Fecha_Creacion", TypeName = "datetime")]
+        public DateTime FechaCreacion { get; set; }
 
-    [StringLength(50)]
-    public string Usuario { get; set; } = null!;
+        [Column("Is_Admin")]
+        public bool IsAdmin { get; set; }
 
-    [StringLength(50)]
-    public string Password { get; set; } = null!;
+        // Relaciones con otras entidades
+        [InverseProperty("IdUsuarioNavigation")]
+        public virtual ICollection<AdmNoticias> AdmNoticias { get; set; } = new List<AdmNoticias>();
 
-    [Column("Fecha_Creacion", TypeName = "datetime")]
-    public DateTime FechaCreacion { get; set; }
+        [InverseProperty("IdUsuarioNavigation")]
+        public virtual ICollection<CliMedico> CliMedico { get; set; } = new List<CliMedico>();
 
-    [Column("Is_Admin")]
-    public bool IsAdmin { get; set; }
+        [InverseProperty("IdUsuarioNavigation")]
+        public virtual ICollection<CliPacientes> CliPacientes { get; set; } = new List<CliPacientes>();
 
-    [InverseProperty("IdUsuarioNavigation")]
-    public virtual ICollection<AdmNoticias> AdmNoticias { get; set; } = new List<AdmNoticias>();
+        [ForeignKey("IdEstado")]
+        [InverseProperty("ComUsuario")]
+        public virtual ComEstadosUsuario IdEstadoNavigation { get; set; } = null!;
 
-    [InverseProperty("IdUsuarioNavigation")]
-    public virtual ICollection<CliMedico> CliMedico { get; set; } = new List<CliMedico>();
-
-    [InverseProperty("IdUsuarioNavigation")]
-    public virtual ICollection<CliPacientes> CliPacientes { get; set; } = new List<CliPacientes>();
-
-    [ForeignKey("IdEstado")]
-    [InverseProperty("ComUsuario")]
-    public virtual ComEstadosUsuario IdEstadoNavigation { get; set; } = null!;
-
-    [InverseProperty("IdUsuarioNavigation")]
-    public virtual ICollection<LogUsuario> LogUsuario { get; set; } = new List<LogUsuario>();
+        [InverseProperty("IdUsuarioNavigation")]
+        public virtual ICollection<LogUsuario> LogUsuario { get; set; } = new List<LogUsuario>();
+    }
 }

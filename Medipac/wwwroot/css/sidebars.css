@@ -1,155 +1,145 @@
-body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+/* Configuración del fondo con gradiente para el sidebar */
+#sidebarMenu {
+    background: linear-gradient(135deg, #1E3E62 0%, #2c3e50 100%); /* Colores en tonos de azul oscuro */
+    color: white;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4); /* Sombra exterior para dar profundidad */
 }
 
-html {
-    height: -webkit-fill-available;
+/* Efecto de transición y estilos para los enlaces */
+.nav-link {
+    padding: 15px 20px;
+    font-size: 1rem;
+    color: #ffffff;
+    transition: all 0.3s ease; /* Efecto suave en hover */
+    position: relative;
+    overflow: hidden;
 }
 
-@media (min-width: 768px) {
-    main {
-        display: flex;
-        flex-wrap: nowrap;
-        height: 100vh;
-        height: -webkit-fill-available;
-        max-height: 100vh;
-        overflow-x: auto;
-        overflow-y: hidden;
+    .nav-link::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.1); /* Suave fondo en hover */
+        transition: left 0.4s ease;
     }
-}
 
-.bg-pag {
-    background-color: #34495e !important;
-}
+    .nav-link:hover::before {
+        left: 0; /* Efecto de deslizamiento en hover */
+    }
 
-.b-example-divider {
-    flex-shrink: 0;
-    width: 1.5rem;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, .1);
-    border: solid rgba(0, 0, 0, .15);
-    border-width: 1px 0;
-    box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-}
+    /* Apariencia del enlace activo */
+    .nav-link.active {
+        background: #3A5673; /* Azul más suave para el fondo activo */
+        color: #ffdd57; /* Color amarillo suave */
+        font-weight: bold;
+        border-left: 4px solid #ffdd57; /* Indicador de selección */
+    }
 
-.bi {
-    vertical-align: -.125em;
-    pointer-events: none;
-    fill: currentColor;
-}
+    /* Personalización de los íconos */
+    .nav-link i {
+        font-size: 1.5rem;
+        color: #ffdd57; /* Amarillo para íconos */
+        margin-right: 10px;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
 
-.dropdown-toggle {
-    outline: 0;
-}
+    .nav-link:hover i {
+        transform: scale(1.2);
+        color: #ffdd57; /* Mantener amarillo en hover */
+    }
 
-.nav-flush .nav-link {
-    border-radius: 0;
-}
-
+/* Transición y sombra en los botones de toggle */
 .btn-toggle {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    padding: .25rem .5rem;
-    font-weight: 600;
-    color: rgba(0, 0, 0, .65);
-    background-color: transparent;
-    border: 0;
+    color: #ffffff;
+    padding: 12px;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo gris sutil */
+    border-radius: 5px;
 }
 
-    .btn-toggle:hover,
-    .btn-toggle:focus {
-        color: rgba(0, 0, 0, .85);
-        background-color: #2d5262;
+    .btn-toggle:hover {
+        background-color: rgba(255, 255, 255, 0.2); /* Hover más claro */
     }
 
-    .btn-toggle::before {
-        width: 1.25em;
-        line-height: 0;
-        content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
-        transition: transform .35s ease;
-        transform-origin: .5em 50%;
-    }
-
-    .btn-toggle[aria-expanded="true"] {
-        color: rgba(0, 0, 0, .85);
-    }
-
-        .btn-toggle[aria-expanded="true"]::before {
-            transform: rotate(90deg);
-        }
+/* Estilos para el submenú */
+.collapse {
+    transition: height 0.4s ease;
+    padding-left: 10px;
+}
 
 .btn-toggle-nav a {
-    display: inline-flex;
-    padding: .1875rem .5rem;
-    margin-top: .125rem;
-    margin-left: 1.25rem;
-    text-decoration: none;
+    color: #ffffff;
+    font-size: 0.9rem;
+    margin: 5px 0;
+    padding: 8px;
+    display: block;
+    transition: background 0.3s, color 0.3s;
 }
 
-    .btn-toggle-nav a:hover,
-    .btn-toggle-nav a:focus {
-        background-color: #2d5262;
+    .btn-toggle-nav a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #ffdd57;
     }
 
-.scrollarea {
-    overflow-y: auto;
+/* Mejoras visuales al botón de hamburguesa */
+.navbar-toggler {
+    background-color: #ffdd57;
+    border: none;
 }
 
-.fw-semibold {
-    font-weight: 600;
+.navbar-toggler-icon {
+    filter: brightness(0) invert(1); /* Icono a blanco */
 }
 
-.lh-tight {
-    line-height: 1.25;
+/* Personalización de efectos de sombras */
+#sidebarMenu .nav-link, .btn-toggle {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Ocultar el sidebar en pantallas pequeñas y mostrar el botón de hamburguesa */
+/* Transición en pantallas pequeñas */
 @media (max-width: 767.98px) {
     #sidebarMenu {
-        display: none; /* Sidebar oculto por defecto */
+        display: none;
     }
 
     .navbar-toggler {
-        display: inline-block; /* Mostrar el botón de hamburguesa */
+        display: inline-block;
+    }
+
+    .collapse.show {
+        display: block;
+        animation: slideIn 0.5s forwards;
     }
 }
 
-/* Mostrar el sidebar en pantallas grandes (>=768px) y ocultar el botón de hamburguesa */
-@media (min-width: 768px) {
-    #sidebarMenu {
-        display: block !important; /* Mostrar el sidebar */
+/* Animación para el despliegue del sidebar en pantallas pequeñas */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
     }
 
-    .navbar-toggler {
-        display: none; /* Ocultar el botón de hamburguesa */
+    to {
+        transform: translateX(0);
+        opacity: 1;
     }
 }
 
-/* Mostrar el sidebar en pantallas pequeñas cuando esté expandido */
-.collapse.show {
-    display: block; /* Mostrar el sidebar cuando esté colapsado en pantallas pequeñas */
+/* Otros ajustes de diseño */
+main {
+    display: flex;
+    height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
-.bg-pag {
-    background-color: #34495e !important;
+.container-fluid {
+    overflow-y: auto;
+    padding-top: 20px;
 }
-
-
-
-/* Nuevos estilos agregados para los botones */
-
-.nav-main .nav-link {
-    padding: 12px 15px; /* Aumentar padding para hacer más grandes los botones */
-    font-size: 0.9rem; /* Aumentar ligeramente el tamaño de la fuente */
-}
-
-    .nav-main .nav-link.active {
-        background-color: #2c2f33; /* Fondo ligeramente más oscuro */
-        color: #fff; /* Asegurar que el texto sea blanco */
-    }
-
-    .nav-main .nav-link:hover {
-        background-color: #2c2f33; /* Fondo más oscuro cuando se hace hover */
-        color: #fff; /* Mantener el texto blanco en hover */
-    }

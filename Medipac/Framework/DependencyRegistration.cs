@@ -23,7 +23,6 @@ namespace Medipac.Framework
             _ = services.AddScoped<IComEstadosUsuarioRepository, ComEstadosUsuarioRepository>();
             _ = services.AddScoped<IAdmNoticiasRepository, AdmNoticiasRepository>();
             _ = services.AddScoped<IAdmCarruselNoticiasRepository, AdmCarruselNoticiasRepository>();
-
         }
     }
 }

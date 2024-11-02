@@ -1,22 +1,31 @@
-using Medipac.Data.ADM.DTO;
+using Medipac.Areas.ADM.Data.DTO;
 using Medipac.Data.ADM.Interfaces;
+using Medipac.Models;
 using Medipac.ReadOnly.DtoTransformation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Medipac.Areas.ADM.Controllers
 {
     [Area("ADM")]
+    [Authorize(Roles = "Administrador")]
     public class AdmNoticiasController : Controller
     {
         private readonly IAdmNoticiasRepository admnoticias;
+        private readonly UserManager<ComUsuario> _userManager;
 
-        public AdmNoticiasController(IAdmNoticiasRepository admnoticias)
+        public AdmNoticiasController(IAdmNoticiasRepository admnoticias,
+                                     UserManager<ComUsuario> userManager)
         {
             this.admnoticias = admnoticias;
+            _userManager = userManager;
         }
 
         public async Task<ActionResult> Index()
         {
+            ViewData["ActivePage"] = "GestionarNoticias";
             var Query = await admnoticias.GetAll();
             return PartialView(Query.Select(item => item.ToDto()).ToList());
         }
@@ -36,6 +45,18 @@ namespace Medipac.Areas.ADM.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(DtoNoticias Dto)
         {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            Dto.IdUsuario = int.Parse(userId);
+            if (Dto.UrlImagen.IsNullOrEmpty())
+            {
+                Dto.UrlImagen = "";
+            }
+
             var Query = await admnoticias.Add(Dto.ToOriginal());
             var Result = await admnoticias.Save();
 

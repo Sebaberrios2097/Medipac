@@ -17,8 +17,12 @@ namespace Medipac.Data.ADM.Interfaces
         {
             return await db.AdmCarruselNoticias.ToListAsync();
         }
+        public async Task<List<AdmCarruselNoticias>> GetAllActive()
+        {
+            return await db.AdmCarruselNoticias.Where(c => c.Activo).ToListAsync();
+        }
 
-        public async Task<AdmCarruselNoticias> GetById(int id) => await db.AdmCarruselNoticias.FirstOrDefaultAsync(a => a.IdCarruselNoticias == id) ?? new AdmCarruselNoticias();
+        public async Task<AdmCarruselNoticias> GetById(int id) => await db.AdmCarruselNoticias.Include(n => n.IdNoticiaNavigation).FirstOrDefaultAsync(a => a.IdCarruselNoticias == id) ?? new AdmCarruselNoticias();
 
         public async Task<AdmCarruselNoticias> Add(AdmCarruselNoticias admCarruselNoticias)
         {

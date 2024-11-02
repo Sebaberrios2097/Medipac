@@ -1,3 +1,4 @@
+using Medipac.Data.ADM.Interfaces;
 using Medipac.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -7,13 +8,22 @@ namespace Medipac.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IAdmCarruselNoticiasRepository _admCarruselNoticiasRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,
+                              IAdmCarruselNoticiasRepository admCarruselNoticiasRepository)
         {
             _logger = logger;
+            _admCarruselNoticiasRepository = admCarruselNoticiasRepository;
         }
 
-        public IActionResult Index()
+        public async Task<ActionResult> Index()
+        {
+            var sliders = await _admCarruselNoticiasRepository.GetAllActive();
+            return View(sliders);
+        }
+
+        public IActionResult AccessDenied()
         {
             return View();
         }

@@ -1,0 +1,16 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityRole<int>
+
+<h2>@ViewData["Title"]</h2>
+
+@using (Html.BeginForm("Delete", "Roles"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+
+    <p>¿Estás seguro que quieres eliminar el rol <strong>@Model.Name</strong>?</p>
+
+    <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <input type="submit" class="btn btn-danger" value="Eliminar" />
+    </div>
+}

@@ -19,8 +19,8 @@ namespace Medipac.Data.Repositories
             return await db.ComUsuario.ToListAsync();
         }
 
-        public async Task<ComUsuario> GetById(int id) => await db.ComUsuario
-            .FirstOrDefaultAsync(a => a.IdUsuario == id) ?? new ComUsuario();
+        //public async Task<ComUsuario> GetById(int id) => await db.ComUsuario
+        //    .FirstOrDefaultAsync(a => a.IdUsuario == id) ?? new ComUsuario();
 
         public async Task<ComUsuario> Add(ComUsuario comusuario)
         {

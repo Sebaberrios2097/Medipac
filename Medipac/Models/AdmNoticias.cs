@@ -26,7 +26,7 @@ public partial class AdmNoticias
 
     [Column("Url_Imagen")]
     [StringLength(500)]
-    public string UrlImagen { get; set; } = null!;
+    public string? UrlImagen { get; set; }
 
     public bool Activo { get; set; }
 

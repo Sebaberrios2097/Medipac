@@ -23,12 +23,28 @@
     <div class="modal-dialog modal-dialog-top">
         <div class="modal-content">
             <!-- Modal Header -->
-            <div class="modal-header bg-pag">
+            <div class="modal-header bg-header-modal">
                 <h5 class="modal-title text-white" id="MdlG_Titulo"></h5>
             </div>
             <!-- Modal body -->
             <div class="modal-body">
                 <div id="MdlG_body"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal General Danger -->
+<div class="modal fade" id="Mdl_General_Danger" tabindex="-1" aria-labelledby="Mdl_General_Danger" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-white" id="MdlG_TituloDanger"></h5>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div id="MdlG_bodyDanger"></div>
             </div>
         </div>
     </div>
@@ -59,6 +75,12 @@
         document.getElementById("MdlG_Titulo").innerHTML = titulo;
         $('#Mdl_General').modal('show');
         CargarDiv("MdlG_body", url);
+    }
+
+    function ModalGeneralDanger(titulo, url) {
+        document.getElementById("MdlG_TituloDanger").innerHTML = titulo;
+        $('#Mdl_General_Danger').modal('show');
+        CargarDiv("MdlG_bodyDanger", url);
     }
 
     function ModalGeneralXL(titulo, url) {
