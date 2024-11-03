@@ -50,5 +50,34 @@
                 </div>
             </a>
         </div>
+        <div class="col-md-3 mb-4">
+            <a id="BtnAlert" class="text-decoration-none">
+                <div class="card h-100 shadow-sm text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Prueba de SweetAlert2</h5>
+                        <p class="card-text text-secondary">Botón para activar SweetAlert2</p>
+                    </div>
+                </div>
+            </a>
+        </div>        
+        <div class="col-md-3 mb-4">
+            <a id="BtnToast" class="text-decoration-none">
+                <div class="card h-100 shadow-sm text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Prueba de Toastr</h5>
+                        <p class="card-text text-secondary">Botón para activar SweetAlert2</p>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 </div>
+
+<script>
+    $("#BtnToast").click(function(){
+        MostrarToast("Título", "Mensaje", "success")
+    })
+    $("#BtnAlert").click(function(){
+        MostrarAlert("Título", "Mensaje", "success")
+    })
+</script>

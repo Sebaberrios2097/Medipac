@@ -67,6 +67,7 @@ namespace Medipac.Areas.CLI.Controllers
 
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(DtoCliMedico Dto)

@@ -27,8 +27,10 @@ namespace Medipac.Areas.RES.Controllers
             return View(Query.ToDto());
         }
 
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
+            ViewData["id"] = id;
+
             return View();
         }
 

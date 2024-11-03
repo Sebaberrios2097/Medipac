@@ -140,6 +140,39 @@
             }
         });
     }
+    // Configuración de Toastr
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+
+    // Mostrar toastr de Toastr
+    function MostrarToast(Title, Message, Type) {
+        if (Message) {
+            toastr[Type](Message, Title);
+        }
+    }
+
+    // Mostrar alerta de SweetAlert2
+    function MostrarAlert(Title, Message, Type) {
+        if (Message) {
+            Swal.fire({
+                title: Title,
+                text: Message,
+                icon: Type,
+                showConfirmButton: true
+            });
+        }
+    }
 
     $("#MdlR_Lnk_Redireccion").click(function () {
         const url = $(this).data("url");
