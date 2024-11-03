@@ -28,6 +28,9 @@
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
 
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />  
+
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -65,6 +68,10 @@
 
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- FullCalendar -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales/es.js"></script>
 
 </head>
 
@@ -123,13 +130,13 @@
                         <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover mt-2"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#collapse-medico"
-                                aria-expanded="@((ViewData["ActivePage"] as string) == "GestionarMedicos" ? "true" : "false")">
+                                aria-expanded="@((ViewData["ActivePage"] as string) == "Agenda" ? "true" : "false")">
                             <i class="bi bi-newspaper" style="padding-right:10px"></i>
                             Médico
                         </button>
-                        <div class="collapse @((ViewData["ActivePage"] as string) == "GestionarMedicos" ? "show" : "" )" id="collapse-medico">
+                        <div class="collapse @((ViewData["ActivePage"] as string) == "Agenda" ? "show" : "" )" id="collapse-medico">
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a asp-area="CLI" asp-controller="CliMedico" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "GestionarMedicos" ? "active" : "")">Gestionar Médicos</a></li>
+                                <li><a asp-area="RES" asp-controller="ResAgenda" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Agenda" ? "active" : "")">Agenda</a></li>
                             </ul>
                         </div>
                     </li>

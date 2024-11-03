@@ -1,119 +1,49 @@
 ﻿@model IEnumerable<Medipac.Areas.RES.Data.DTO.DtoResAgenda>
 
-<div class="container">
-    <h2>Citas Médicas Agendadas</h2>
+@{
+    ViewData["Title"] = "Agenda del Médico";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
 
-    <a href="/RES/ResAgenda/Create" class="btn">Nueva Cita</a>
+<div class="container mt-5">
+@*     <!-- Botón para añadir una nueva disponibilidad -->
+    <div class="d-flex justify-content-end mb-3">
+        <a asp-action="Create" class="btn btn-primary">Crear Disponibilidad</a>
+    </div> *@
 
-    @foreach (var cita in Model)
-    {
-        <div class="cita-card">
-            <h3>Cita Médica con el médico de Id @cita.IdMedico</h3>
-            <div class="cita-info">
-                <span><strong>Fecha:</strong> @cita.Fecha.ToShortDateString()</span>
-                <span><strong>Hora:</strong> @cita.HoraInicio - @cita.HoraFin</span>
-                <span><strong>Estado:</strong> @(cita.Disponible ? "Disponible" : "No Disponible")</span>
-            </div>
-            <a href="@Url.Action("Edit", "ResAgenda", new { id = cita.IdAgenda})" class="btn-info">Editar</a>
-            <a href="@Url.Action("Delete", "ResAgenda", new { id = cita.IdAgenda})" class="btn-danger">Eliminar</a>
-        </div>
-    }
+    <!-- Contenedor del calendario -->
+    <div id="calendar"></div>
 </div>
 
-<!-- Aquí el CSS que te proporcioné arriba -->
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-    }
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
 
-    .container {
-        width: 80%;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'es', // Establecer idioma a español
+            timeZone: 'America/Santiago', // Zona horaria de Chile
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: '/RES/ResAgenda/GetEvents', // Cargar eventos mediante AJAX
+            editable: true,
+            selectable: true,
 
-    h2 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 30px;
-    }
+            // Evento para ver detalles de la disponibilidad
+            eventClick: function (info) {
+                window.location.href = 'ResAgenda/Details/' + info.event.id;
+            },
 
-    .btn {
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        display: inline-block;
-        margin-bottom: 20px;
-    }
+            // Evento para seleccionar un rango de fechas en el calendario y crear una nueva disponibilidad
+            select: function (info) {
+                // Redirige a la página de creación, pasando las fechas de inicio y fin seleccionadas
+                window.location.href = '/RES/ResAgenda/Create?start=' + info.startStr + '&end=' + info.endStr;
+            }
+        });
 
-    .btn:hover {
-        background-color: #0056b3;
-    }
-
-    .cita-card {
-        background-color: #fff;
-        border: 2px solid #000;
-        border-radius: 20px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s;
-    }
-
-    .cita-card:hover {
-        transform: scale(1.02);
-    }
-
-    .cita-card h3 {
-        margin: 0;
-        color: #333;
-        font-size: 18px;
-    }
-
-    .cita-info {
-        margin-top: 10px;
-        font-size: 16px;
-    }
-
-    .cita-info span {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .btn-info {
-        background-color: #17a2b8;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 5px;
-        text-decoration: none;
-        margin-right: 10px;
-        cursor: pointer;
-    }
-
-    .btn-info:hover {
-        background-color: #138496;
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 5px;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .btn-danger:hover {
-        background-color: #c82333;
-    }
-</style>
+        calendar.render();
+    });
+</script>

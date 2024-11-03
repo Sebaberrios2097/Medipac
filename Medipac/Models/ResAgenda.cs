@@ -22,6 +22,7 @@ public partial class ResAgenda
     public int HoraFin { get; set; }
 
     public bool Disponible { get; set; }
+    public string? Descripcion { get; set; }
 
     [ForeignKey("IdMedico")]
     [InverseProperty("ResAgenda")]

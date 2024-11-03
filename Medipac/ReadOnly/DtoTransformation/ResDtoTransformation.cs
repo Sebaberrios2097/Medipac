@@ -12,6 +12,7 @@ namespace Medipac.ReadOnly.DtoTransformation
             return new()
             {
                 Disponible = original.Disponible,
+                Descripcion = original.Descripcion,
                 Fecha = original.Fecha,
                 HoraFin = original.HoraFin,
                 HoraInicio = original.HoraInicio,
@@ -26,6 +27,7 @@ namespace Medipac.ReadOnly.DtoTransformation
             return new()
             {
                 Disponible = dto.Disponible,
+                Descripcion = dto.Descripcion,
                 Fecha = dto.Fecha,
                 HoraFin = dto.HoraFin,
                 HoraInicio = dto.HoraInicio,
