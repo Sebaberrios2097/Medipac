@@ -10,5 +10,6 @@ namespace Medipac.Areas.RES.Data.Interfaces
         void Update(ResAgenda resagenda);
         Task<bool> DeleteById(int id);
         Task<int> Save();
+        Task<bool> ExisteConflictoHorario(int idMedico, DateOnly fecha, int horaInicio, int horaFin);
     }
 }

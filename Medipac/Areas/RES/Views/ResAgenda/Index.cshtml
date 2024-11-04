@@ -6,11 +6,6 @@
 }
 
 <div class="container mt-5">
-@*     <!-- Botón para añadir una nueva disponibilidad -->
-    <div class="d-flex justify-content-end mb-3">
-        <a asp-action="Create" class="btn btn-primary">Crear Disponibilidad</a>
-    </div> *@
-
     <!-- Contenedor del calendario -->
     <div id="calendar"></div>
 </div>
@@ -40,7 +35,11 @@
             // Evento para seleccionar un rango de fechas en el calendario y crear una nueva disponibilidad
             select: function (info) {
                 // Redirige a la página de creación, pasando las fechas de inicio y fin seleccionadas
-                window.location.href = '/RES/ResAgenda/Create?start=' + info.startStr + '&end=' + info.endStr;
+                ModalGeneral(
+                    'Crear Especialidad',
+                    '@Url.Action("Create", "ResAgenda")' + '?start=' + info.startStr + '&end=' + info.endStr
+                );
+                // window.location.href = '/RES/ResAgenda/Create?start=' + info.startStr + '&end=' + info.endStr;
             }
         });
 

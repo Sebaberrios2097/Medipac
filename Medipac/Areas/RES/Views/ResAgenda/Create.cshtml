@@ -1,40 +1,110 @@
 ﻿@model Medipac.Areas.RES.Data.DTO.DtoResAgenda
 
-@{
-    ViewData["Title"] = "Asignar Disponibilidad";
-    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
-}
+<div class="container mt-3">
+    <h5 class="text-center mb-4">@ViewData["Title"]</h5>
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">@ViewData["Title"]</h2>
+    <!-- Contenedor de mensajes de error -->
+    <div id="error-messages" class="alert alert-danger d-none"></div>
 
-    @using (Html.BeginForm("Create", "ResAgenda", FormMethod.Post))
+    @using (Html.BeginForm("Create", "ResAgenda", FormMethod.Post, new { id = "createForm" }))
     {
+        @Html.AntiForgeryToken()
+
         <div class="mb-3">
             <label for="Fecha" class="form-label">Fecha</label>
             @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(m => m.Fecha, "", new { @class = "text-danger" })
         </div>
+        
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="HoraInicioDisplay" class="form-label">Hora de Inicio</label>
+                @Html.EditorFor(model => model.HoraInicioDisplay, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+                @Html.ValidationMessageFor(m => m.HoraInicio, "", new { @class = "text-danger" })
+            </div>
 
-        <div class="mb-3">
-            <label for="HoraInicioDisplay" class="form-label">Hora de Inicio</label>
-            @Html.EditorFor(model => model.HoraInicioDisplay, new { htmlAttributes = new { @class = "form-control", type = "time" } })
-            @Html.ValidationMessageFor(m => m.HoraInicio, "", new { @class = "text-danger" })
+            <div class="col-md-6">
+                <label for="HoraFinDisplay" class="form-label">Hora de Fin</label>
+                @Html.EditorFor(model => model.HoraFinDisplay, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+                @Html.ValidationMessageFor(m => m.HoraFin, "", new { @class = "text-danger" })
+            </div>
         </div>
 
         <div class="mb-3">
-            <label for="HoraFinDisplay" class="form-label">Hora de Fin</label>
-            @Html.EditorFor(model => model.HoraFinDisplay, new { htmlAttributes = new { @class = "form-control", type = "time" } })
-            @Html.ValidationMessageFor(m => m.HoraFin, "", new { @class = "text-danger" })
+            <label for="Fecha" class="form-label">Descripción</label>
+            @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", rows = 5 })
+            @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
         </div>
 
-        <div class="mb-3 form-check">
-            @Html.CheckBoxFor(m => m.Disponible, new { @class = "form-check-input" })
-            <label for="Disponible" class="form-check-label">Disponible</label>
-            @Html.ValidationMessageFor(m => m.Disponible, "", new { @class = "text-danger" })
+        <div class="d-flex justify-content-end mt-4">
+            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
-
-        <button type="submit" class="btn btn-primary">Guardar Disponibilidad</button>
-        <a href="@Url.Action("Index", "ResAgenda")" class="btn btn-secondary">Cancelar</a>
     }
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#createForm').on('submit', function (e) {
+            e.preventDefault(); // Prevenir el envío normal del formulario
+
+            // Obtener el token de anti-falsificación
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
+            // Obtener y convertir las horas de inicio y fin
+            var horaInicio = $('#HoraInicioDisplay').val();
+            var horaFin = $('#HoraFinDisplay').val();
+
+            // Convertir HH:mm a HHmm (por ejemplo, "07:30" a 730)
+            var horaInicioInt = parseInt(horaInicio.replace(":", ""));
+            var horaFinInt = parseInt(horaFin.replace(":", ""));
+
+            $.ajax({
+                url: '@Url.Action("Create", "ResAgenda", new { area = "RES" })',
+                type: 'POST',
+                data: {
+                    __RequestVerificationToken: token,
+                    Fecha: $('#Fecha').val(),
+                    HoraInicio: horaInicioInt,
+                    HoraFin: horaFinInt,
+                    Descripcion: $('#Descripcion').val(),
+                    Disponible: $('#Disponible').is(':checked')
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Primero cerrar el modal
+                        $('#Mdl_General').modal('hide');
+
+                        // Luego mostrar SweetAlert de éxito
+                        Swal.fire({
+                            title: '¡Disponibilidad Creada!',
+                            text: 'La disponibilidad se ha creado exitosamente.',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload(); // Recargar la página para reflejar los cambios en el calendario
+                            }
+                        });
+                    } else {
+                        // Mostrar SweetAlert de error
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.message,
+                            icon: 'error',
+                            confirmButtonText: 'Cerrar'
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Ocurrió un error al intentar guardar la disponibilidad.',
+                        icon: 'error',
+                        confirmButtonText: 'Cerrar'
+                    });
+                }
+            });
+        });
+    });
+</script>

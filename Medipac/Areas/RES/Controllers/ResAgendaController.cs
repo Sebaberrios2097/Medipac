@@ -86,12 +86,12 @@ namespace Medipac.Areas.RES.Controllers
                 Disponible = true
             };
 
-            return View(model.ToDto());
+            return PartialView(model.ToDto());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(DtoResAgenda dto)
+        public async Task<JsonResult> Create(DtoResAgenda dto)
         {
             if (ModelState.IsValid)
             {
@@ -99,22 +99,41 @@ namespace Medipac.Areas.RES.Controllers
                 var medico = await cliMedico.GetByUserId(usuarioId);
                 if (medico == null)
                 {
-                    return NotFound("Médico no encontrado.");
+                    return Json(new { success = false, message = "Médico no encontrado." });
                 }
 
-                // Asignar el IdMedico antes de guardar la disponibilidad
+                // Verificar si existe un conflicto de horario
+                bool existeConflicto = await resagenda.ExisteConflictoHorario(
+                    medico.IdMedico,
+                    dto.Fecha,
+                    dto.HoraInicio,
+                    dto.HoraFin
+                );
+
+                if (existeConflicto)
+                {
+                    return Json(new { success = false, message = "Ya existe una disponibilidad en este rango de horas." });
+                }
+
+                // Si no hay conflicto, procede a guardar
                 dto.IdMedico = medico.IdMedico;
                 var query = await resagenda.Add(dto.ToOriginal());
                 var result = await resagenda.Save();
 
                 if (result > 0)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return Json(new { success = true });
                 }
             }
 
-            return View(dto); // Si hay errores, volver a la vista de creación
+            // Si el modelo no es válido, devolver errores de validación
+            var errorMessage = string.Join("<br/>", ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage));
+
+            return Json(new { success = false, message = errorMessage });
         }
+
 
         public async Task<IActionResult> Edit(int id)
         {
