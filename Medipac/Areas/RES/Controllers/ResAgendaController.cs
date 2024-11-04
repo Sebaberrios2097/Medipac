@@ -2,9 +2,11 @@ using Medipac.Areas.CLI.Data.Interfaces;
 using Medipac.Areas.RES.Data.DTO;
 using Medipac.Areas.RES.Data.Interfaces;
 using Medipac.Models;
+using Medipac.ReadOnly;
 using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Medipac.Areas.RES.Controllers
@@ -60,7 +62,7 @@ namespace Medipac.Areas.RES.Controllers
                     title = a.Disponible ? "Disponible" : "No disponible",
                     start = $"{a.Fecha:yyyy-MM-dd}T{(a.HoraInicio / 100):D2}:{(a.HoraInicio % 100):D2}",
                     end = $"{a.Fecha:yyyy-MM-dd}T{(a.HoraFin / 100):D2}:{(a.HoraFin % 100):D2}",
-                    color = a.Disponible ? "green" : "red",
+                    color = a.Disponible ? "#4CAF50" : "#F44336",
                     description = a.Descripcion.IsNullOrEmpty() ? "" : a.Descripcion
                 })
                 .ToList();
@@ -85,6 +87,8 @@ namespace Medipac.Areas.RES.Controllers
                 HoraFin = end.HasValue ? (end.Value.Hour * 100 + end.Value.Minute) : 1700, // 5:00 pm por defecto
                 Disponible = true
             };
+
+            ViewBag.Disponible = DropDownList.Disponible;
 
             return PartialView(model.ToDto());
         }
@@ -135,27 +139,68 @@ namespace Medipac.Areas.RES.Controllers
         }
 
 
-        public async Task<IActionResult> Edit(int id)
+        [HttpGet]
+        public async Task<ActionResult> Edit(int id)
         {
             if (id == 0) return NotFound();
 
-            var Query = await resagenda.GetById(id);
-            if (Query == null) return NotFound();
+            var query = await resagenda.GetById(id);
+            if (query == null) return NotFound();
 
-            return PartialView(Query.ToDto());
+            ViewBag.Disponible = DropDownList.Disponible;
+
+            return PartialView("Edit", query.ToDto()); // Devuelve la vista Edit como parcial para el modal
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DtoResAgenda dto)
+        public async Task<JsonResult> Edit(int idAgenda, DtoResAgenda dto)
         {
-            if (id != dto.IdAgenda) return NotFound();
+            if (idAgenda != dto.IdAgenda) return Json(new { success = false, message = "ID de disponibilidad no coincide." });
 
-            resagenda.Update(dto.ToOriginal());
-            await resagenda.Save();
+            if (ModelState.IsValid)
+            {
+                var usuarioId = userManager.GetUserId(User);
+                var medico = await cliMedico.GetByUserId(usuarioId);
+                if (medico == null)
+                {
+                    return Json(new { success = false, message = "Médico no encontrado." });
+                }
 
-            return RedirectToAction(nameof(Index));
+                // Verificar si existe un conflicto de horario con otras disponibilidades
+                bool existeConflicto = await resagenda.ExisteConflictoHorario(
+                    medico.IdMedico,
+                    dto.Fecha,
+                    dto.HoraInicio,
+                    dto.HoraFin,
+                    dto.IdAgenda // Excluir la misma disponibilidad que estamos editando
+                );
+
+                if (existeConflicto)
+                {
+                    return Json(new { success = false, message = "Ya existe una disponibilidad en este rango de horas." });
+                }
+
+                // Si no hay conflicto, procede a actualizar
+                dto.IdMedico = medico.IdMedico;
+                resagenda.Update(dto.ToOriginal());
+                var result = await resagenda.Save();
+
+                if (result > 0)
+                {
+                    return Json(new { success = true });
+                }
+            }
+
+            // Si el modelo no es válido, devolver errores de validación
+            var errorMessage = string.Join("<br/>", ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage));
+
+            return Json(new { success = false, message = errorMessage });
         }
+
 
         public async Task<IActionResult> Delete(int id)
         {

@@ -54,14 +54,15 @@ namespace Medipac.Data.Repositories
             return await db.SaveChangesAsync();
         }
 
-        public async Task<bool> ExisteConflictoHorario(int idMedico, DateOnly fecha, int horaInicio, int horaFin)
+        public async Task<bool> ExisteConflictoHorario(int idMedico, DateOnly fecha, int horaInicio, int horaFin, int? idExcluir = null)
         {
             return await db.ResAgenda.AnyAsync(a =>
                 a.IdMedico == idMedico &&
                 a.Fecha == fecha &&
                 ((horaInicio >= a.HoraInicio && horaInicio < a.HoraFin) ||
                  (horaFin > a.HoraInicio && horaFin <= a.HoraFin) ||
-                 (horaInicio <= a.HoraInicio && horaFin >= a.HoraFin))
+                 (horaInicio <= a.HoraInicio && horaFin >= a.HoraFin)) &&
+                (!idExcluir.HasValue || a.IdAgenda != idExcluir) // Excluir el ID actual si se proporciona
             );
         }
     }

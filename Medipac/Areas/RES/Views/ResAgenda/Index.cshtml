@@ -1,48 +1,133 @@
 ﻿@model IEnumerable<Medipac.Areas.RES.Data.DTO.DtoResAgenda>
 
 @{
-    ViewData["Title"] = "Agenda del Médico";
+    ViewData["Title"] = "Mi Agenda";
     Layout = "~/Views/Shared/_LayoutAdm.cshtml";
 }
 
-<div class="container mt-5">
+<div class="container-fluid mt-5">
+    <div class="card titAgenda">
+        <div class="card-header text-center">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+    </div>
     <!-- Contenedor del calendario -->
-    <div id="calendar"></div>
+    <div id="calendar" class="mt-4"></div>
 </div>
 
+<style>
+    /* Estilo para el contenedor del calendario */
+    #calendar {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilo para los botones de navegación */
+    .fc-button {
+        background-color: #007bff;
+        border: none;
+        color: #fff;
+    }
+
+    .fc-button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Estilo para el día actual */
+    .fc-day-today {
+        background-color: #e9f5ff;
+    }
+
+    /* Estilo de los eventos */
+    .fc-event {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    /* Estilo de la cabecera */
+    .fc-toolbar-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    /* Animación para el modal */
+    .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+</style>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var calendarEl = document.getElementById('calendar');
+document.addEventListener('DOMContentLoaded', function () {
+    var calendarEl = document.getElementById('calendar');
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            locale: 'es', // Establecer idioma a español
-            timeZone: 'America/Santiago', // Zona horaria de Chile
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            events: '/RES/ResAgenda/GetEvents', // Cargar eventos mediante AJAX
-            editable: true,
-            selectable: true,
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'es',
+        timeZone: 'America/Santiago',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: '/RES/ResAgenda/GetEvents',
+        editable: true,
+        selectable: true,
+        eventDisplay: 'block', // Muestra los eventos como bloques, ocupando todo el ancho
+        eventColor: '#007bff', // Color por defecto para eventos
+        eventTextColor: '#ffffff', // Color de texto en eventos
+        dayMaxEvents: true, // Muestra una alerta si hay muchos eventos en un día
+        height: 'auto', // Ajusta la altura del calendario automáticamente
+        contentHeight: 'auto', // Ajusta la altura del contenido automáticamente
+        expandRows: true, // Expande las filas para mantener el contenido alineado
 
-            // Evento para ver detalles de la disponibilidad
-            eventClick: function (info) {
-                window.location.href = 'ResAgenda/Details/' + info.event.id;
-            },
+        // Personalizar el contenido del evento para mostrar horas de inicio y fin en formato 24H
+        eventContent: function (arg) {
+            var startTime = arg.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            var endTime = arg.event.end ? arg.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
 
-            // Evento para seleccionar un rango de fechas en el calendario y crear una nueva disponibilidad
-            select: function (info) {
-                // Redirige a la página de creación, pasando las fechas de inicio y fin seleccionadas
-                ModalGeneral(
-                    'Crear Especialidad',
-                    '@Url.Action("Create", "ResAgenda")' + '?start=' + info.startStr + '&end=' + info.endStr
-                );
-                // window.location.href = '/RES/ResAgenda/Create?start=' + info.startStr + '&end=' + info.endStr;
+            let eventTitle = document.createElement('div');
+            eventTitle.innerHTML = `<b>${startTime} - ${endTime}</b><br>${arg.event.title}`;
+            return { domNodes: [eventTitle] };
+        },
+
+        eventDidMount: function (arg) {
+            if (arg.event.extendedProps.description) {
+                arg.el.setAttribute('title', arg.event.extendedProps.description);
             }
-        });
+        },
 
-        calendar.render();
+        // Evento para abrir detalles en el modal
+        eventClick: function (info) {
+            ModalGeneral(
+                'Detalles de Disponibilidad',
+                '@Url.Action("Edit", "ResAgenda", new { area = "RES" })' + '?id=' + info.event.id
+            );
+        },
+
+        // Evento para seleccionar un rango de fechas en el calendario y crear una nueva disponibilidad
+        select: function (info) {
+            ModalGeneral(
+                'Crear Disponibilidad',
+                '@Url.Action("Create", "ResAgenda")' + '?start=' + info.startStr + '&end=' + info.endStr
+            );
+        }
     });
+
+    calendar.render();
+});
+
+// Función para mostrar el modal con animación
+function ModalGeneral(title, url) {
+    $('#myModal .modal-title').text(title);
+    $('#myModal .modal-body').load(url, function() {
+        $('#myModal').modal({ show: true });
+        $('#myModal').addClass('fade-in');
+    });
+}
 </script>

@@ -10,10 +10,21 @@
     {
         @Html.AntiForgeryToken()
 
-        <div class="mb-3">
-            <label for="Fecha" class="form-label">Fecha</label>
-            @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(m => m.Fecha, "", new { @class = "text-danger" })
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="Fecha" class="form-label">Fecha</label>
+                @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.Fecha, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="Disponible" class="form-label">Disponibilidad</label>
+                @Html.DropDownListFor(model => model.Disponible, new SelectList(ViewBag.Disponible, "Key", "Value"), "Seleccione...", new
+                    {
+                        @class = "form-select"
+                    })
+                @Html.ValidationMessageFor(m => m.Disponible, "", new { @class = "text-danger" })
+            </div>
         </div>
         
         <div class="row mb-3">
