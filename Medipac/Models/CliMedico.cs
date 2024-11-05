@@ -57,4 +57,6 @@ public partial class CliMedico
 
     [InverseProperty("IdMedicoNavigation")]
     public virtual ICollection<ResReserva> ResReserva { get; set; } = new List<ResReserva>();
+    [InverseProperty("IdMedicoNavigation")]
+    public virtual ICollection<ResHorarioMedico> ResHorarioMedico { get; set; } = new List<ResHorarioMedico>();
 }

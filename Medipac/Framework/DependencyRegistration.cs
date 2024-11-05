@@ -16,6 +16,7 @@ namespace Medipac.Framework
             _ = services.AddScoped<IResEspecialidadesRepository, ResEspecialidadesRepository>();
             _ = services.AddScoped<IResMedicoEspecialidadRepository, ResMedicoEspecialidadRepository>();
             _ = services.AddScoped<IResReservaRepository, ResReservaRepository>();
+            _ = services.AddScoped<IResHorarioMedicoRepository, ResHorarioMedicoRepository>();
             _ = services.AddScoped<ICliHistorialPacienteRepository, CliHistorialPacienteRepository>();
             _ = services.AddScoped<ICliPacientesRepository, CliPacientesRepository>();
             _ = services.AddScoped<ICliMedicoRepository, CliMedicoRepository>();

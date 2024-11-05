@@ -152,6 +152,86 @@ namespace Medipac.Areas.RES.Controllers
             return PartialView("Edit", query.ToDto()); // Devuelve la vista Edit como parcial para el modal
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> CreateRecurring(DtoResAgenda dto)
+        {
+            if (ModelState.IsValid)
+            {
+                var usuarioId = userManager.GetUserId(User);
+                var medico = await cliMedico.GetByUserId(usuarioId);
+                if (medico == null)
+                {
+                    return Json(new { success = false, message = "Médico no encontrado." });
+                }
+
+                dto.IdMedico = medico.IdMedico;
+
+                DateOnly fechaFinRecurrente = dto.Fecha.AddMonths(1).AddDays(15);
+                var mensajesConflictos = new List<string>(); // Lista para acumular los conflictos
+
+                foreach (var dia in dto.DiasRecurrentes)
+                {
+                    var fechaActual = dto.Fecha;
+                    while (fechaActual <= fechaFinRecurrente)
+                    {
+                        if (fechaActual.DayOfWeek == dia)
+                        {
+                            var nuevaDisponibilidad = new DtoResAgenda
+                            {
+                                Fecha = fechaActual,
+                                HoraInicio = dto.HoraInicio,
+                                HoraFin = dto.HoraFin,
+                                Disponible = true,
+                                IdMedico = medico.IdMedico
+                            };
+
+                            bool existeConflicto = await resagenda.ExisteConflictoHorario(
+                                medico.IdMedico,
+                                nuevaDisponibilidad.Fecha,
+                                nuevaDisponibilidad.HoraInicio,
+                                nuevaDisponibilidad.HoraFin
+                            );
+
+                            if (existeConflicto)
+                            {
+                                // Si hay conflicto, agrega un mensaje detallado para esta fecha y hora
+                                var horaInicioStr = $"{nuevaDisponibilidad.HoraInicio / 100:D2}:{nuevaDisponibilidad.HoraInicio % 100:D2}";
+                                var horaFinStr = $"{nuevaDisponibilidad.HoraFin / 100:D2}:{nuevaDisponibilidad.HoraFin % 100:D2}";
+                                mensajesConflictos.Add($"Hay un conflicto de horario el día {fechaActual:dd/MM/yyyy} entre las {horaInicioStr} y {horaFinStr}.");
+                            }
+                            else
+                            {
+                                await resagenda.Add(nuevaDisponibilidad.ToOriginal());
+                            }
+                        }
+                        fechaActual = fechaActual.AddDays(1);
+                    }
+                }
+
+                var result = await resagenda.Save();
+
+                if (mensajesConflictos.Any())
+                {
+                    // Si hubo conflictos, devolver los mensajes acumulados
+                    return Json(new { success = false, message = string.Join("<br/>", mensajesConflictos) });
+                }
+
+                if (result > 0)
+                {
+                    return Json(new { success = true });
+                }
+            }
+
+            var errorMessage = string.Join("<br/>", ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage));
+
+            return Json(new { success = false, message = errorMessage });
+        }
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

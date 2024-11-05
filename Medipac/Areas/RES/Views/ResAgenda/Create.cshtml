@@ -6,7 +6,7 @@
     <!-- Contenedor de mensajes de error -->
     <div id="error-messages" class="alert alert-danger d-none"></div>
 
-    @using (Html.BeginForm("Create", "ResAgenda", FormMethod.Post, new { id = "createForm" }))
+    @using (Html.BeginForm("CreateRecurring", "ResAgenda", FormMethod.Post, new { id = "createForm" }))
     {
         @Html.AntiForgeryToken()
 
@@ -26,7 +26,7 @@
                 @Html.ValidationMessageFor(m => m.Disponible, "", new { @class = "text-danger" })
             </div>
         </div>
-        
+
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="HoraInicioDisplay" class="form-label">Hora de Inicio</label>
@@ -39,6 +39,32 @@
                 @Html.EditorFor(model => model.HoraFinDisplay, new { htmlAttributes = new { @class = "form-control", type = "time" } })
                 @Html.ValidationMessageFor(m => m.HoraFin, "", new { @class = "text-danger" })
             </div>
+        </div>
+
+        <!-- Selección de días de la semana -->
+        <div class="mb-3">
+            <label class="form-label">Días de la semana</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Monday" /> Lunes
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Tuesday" /> Martes
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Wednesday" /> Miércoles
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Thursday" /> Jueves
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Friday" /> Viernes
+            </div>
+        </div>
+
+        <!-- Fecha final de recurrencia -->
+        <div class="mb-3">
+            <label for="FechaFinRecurrente" class="form-label">Repetir hasta</label>
+            <input type="date" id="FechaFinRecurrente" name="FechaFinRecurrente" class="form-control" />
         </div>
 
         <div class="mb-3">
@@ -57,21 +83,19 @@
 <script>
     $(document).ready(function () {
         $('#createForm').on('submit', function (e) {
-            e.preventDefault(); // Prevenir el envío normal del formulario
+            e.preventDefault();
 
-            // Obtener el token de anti-falsificación
             var token = $('input[name="__RequestVerificationToken"]').val();
-
-            // Obtener y convertir las horas de inicio y fin
             var horaInicio = $('#HoraInicioDisplay').val();
             var horaFin = $('#HoraFinDisplay').val();
-
-            // Convertir HH:mm a HHmm (por ejemplo, "07:30" a 730)
             var horaInicioInt = parseInt(horaInicio.replace(":", ""));
             var horaFinInt = parseInt(horaFin.replace(":", ""));
+            var diasRecurrentes = $('input[name="DiasRecurrentes"]:checked').map(function () {
+                return $(this).val();
+            }).get();
 
             $.ajax({
-                url: '@Url.Action("Create", "ResAgenda", new { area = "RES" })',
+                url: '@Url.Action("CreateRecurring", "ResAgenda", new { area = "RES" })',
                 type: 'POST',
                 data: {
                     __RequestVerificationToken: token,
@@ -79,29 +103,27 @@
                     HoraInicio: horaInicioInt,
                     HoraFin: horaFinInt,
                     Descripcion: $('#Descripcion').val(),
-                    Disponible: $('#Disponible').is(':checked')
+                    Disponible: $('#Disponible').is(':checked'),
+                    DiasRecurrentes: diasRecurrentes,
+                    FechaFinRecurrente: $('#FechaFinRecurrente').val()
                 },
                 success: function (response) {
                     if (response.success) {
-                        // Primero cerrar el modal
                         $('#Mdl_General').modal('hide');
-
-                        // Luego mostrar SweetAlert de éxito
                         Swal.fire({
-                            title: '¡Disponibilidad Creada!',
-                            text: 'La disponibilidad se ha creado exitosamente.',
+                            title: '¡Disponibilidad Recurrente Creada!',
+                            text: 'La disponibilidad recurrente se ha creado exitosamente.',
                             icon: 'success',
                             confirmButtonText: 'Aceptar'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                location.reload(); // Recargar la página para reflejar los cambios en el calendario
+                                location.reload();
                             }
                         });
                     } else {
-                        // Mostrar SweetAlert de error
                         Swal.fire({
-                            title: 'Error',
-                            text: response.message,
+                            title: 'Conflicto de Horario',
+                            html: response.message, // Usa HTML para mostrar los mensajes con <br/>
                             icon: 'error',
                             confirmButtonText: 'Cerrar'
                         });

@@ -114,6 +114,30 @@ namespace Medipac.ReadOnly.DtoTransformation
                 IdReserva = dto.IdReserva
             };
         }
+        // Transformación modelo ResHorarioMedico
+        public static DtoResHorarioMedico ToDto(this ResHorarioMedico original)
+        {
+            return new()
+            {
+                IdHorario = original.IdHorario,
+                IdMedico = original.IdMedico,
+                DiaSemana = original.DiaSemana,
+                HoraInicio = original.HoraInicio,
+                HoraFin = original.HoraFin
+            };
+        }
+
+        public static ResHorarioMedico ToOriginal(this DtoResHorarioMedico dto)
+        {
+            return new()
+            {
+                IdHorario = dto.IdHorario,
+                IdMedico = dto.IdMedico,
+                DiaSemana = dto.DiaSemana,
+                HoraInicio = dto.HoraInicio,
+                HoraFin = dto.HoraFin
+            };
+        }
 
     }
 }

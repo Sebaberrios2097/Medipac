@@ -1,0 +1,76 @@
+﻿@model Medipac.Areas.RES.Data.DTO.DtoResHorarioMedico
+
+@using (Html.BeginForm("Create", "ResHorarioMedico", FormMethod.Post, new { id = "createHorarioForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body">
+        <div class="mb-3">
+            <label for="DiaSemana" class="form-label">Día de la Semana</label>
+            <select id="DiaSemana" name="DiaSemana" class="form-select" required>
+                <option value="">Seleccione un día...</option>
+                <option value="1">Lunes</option>
+                <option value="2">Martes</option>
+                <option value="3">Miércoles</option>
+                <option value="4">Jueves</option>
+                <option value="5">Viernes</option>
+                <option value="6">Sábado</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(model => model.HoraInicioDisplay, "Hora de Inicio", new { @class = "form-label" })
+            @Html.EditorFor(model => model.HoraInicioDisplay, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(model => model.HoraFinDisplay, "Hora de Fin", new { @class = "form-label" })
+            @Html.EditorFor(model => model.HoraFinDisplay, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+        </div>
+    </div>
+
+    <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <input type="submit" class="btn btn-primary" value="Guardar" />
+    </div>
+}
+
+<script type="text/javascript">
+    // Manejar el submit del formulario usando AJAX
+    $("#createHorarioForm").submit(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Create", "ResHorarioMedico")',
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.message,
+                        icon: response.type,
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = '@Url.Action("Index", "ResHorarioMedico")';
+                    });
+                } else {
+                    Swal.fire({
+                        title: response.title,
+                        html: response.message,
+                        icon: response.type,
+                        confirmButtonText: 'Cerrar'
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: "Error",
+                    text: "Ocurrió un error al procesar la solicitud.",
+                    icon: "error",
+                    confirmButtonText: 'Cerrar'
+                });
+            }
+        });
+    });
+</script>

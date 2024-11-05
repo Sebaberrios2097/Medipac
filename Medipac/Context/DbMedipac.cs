@@ -42,6 +42,8 @@ public partial class DbMedipac : IdentityDbContext<ComUsuario, IdentityRole<int>
 
     public virtual DbSet<ResReserva> ResReserva { get; set; }
 
+    public virtual DbSet<ResHorarioMedico> ResHorarioMedico { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -124,6 +126,13 @@ public partial class DbMedipac : IdentityDbContext<ComUsuario, IdentityRole<int>
             entity.HasOne(d => d.IdMedicoNavigation).WithMany(p => p.ResAgenda)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_RES_Agenda_CLI_Medico");
+        });
+
+        modelBuilder.Entity<ResHorarioMedico>(entity =>
+        {
+            entity.HasOne(d => d.IdMedicoNavigation).WithMany(p => p.ResHorarioMedico)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Res_HorarioMedico_CLI_Medico");
         });
 
         modelBuilder.Entity<ResEspecialidades>(entity =>

@@ -6,17 +6,16 @@ namespace Medipac.Areas.RES.Data.DTO
     public class DtoResAgenda
     {
         [Key]
-        [Column("Id_Agenda")]
         public int IdAgenda { get; set; }
-        [Column("Id_Medico")]
         public int IdMedico { get; set; }
         public DateOnly Fecha { get; set; }
-        [Column("Hora_Inicio")]
         public int HoraInicio { get; set; }
-        [Column("Hora_FIn")]
         public int HoraFin { get; set; }
         public bool Disponible { get; set; }
         public string? Descripcion { get; set; }
+
+        public List<DayOfWeek>? DiasRecurrentes { get; set; }
+        public DateOnly FechaFinRecurrente { get; set; }
 
         // Propiedades para la vista en formato "HH:mm"
         [NotMapped]

@@ -11,28 +11,42 @@
             <h1>@ViewData["Title"]</h1>
         </div>
     </div>
-    <!-- Contenedor del calendario -->
-    <div id="calendar" class="mt-4"></div>
+
+    <!-- Contenedor del calendario con el botón de "Configurar Horario" -->
+    <div id="calendarContainer" class="mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="fs-4">Calendario de Disponibilidad</h2>
+            <a href="@Url.Action("Index", "ResHorarioMedico")" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                <i class="bi bi-clock me-2"></i> Configurar Horario
+            </a>
+        </div>
+        <div id="calendar"></div>
+    </div>
 </div>
 
 <style>
     /* Estilo para el contenedor del calendario */
-    #calendar {
+    #calendarContainer {
         background-color: #f8f9fa;
         border-radius: 10px;
         padding: 20px;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    /* Estilo para los botones de navegación */
-    .fc-button {
+    /* Estilo del botón de "Configurar Horario" */
+    .btn-primary {
         background-color: #007bff;
         border: none;
         color: #fff;
     }
-
-    .fc-button:hover {
+    .btn-primary:hover {
         background-color: #0056b3;
+    }
+
+    /* Estilo para el calendario */
+    #calendar {
+        padding: 10px;
+        border-radius: 10px;
     }
 
     /* Estilo para el día actual */
@@ -49,13 +63,6 @@
         padding: 5px;
     }
 
-    /* Estilo de la cabecera */
-    .fc-toolbar-title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #333;
-    }
-
     /* Animación para el modal */
     .fade-in {
         animation: fadeIn 0.3s ease-in-out;
@@ -63,71 +70,81 @@
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    var calendarEl = document.getElementById('calendar');
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        locale: 'es',
-        timeZone: 'America/Santiago',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        events: '/RES/ResAgenda/GetEvents',
-        editable: true,
-        selectable: true,
-        eventDisplay: 'block', // Muestra los eventos como bloques, ocupando todo el ancho
-        eventColor: '#007bff', // Color por defecto para eventos
-        eventTextColor: '#ffffff', // Color de texto en eventos
-        dayMaxEvents: true, // Muestra una alerta si hay muchos eventos en un día
-        height: 'auto', // Ajusta la altura del calendario automáticamente
-        contentHeight: 'auto', // Ajusta la altura del contenido automáticamente
-        expandRows: true, // Expande las filas para mantener el contenido alineado
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'es',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: '/RES/ResAgenda/GetEvents',
+            editable: true,
+            selectable: true,
+            eventDisplay: 'block',
+            eventColor: '#007bff',
+            eventTextColor: '#ffffff',
+            dayMaxEvents: true,
+            height: 'auto',
+            contentHeight: 'auto',
+            expandRows: true,
 
-        // Personalizar el contenido del evento para mostrar horas de inicio y fin en formato 24H
-        eventContent: function (arg) {
-            var startTime = arg.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-            var endTime = arg.event.end ? arg.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
+            // Restringir selección a partir de la fecha actual
+            validRange: {
+                start: new Date().toISOString().split('T')[0] // Fecha actual en formato YYYY-MM-DD
+            },
 
-            let eventTitle = document.createElement('div');
-            eventTitle.innerHTML = `<b>${startTime} - ${endTime}</b><br>${arg.event.title}`;
-            return { domNodes: [eventTitle] };
-        },
+            // Personalizar el contenido del evento
+            eventContent: function (arg) {
+                var startTime = arg.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                var endTime = arg.event.end ? arg.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
 
-        eventDidMount: function (arg) {
-            if (arg.event.extendedProps.description) {
-                arg.el.setAttribute('title', arg.event.extendedProps.description);
+                let eventTitle = document.createElement('div');
+                eventTitle.innerHTML = `<b>${startTime} - ${endTime}</b><br>${arg.event.title}`;
+                return { domNodes: [eventTitle] };
+            },
+
+            eventDidMount: function (arg) {
+                if (arg.event.extendedProps.description) {
+                    arg.el.setAttribute('title', arg.event.extendedProps.description);
+                }
+            },
+
+            // Deshabilitar la creación en días anteriores al actual
+            selectAllow: function (selectInfo) {
+                var today = new Date();
+                return selectInfo.start >= today.setHours(0, 0, 0, 0);
+            },
+
+            // Evento para abrir detalles en el modal
+            eventClick: function (info) {
+                ModalGeneral(
+                    'Detalles de Disponibilidad',
+                    '@Url.Action("Edit", "ResAgenda", new { area = "RES" })' + '?id=' + info.event.id
+                );
+            },
+
+            // Evento para seleccionar un rango de fechas en el calendario y crear una nueva disponibilidad
+            select: function (info) {
+                ModalGeneral(
+                    'Crear Disponibilidad',
+                    '@Url.Action("Create", "ResAgenda")' + '?start=' + info.startStr + '&end=' + info.endStr
+                );
             }
-        },
+        });
 
-        // Evento para abrir detalles en el modal
-        eventClick: function (info) {
-            ModalGeneral(
-                'Detalles de Disponibilidad',
-                '@Url.Action("Edit", "ResAgenda", new { area = "RES" })' + '?id=' + info.event.id
-            );
-        },
-
-        // Evento para seleccionar un rango de fechas en el calendario y crear una nueva disponibilidad
-        select: function (info) {
-            ModalGeneral(
-                'Crear Disponibilidad',
-                '@Url.Action("Create", "ResAgenda")' + '?start=' + info.startStr + '&end=' + info.endStr
-            );
-        }
+        calendar.render();
     });
 
-    calendar.render();
-});
-
-// Función para mostrar el modal con animación
-function ModalGeneral(title, url) {
-    $('#myModal .modal-title').text(title);
-    $('#myModal .modal-body').load(url, function() {
-        $('#myModal').modal({ show: true });
-        $('#myModal').addClass('fade-in');
-    });
-}
+    // Función para mostrar el modal con animación
+    function ModalGeneral(title, url) {
+        $('#myModal .modal-title').text(title);
+        $('#myModal .modal-body').load(url, function () {
+            $('#myModal').modal({ show: true });
+            $('#myModal').addClass('fade-in');
+        });
+    }
 </script>
