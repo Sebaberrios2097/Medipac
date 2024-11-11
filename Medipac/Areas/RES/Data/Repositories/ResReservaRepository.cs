@@ -52,5 +52,17 @@ namespace Medipac.Data.Repositories
         {
             return await db.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<ResEspecialidades>> GetEspecialidades()
+        {
+            return await db.ResEspecialidades.Where(e => e.Estado).ToListAsync();
+        }
+        public async Task<IEnumerable<CliMedico>> GetMedicosByEspecialidad(int idEspecialidad)
+        {
+            return await db.ResMedicoEspecialidad
+                .Where(me => me.IdEspecialidad == idEspecialidad)
+                .Select(me => me.IdMedicoNavigation)
+                .ToListAsync();
+        }
     }
 }

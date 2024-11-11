@@ -141,6 +141,23 @@
                         </div>
                     </li>
                 }
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Paciente"))
+                {
+                    <li>
+                        <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover mt-2"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapse-medico"
+                                aria-expanded="@((ViewData["ActivePage"] as string) == "Agenda" ? "true" : "false")">
+                            <i class="bi bi-newspaper" style="padding-right:10px"></i>
+                            Médico
+                        </button>
+                        <div class="collapse @((ViewData["ActivePage"] as string) == "Agenda" ? "show" : "" )" id="collapse-medico">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                <li><a asp-area="RES" asp-controller="ResReserva" asp-action="Create" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Agenda" ? "active" : "")">Agenda</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                }
             </ul>
 
             <!-- Colocar el botón al final del sidebar -->

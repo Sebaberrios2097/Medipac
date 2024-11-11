@@ -85,11 +85,20 @@ async Task InitializeRolesAndAdminUser(IServiceProvider serviceProvider)
     var userManager = serviceProvider.GetRequiredService<UserManager<ComUsuario>>();
 
     string adminRole = "Administrador";
+    string medicoRole = "Medico";
+    string pacienteRole = "Paciente";
 
-    // Verifica si el rol "Administrador" existe; si no, créalo
     if (!await roleManager.RoleExistsAsync(adminRole))
     {
         await roleManager.CreateAsync(new IdentityRole<int>(adminRole));
+    }
+    if (!await roleManager.RoleExistsAsync(medicoRole))
+    {
+        await roleManager.CreateAsync(new IdentityRole<int>(medicoRole));
+    }
+    if (!await roleManager.RoleExistsAsync(pacienteRole))
+    {
+        await roleManager.CreateAsync(new IdentityRole<int>(pacienteRole));
     }
 
     // Crea un usuario administrador predeterminado

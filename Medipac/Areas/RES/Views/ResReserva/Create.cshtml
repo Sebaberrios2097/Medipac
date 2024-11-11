@@ -1,0 +1,157 @@
+﻿@model Medipac.Areas.RES.Data.DTO.DtoResReserva
+
+@{
+    ViewData["Title"] = "Reservar Cita";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card titAgenda">
+        <div class="card-header text-center">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <!-- Selección de Especialidad y Médico -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <label for="Especialidad">Especialidad</label>
+            @Html.DropDownList("EspecialidadId", new SelectList(ViewBag.Especialidades, "IdEspecialidad", "Nombre"), "Seleccione...", new { @class = "form-select" })
+        </div>
+        <div class="col-md-6">
+            <label for="Medico">Médico</label>
+            <select id="MedicoId" name="MedicoId" class="form-select" disabled>
+                <option value="">Seleccione un médico...</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Contenedor del calendario -->
+    <div id="calendarContainer" class="mt-4">
+        <h2 class="fs-4">Calendario de Disponibilidad</h2>
+        <div id="calendar"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Manejo de cambio en el dropdown de especialidades
+        $('#EspecialidadId').on('change', function () {
+            var especialidadId = $(this).val();
+            $('#MedicoId').prop('disabled', true).html('<option>Cargando...</option>');
+
+            $.getJSON('@Url.Action("GetMedicosPorEspecialidad")', { especialidadId: especialidadId }, function (data) {
+                console.log(data)
+                var options = '<option value="">Seleccione un médico...</option>';
+                data.forEach(function (medico) {
+                    options += `<option value="${medico.idMedico}">${medico.nombres}</option>`;
+                });
+                $('#MedicoId').html(options).prop('disabled', false);
+            });
+        });
+
+        // Configuración del calendario FullCalendar
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'es',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: function (fetchInfo, successCallback, failureCallback) {
+                var medicoId = $('#MedicoId').val();
+
+                console.log("Fetching events for medicoId:" + medicoId); // Log para verificar
+                // Escuchar cambios en el selector de médico
+                $('#MedicoId').on('change', function () {
+                    var selectedMedicoId = $(this).val();
+                    console.log("Selected Medico ID:", selectedMedicoId); // Verificar el ID seleccionado
+                    calendar.refetchEvents(); // Recargar eventos del calendario al seleccionar un médico
+                });
+
+                if (!medicoId) {
+                    successCallback([]);
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("GetDisponibilidadMedico", "ResReserva", new { area = "RES" })',
+                    dataType: 'json',
+                    data: {
+                        medicoId: medicoId,
+                        start: fetchInfo.startStr,
+                        end: fetchInfo.endStr
+                    },
+                    success: function (data) {
+                        console.log("Received data:", data);
+                        successCallback(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching events:", error);
+                        failureCallback();
+                    }
+                });
+
+            },
+            eventClick: function(info) {
+                // Obtener información del evento
+                const agendaId = info.event.id;
+                const fechaHoraReserva = info.event.start.toLocaleString(); // Ajustar el formato según prefieras
+
+                // Mostrar SweetAlert2 para confirmar la reserva
+                Swal.fire({
+                    title: '¿Desea confirmar la reserva?',
+                    html: `<p>Médico: ${info.event.title}</p><p>Fecha y Hora: ${fechaHoraReserva}</p>`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Confirmar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si el usuario confirma, hacer la reserva
+                        $.ajax({
+                            url: '@Url.Action("ConfirmReservation", "ResReserva", new { area = "RES" })',
+                            type: 'POST',
+                            data: {
+                                agendaId: agendaId
+                            },
+                            success: function(response) {
+                                // Mostrar mensaje de éxito
+                                Swal.fire({
+                                    title: 'Reserva Confirmada',
+                                    text: 'Su reserva se ha realizado exitosamente.',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                                // Opcional: Recargar el calendario para actualizar la disponibilidad
+                                calendar.refetchEvents();
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'Hubo un problema al realizar la reserva. Por favor, inténtelo de nuevo.',
+                                    icon: 'error'
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        // Renderizar el calendario
+        calendar.render();
+    });
+
+    // Función para mostrar el modal con animación
+    function ModalGeneral(title, url) {
+        $('#myModal .modal-title').text(title);
+        $('#myModal .modal-body').load(url, function () {
+            $('#myModal').modal({ show: true });
+            $('#myModal').addClass('fade-in');
+        });
+    }
+</script>

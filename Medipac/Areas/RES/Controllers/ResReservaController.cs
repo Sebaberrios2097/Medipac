@@ -1,18 +1,34 @@
+using Medipac.Areas.CLI.Data.Interfaces;
 using Medipac.Areas.RES.Data.DTO;
 using Medipac.Areas.RES.Data.Interfaces;
+using Medipac.Data.Repositories;
+using Medipac.Models;
 using Medipac.ReadOnly.DtoTransformation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Medipac.Areas.RES.Controllers
 {
     [Area("RES")]
+    [Authorize(Roles = "Paciente")]
     public class ResReservaController : Controller
     {
         private readonly IResReservaRepository resreserva;
+        private readonly IResAgendaRepository resagenda;
+        private readonly UserManager<ComUsuario> userManager;
+        private readonly ICliPacientesRepository clipacientes;
 
-        public ResReservaController(IResReservaRepository resreserva)
+
+        public ResReservaController(IResReservaRepository resreserva,
+                                    IResAgendaRepository resagenda,
+                                    UserManager<ComUsuario> userManager,
+                                    ICliPacientesRepository clipacientes)
         {
             this.resreserva = resreserva;
+            this.resagenda = resagenda;
+            this.userManager = userManager;
+            this.clipacientes = clipacientes;
         }
 
         public async Task<ActionResult> Index()
@@ -27,25 +43,97 @@ namespace Medipac.Areas.RES.Controllers
             return View(Query.ToDto());
         }
 
-        public ActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Especialidades = await resreserva.GetEspecialidades(); // Obtener lista de especialidades para dropdown
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(DtoResReserva Dto)
+        public async Task<IActionResult> Create(DtoResReserva dto)
         {
-            var Query = await resreserva.Add(Dto.ToOriginal());
-            var Result = await resreserva.Save();
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Especialidades = await resreserva.GetEspecialidades();
+                return View(dto);
+            }
 
-            if (Result > 0)
+            var reserva = await resreserva.Add(dto.ToOriginal());
+            var result = await resreserva.Save();
+
+            if (result > 0)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(Query.ToDto());
+            ViewBag.Especialidades = await resreserva.GetEspecialidades();
+            return View(dto);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmReservation(int agendaId)
+        {
+            // Obtener la disponibilidad del médico (ResAgenda) según el agendaId
+            var agenda = await resagenda.GetById(agendaId);
+            if (agenda == null || !agenda.Disponible)
+            {
+                return Json(new { success = false, message = "La franja horaria ya no está disponible." });
+            }
+
+            var userId = userManager.GetUserId(User);
+
+            var paciente = await clipacientes.GetByUserId(userId);
+
+            var nuevaReserva = new ResReserva
+            {
+                IdPaciente = paciente.IdPaciente,
+                IdMedico = agenda.IdMedico,
+                Fecha = new DateTime(agenda.Fecha.Year, agenda.Fecha.Month, agenda.Fecha.Day, agenda.HoraInicio / 100, agenda.HoraInicio % 100, 0),
+                Estado = true,
+                FechaCreacion = DateTime.Now
+            };
+
+            await resreserva.Add(nuevaReserva);
+            var result = await resreserva.Save();
+
+            // Si la reserva se guarda correctamente, actualizamos la agenda para marcarla como no disponible
+            if (result > 0)
+            {
+                agenda.Disponible = false; // Marcar la franja como no disponible
+                resagenda.Update(agenda);
+                await resagenda.Save();
+
+                return Json(new { success = true, message = "Reserva confirmada con éxito." });
+            }
+
+            return Json(new { success = false, message = "Ocurrió un error al confirmar la reserva. Intente nuevamente." });
+        }
+
+
+        public async Task<JsonResult> GetMedicosPorEspecialidad(int especialidadId)
+        {
+            var medicos = await resreserva.GetMedicosByEspecialidad(especialidadId);
+            return Json(medicos.Select(m => new { m.IdMedico, m.Nombres }));
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetDisponibilidadMedico(int medicoId)
+        {
+            var disponibilidades = await resagenda.GetDisponibilidadByMedicoAndDateRange(medicoId);
+
+            var eventos = disponibilidades.Select(d => new
+            {
+                id = d.IdAgenda,
+                title = d.Descripcion ?? "Disponible",
+                start = new DateTime(d.Fecha.Year, d.Fecha.Month, d.Fecha.Day, d.HoraInicio / 100, d.HoraInicio % 100, 0).ToString("s"),
+                end = new DateTime(d.Fecha.Year, d.Fecha.Month, d.Fecha.Day, d.HoraFin / 100, d.HoraFin % 100, 0).ToString("s"),
+                allDay = false
+            });
+
+            return Json(eventos);
+        }
+
 
         public async Task<IActionResult> Edit(int id)
         {

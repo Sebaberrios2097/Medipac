@@ -65,5 +65,18 @@ namespace Medipac.Data.Repositories
                 (!idExcluir.HasValue || a.IdAgenda != idExcluir) // Excluir el ID actual si se proporciona
             );
         }
+
+        public async Task<IEnumerable<ResAgenda>> GetDisponibilidadByMedicoAndDateRange(int medicoId)
+        {
+            DateOnly fechaActual = DateOnly.FromDateTime(DateTime.Now);
+            return await db.ResAgenda
+                .Where(a =>
+                    a.IdMedico == medicoId &&
+                    a.Fecha >= fechaActual &&
+                    a.Disponible) // Solo registros disponibles
+                .ToListAsync();
+        }
+
+
     }
 }

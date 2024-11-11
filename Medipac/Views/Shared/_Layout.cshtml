@@ -58,6 +58,10 @@
                                         {
                                             <li><a class="dropdown-item" asp-area="CLI" asp-controller="CliHome" asp-action="Home">Panel de Médico</a></li>
                                         }
+                                        @if (User.IsInRole("Paciente"))
+                                        {
+                                            <li><a class="dropdown-item" asp-area="CLI" asp-controller="CliHome" asp-action="Home">Historial Médico</a></li>
+                                        }
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
                                             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">

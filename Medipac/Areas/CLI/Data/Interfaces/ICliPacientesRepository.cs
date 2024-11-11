@@ -6,6 +6,7 @@ namespace Medipac.Areas.CLI.Data.Interfaces
     {
         Task<List<CliPacientes>> GetAll();
         Task<CliPacientes> GetById(int id);
+        Task<CliPacientes> GetByUserId(string id);
         Task<CliPacientes> Add(CliPacientes clipacientes);
         void Update(CliPacientes clipacientes);
         Task<bool> DeleteById(int id);

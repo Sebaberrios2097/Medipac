@@ -1,4 +1,5 @@
 using Medipac.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Medipac.Areas.RES.Data.Interfaces
 {
@@ -11,5 +12,7 @@ namespace Medipac.Areas.RES.Data.Interfaces
         Task<bool> DeleteById(int id);
         Task<int> Save();
         Task<bool> ExisteConflictoHorario(int idMedico, DateOnly fecha, int horaInicio, int horaFin, int? idExcluir = null);
+        Task<IEnumerable<ResAgenda>> GetDisponibilidadByMedicoAndDateRange(int medicoId);
+
     }
 }

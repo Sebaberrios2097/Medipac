@@ -10,5 +10,8 @@ namespace Medipac.Areas.RES.Data.Interfaces
         void Update(ResReserva resreserva);
         Task<bool> DeleteById(int id);
         Task<int> Save();
+
+        Task<IEnumerable<ResEspecialidades>> GetEspecialidades();
+        Task<IEnumerable<CliMedico>> GetMedicosByEspecialidad(int idEspecialidad);
     }
 }

@@ -4,6 +4,7 @@ using Medipac.Areas.RES.Data.Interfaces;
 using Medipac.Models;
 using Medipac.ReadOnly;
 using Medipac.ReadOnly.DtoTransformation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace Medipac.Areas.RES.Controllers
 {
     [Area("RES")]
+    [Authorize(Roles = "Medico")]
     public class ResAgendaController : Controller
     {
         private readonly IResAgendaRepository resagenda;
