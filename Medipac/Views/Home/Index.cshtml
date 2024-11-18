@@ -4,6 +4,22 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .card:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .card-img-top:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+    }
+
+    .hover-opacity:hover {
+        opacity: 0.5;
+    }
+</style>
+
 <div id="carouselExampleCaptions" class="carousel slide mt-3">
     <div class="carousel-indicators">
         @for (int i = 0; i < Model.Count(); i++)
@@ -32,4 +48,108 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+
+<section class="services-section mt-5 py-5" style="background-color: #f9f9f9;">
+    <div class="container">
+        <h2 class="text-center mb-5 position-relative">
+            Nuestros Servicios
+            <span class="d-block mx-auto mt-2" style="width: 80px; height: 3px; background-color: #3498db; border-radius: 5px;"></span>
+        </h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100 text-center shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="icon-circle mb-3 mx-auto" style="width: 80px; height: 80px; background-color: #3498db; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user-md fa-2x text-white"></i>
+                        </div>
+                        <h5 class="card-title">Consultas Médicas</h5>
+                        <p class="card-text">Atención personalizada con médicos especialistas en diversas áreas de la salud.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 text-center shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="icon-circle mb-3 mx-auto" style="width: 80px; height: 80px; background-color: #2ecc71; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-heartbeat fa-2x text-white"></i>
+                        </div>
+                        <h5 class="card-title">Exámenes Cardiovasculares</h5>
+                        <p class="card-text">Evaluaciones completas del sistema cardiovascular con tecnología de vanguardia.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 text-center shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="icon-circle mb-3 mx-auto" style="width: 80px; height: 80px; background-color: #e74c3c; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-procedures fa-2x text-white"></i>
+                        </div>
+                        <h5 class="card-title">Cirugías Ambulatorias</h5>
+                        <p class="card-text">Procedimientos quirúrgicos seguros y eficientes con mínima estancia hospitalaria.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5">
+            <a class="btn btn-primary btn-lg rounded-pill" asp-area="RES" asp-controller="ResReserva" asp-action="Create"><i class="fas fa-calendar-check me-2"></i> Reservar Cita</a>
+        </div>
+    </div>
+</section>
+
+<section class="news-section mt-5">
+    <div class="container">
+        <h2 class="text-center mb-5 position-relative">
+            Últimas Noticias
+            <span class="d-block mx-auto mt-2" style="width: 80px; height: 3px; background-color: #3498db; border-radius: 5px;"></span>
+        </h2>
+
+        <!-- Tarjetas de Noticias -->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <!-- Primera Tarjeta -->
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 rounded">
+                    <div class="position-relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Médico examinando a un paciente" class="card-img-top" style="height: 200px; object-fit: cover; transition: transform 0.3s ease;">
+                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-0 hover-opacity" style="transition: opacity 0.3s;"></div>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary">Nuevo tratamiento contra el cáncer</h5>
+                        <p class="card-text text-truncate" style="max-height: 3rem; overflow: hidden;">Investigadores de nuestro centro han desarrollado un prometedor tratamiento que podría revolucionar la lucha contra el cáncer.</p>
+                        <a href="/news/cancer-treatment" class="btn btn-outline-primary mt-auto rounded-pill">Leer más</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Segunda Tarjeta -->
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 rounded">
+                    <div class="position-relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80" alt="Laboratorio de investigación médica" class="card-img-top" style="height: 200px; object-fit: cover; transition: transform 0.3s ease;">
+                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-0 hover-opacity" style="transition: opacity 0.3s;"></div>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary">Avances en medicina regenerativa</h5>
+                        <p class="card-text text-truncate" style="max-height: 3rem; overflow: hidden;">Nuestro equipo de investigación ha logrado importantes avances en el campo de la medicina regenerativa y terapias con células madre.</p>
+                        <a href="/news/regenerative-medicine" class="btn btn-outline-primary mt-auto rounded-pill">Leer más</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tercera Tarjeta -->
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 rounded">
+                    <div class="position-relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1464&q=80" alt="Médico con estetoscopio" class="card-img-top" style="height: 200px; object-fit: cover; transition: transform 0.3s ease;">
+                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-0 hover-opacity" style="transition: opacity 0.3s;"></div>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary">Campaña de prevención cardiovascular</h5>
+                        <p class="card-text text-truncate" style="max-height: 3rem; overflow: hidden;">Lanzamos una nueva campaña para concientizar sobre la importancia de la salud cardiovascular y prevenir enfermedades del corazón.</p>
+                        <a href="/news/heart-health-campaign" class="btn btn-outline-primary mt-auto rounded-pill">Leer más</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 

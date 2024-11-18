@@ -502,3 +502,19 @@ input[type="number"] {
 .bg-header-modal {
     background: linear-gradient(135deg, #1E3E62 0%, #2c3e50 100%);
 }
+
+/* Ajustes en pantallas pequeñas */
+@media (max-width: 768px) {
+    #calendar {
+        font-size: 0.85rem; /* Reduce el tamaño del texto */
+        padding: 10px;
+    }
+
+    .fc-toolbar-title {
+        font-size: 1.2rem; /* Ajusta el tamaño del título */
+    }
+
+    .fc-dayGridMonth-view, .fc-timeGridWeek-view, .fc-timeGridDay-view {
+        padding: 0 5px; /* Espaciado reducido */
+    }
+}

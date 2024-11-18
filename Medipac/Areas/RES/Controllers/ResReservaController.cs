@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Medipac.Areas.RES.Controllers
 {
     [Area("RES")]
-    [Authorize(Roles = "Paciente")]
     public class ResReservaController : Controller
     {
         private readonly IResReservaRepository resreserva;
