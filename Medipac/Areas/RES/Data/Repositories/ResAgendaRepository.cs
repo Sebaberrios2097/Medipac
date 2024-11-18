@@ -70,6 +70,7 @@ namespace Medipac.Data.Repositories
         {
             DateOnly fechaActual = DateOnly.FromDateTime(DateTime.Now);
             return await db.ResAgenda
+                .Include(a => a.IdMedicoNavigation)
                 .Where(a =>
                     a.IdMedico == medicoId &&
                     a.Fecha >= fechaActual &&

@@ -30,11 +30,17 @@ namespace Medipac.Areas.ADM.Controllers
             return PartialView(Query.Select(item => item.ToDto()).ToList());
         }
 
-        public async Task<ActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var Query = await admnoticias.GetById(id);
-            return View(Query.ToDto());
+            var noticia = await admnoticias.GetById(id);
+            if (noticia == null)
+            {
+                return NotFound();
+            }
+
+            return View(noticia.ToDto());
         }
+
 
         public ActionResult Create()
         {

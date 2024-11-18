@@ -106,7 +106,7 @@
                 console.log(data)
                 var options = '<option value="">Seleccione un médico...</option>';
                 data.forEach(function (medico) {
-                    options += `<option value="${medico.idMedico}">${medico.nombres}</option>`;
+                    options += `<option value="${medico.idMedico}">${medico.nombres} ${medico.apPaterno} ${medico.apMaterno}</option>`;
                 });
                 $('#MedicoId').html(options).prop('disabled', false);
             });
@@ -168,13 +168,14 @@
             },
             eventClick: function(info) {
                 // Obtener información del evento
+                const especialidadId = $('#EspecialidadId').val();;
                 const agendaId = info.event.id;
                 const fechaHoraReserva = info.event.start.toLocaleString(); // Ajustar el formato según prefieras
-
+                console.log(info)
                 // Mostrar SweetAlert2 para confirmar la reserva
                 Swal.fire({
                     title: '<strong>¿Desea confirmar la reserva?</strong>',
-                    html: `<p><i class="bi bi-person-circle"></i> Médico: ${info.event.title}</p>
+                    html: `<p><i class="bi bi-person-circle"></i> Médico: ${info.event.extendedProps.medico}</p>
                            <p><i class="bi bi-calendar-event"></i> Fecha y Hora: ${fechaHoraReserva}</p>`,
                     icon: 'info',
                     showCancelButton: true,
@@ -192,7 +193,8 @@
                             url: '@Url.Action("ConfirmReservation", "ResReserva", new { area = "RES" })',
                             type: 'POST',
                             data: {
-                                agendaId: agendaId
+                                agendaId: agendaId,
+                                especialidadId : especialidadId
                             },
                             success: function(response) {
                                 // Mostrar mensaje de éxito

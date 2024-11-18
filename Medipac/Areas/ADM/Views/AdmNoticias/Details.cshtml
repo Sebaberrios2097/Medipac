@@ -1,0 +1,58 @@
+﻿@model Medipac.Areas.ADM.Data.DTO.DtoNoticias
+
+@{
+    ViewData["Title"] = Model.Titulo;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .container img {
+        margin-bottom: 20px;
+    }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .img-predefinida {
+        height: 300px;
+        width: 100%;
+        object-fit: cover; 
+        object-position: center; 
+        border-radius: 10px;
+    }
+
+
+
+
+
+</style>
+
+<div class="container mt-5">
+    <!-- Título de la Noticia -->
+    <div class="text-center mb-4">
+        <h1 class="display-4">@Model.Titulo</h1>
+        @if (!string.IsNullOrEmpty(Model.Subtitulo))
+        {
+            <h3 class="text-muted">@Model.Subtitulo</h3>
+        }
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.UrlImagen))
+    {
+        <div class="text-center mb-4">
+            <img src="@Model.UrlImagen" class="img-fluid rounded shadow img-predefinida" alt="Imagen de la noticia">
+        </div>
+    }
+
+
+    <!-- Contenido de la Noticia -->
+    <div class="mb-4">
+        @Html.Raw(Model.Contenido)
+    </div>
+</div>

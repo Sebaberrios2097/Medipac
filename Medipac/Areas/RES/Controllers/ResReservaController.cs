@@ -17,17 +17,20 @@ namespace Medipac.Areas.RES.Controllers
         private readonly IResAgendaRepository resagenda;
         private readonly UserManager<ComUsuario> userManager;
         private readonly ICliPacientesRepository clipacientes;
+        private readonly IResEspecialidadesRepository resespecialidades;
 
 
         public ResReservaController(IResReservaRepository resreserva,
                                     IResAgendaRepository resagenda,
                                     UserManager<ComUsuario> userManager,
-                                    ICliPacientesRepository clipacientes)
+                                    ICliPacientesRepository clipacientes,
+                                    IResEspecialidadesRepository resespecialidades)
         {
             this.resreserva = resreserva;
             this.resagenda = resagenda;
             this.userManager = userManager;
             this.clipacientes = clipacientes;
+            this.resespecialidades = resespecialidades;
         }
 
         public async Task<ActionResult> Index()
@@ -71,7 +74,7 @@ namespace Medipac.Areas.RES.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConfirmReservation(int agendaId)
+        public async Task<IActionResult> ConfirmReservation(int agendaId, int especialidadId)
         {
             // Obtener la disponibilidad del médico (ResAgenda) según el agendaId
             var agenda = await resagenda.GetById(agendaId);
@@ -96,10 +99,13 @@ namespace Medipac.Areas.RES.Controllers
             await resreserva.Add(nuevaReserva);
             var result = await resreserva.Save();
 
+            var especialidad = await resespecialidades.GetById(especialidadId);
+
             // Si la reserva se guarda correctamente, actualizamos la agenda para marcarla como no disponible
             if (result > 0)
             {
                 agenda.Disponible = false; // Marcar la franja como no disponible
+                agenda.Descripcion = $"Reserva para {especialidad.Nombre} solicitada por {paciente.ApPaterno} {paciente.ApMaterno} {paciente.Nombres}";
                 resagenda.Update(agenda);
                 await resagenda.Save();
 
@@ -113,7 +119,7 @@ namespace Medipac.Areas.RES.Controllers
         public async Task<JsonResult> GetMedicosPorEspecialidad(int especialidadId)
         {
             var medicos = await resreserva.GetMedicosByEspecialidad(especialidadId);
-            return Json(medicos.Select(m => new { m.IdMedico, m.Nombres }));
+            return Json(medicos.Select(m => new { m.IdMedico, m.Nombres, m.ApPaterno, m.ApMaterno }));
         }
 
         [HttpGet]
@@ -125,6 +131,7 @@ namespace Medipac.Areas.RES.Controllers
             {
                 id = d.IdAgenda,
                 title = d.Descripcion ?? "Disponible",
+                medico = d.IdMedicoNavigation.Nombres,
                 start = new DateTime(d.Fecha.Year, d.Fecha.Month, d.Fecha.Day, d.HoraInicio / 100, d.HoraInicio % 100, 0).ToString("s"),
                 end = new DateTime(d.Fecha.Year, d.Fecha.Month, d.Fecha.Day, d.HoraFin / 100, d.HoraFin % 100, 0).ToString("s"),
                 allDay = false
@@ -180,5 +187,39 @@ namespace Medipac.Areas.RES.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        public IActionResult ReservasMedico()
+        {
+            ViewData["ActivePage"] = "Reservas";
+            return View();
+        }
+
+        public IActionResult ReservasPaciente()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetReservasPorMedico(int medicoId)
+        {
+            var reservas = await resreserva.GetByMedicoId(medicoId);
+
+            if (reservas == null)
+            {
+                return Json(new List<object>()); // Retornar un array vacío si no hay reservas
+            }
+
+            var eventos = reservas.Select(r => new
+            {
+                id = r.IdReserva.ToString(),
+                title = $"{r.IdPacienteNavigation.Nombres} {r.IdPacienteNavigation.ApPaterno} {r.IdPacienteNavigation.ApMaterno}",
+                start = r.Fecha.ToString("yyyy-MM-ddTHH:mm:ss"),
+                end = r.Fecha.AddMinutes(30).ToString("yyyy-MM-ddTHH:mm:ss"),
+                description = $"Reserva con {r.IdPacienteNavigation.Nombres}"
+            });
+
+            return Json(eventos);
+        }
+
+
     }
 }

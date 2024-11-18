@@ -17,6 +17,10 @@ namespace Medipac.Data.ADM.Interfaces
         {
             return await db.AdmNoticias.ToListAsync();
         }
+        public async Task<List<AdmNoticias>> GetAllActive()
+        {
+            return await db.AdmNoticias.Where(c => c.Activo).ToListAsync();
+        }
 
         public async Task<AdmNoticias> GetById(int id) => await db.AdmNoticias.FirstOrDefaultAsync(a => a.IdNoticia == id) ?? new AdmNoticias();
 

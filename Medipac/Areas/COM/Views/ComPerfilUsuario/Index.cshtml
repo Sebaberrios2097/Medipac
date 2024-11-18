@@ -1,0 +1,131 @@
+﻿@model Medipac.Areas.COM.Models.PerfilUsuarioViewModel
+
+@{
+    ViewData["Tittle"] = "Perfil de Usuario";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+
+<div class="container my-5">
+    <div class="row">
+        <!-- Encabezado -->
+        <div class="col-12 mb-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <h1 class="text-primary"><i class="fas fa-user-circle me-2"></i> Perfil de Usuario</h1>
+                <a href="/" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Volver
+                </a>
+            </div>
+        </div>
+
+        <!-- Información General -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 rounded mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5><i class="fas fa-info-circle me-2"></i> Información General</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Nombre de Usuario:</strong> <span class="text-muted">@Model.Usuario.UserName</span></p>
+                    <p><strong>Email:</strong> <span class="text-muted">@Model.Usuario.Email</span></p>
+                    <p><strong>Teléfono:</strong> <span class="text-muted">@(Model.Usuario.PhoneNumber ?? "No registrado")</span></p>
+                    <p><strong>Rol:</strong> <span class="badge bg-info">@Model.Rol</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información Adicional -->
+        <div class="col-md-8">
+            @if (Model.CliPacientes != null)
+            {
+                <div class="card shadow-lg border-0 rounded mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5><i class="fas fa-user me-2"></i> Información del Paciente</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Nombre:</strong> <span class="text-muted">@Model.CliPacientes.Nombres</span></p>
+                                <p><strong>RUT:</strong> <span class="text-muted">@Model.CliPacientes.Rut</span></p>
+                                <p><strong>Correo:</strong> <span class="text-muted">@Model.CliPacientes.Correo</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Apellidos:</strong> <span class="text-muted">@Model.CliPacientes.ApPaterno @Model.CliPacientes.ApMaterno</span></p>
+                                <p><strong>Teléfono:</strong> <span class="text-muted">@Model.CliPacientes.Fono</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (Model.CliMedico != null)
+            {
+                <div class="card shadow-lg border-0 rounded mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5><i class="fas fa-user-md me-2"></i> Información del Médico</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Nombre:</strong> <span class="text-muted">@Model.CliMedico.Nombres</span></p>
+                                <p><strong>RUT:</strong> <span class="text-muted">@Model.CliMedico.Rut</span></p>
+                                <p><strong>Correo:</strong> <span class="text-muted">@Model.CliMedico.Correo</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Apellidos:</strong> <span class="text-muted">@Model.CliMedico.ApPaterno @Model.CliMedico.ApMaterno</span></p>
+                                <p><strong>Teléfono:</strong> <span class="text-muted">@Model.CliMedico.Fono</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <!-- Información General -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 rounded mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5><i class="fas fa-info-circle me-2"></i> Información General</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateGeneralInfo" method="post">
+                        <div class="mb-3">
+                            <label for="Email" class="form-label"><strong>Email</strong></label>
+                            <input type="email" class="form-control" id="Email" name="Email" value="@Model.Usuario.Email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="PhoneNumber" class="form-label"><strong>Teléfono</strong></label>
+                            <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" value="@Model.Usuario.PhoneNumber">
+                        </div>
+                        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cambiar Contraseña -->
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded mb-4">
+                <div class="card-header bg-warning text-white">
+                    <h5><i class="fas fa-lock me-2"></i> Cambiar Contraseña</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="ChangePassword" method="post">
+                        <div class="mb-3">
+                            <label for="CurrentPassword" class="form-label"><strong>Contraseña Actual</strong></label>
+                            <input type="password" class="form-control" id="CurrentPassword" name="CurrentPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="NewPassword" class="form-label"><strong>Nueva Contraseña</strong></label>
+                            <input type="password" class="form-control" id="NewPassword" name="NewPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ConfirmPassword" class="form-label"><strong>Confirmar Nueva Contraseña</strong></label>
+                            <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning">Actualizar Contraseña</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

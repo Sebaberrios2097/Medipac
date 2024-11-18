@@ -22,6 +22,22 @@ namespace Medipac.Data.Repositories
         public async Task<ResReserva> GetById(int id) => await db.ResReserva
             .FirstOrDefaultAsync(a => a.IdReserva == id) ?? new ResReserva();
 
+        public async Task<List<ResReserva>> GetByMedicoId(int id)
+        {
+            return await db.ResReserva
+                .Include(a => a.IdMedicoNavigation)
+                .Include(a => a.IdPacienteNavigation)
+                .Where(a => a.IdMedico == id).ToListAsync();
+        }
+
+        public async Task<List<ResReserva>> GetByPacienteId(int id)
+        {
+            return await db.ResReserva
+                .Include(a => a.IdMedicoNavigation)
+                .Include(a => a.IdPacienteNavigation)
+                .Where(a => a.IdPaciente == id).ToListAsync();
+        }
+
         public async Task<ResReserva> Add(ResReserva resreserva)
         {
             _ = await db.ResReserva.AddAsync(resreserva);

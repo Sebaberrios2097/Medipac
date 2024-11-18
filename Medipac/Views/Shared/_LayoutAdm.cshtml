@@ -90,6 +90,11 @@
             <a href="/" class="navbar-logo text-white"><i class="bi bi-heart-pulse-fill me-1"></i> Centro Médico</a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
+                <li>
+                    <a asp-area="COM" asp-controller="ComPerfilUsuario" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "PerfilUsuario" ? "active" : "")">
+                        <i class="bi bi-person-circle me-2"></i> Mi Perfil
+                    </a>
+                </li>
                 
                 @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrador"))
                 {
@@ -130,13 +135,16 @@
                         <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover mt-2"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#collapse-medico"
-                                aria-expanded="@((ViewData["ActivePage"] as string) == "Agenda" ? "true" : "false")">
+                                aria-expanded="@((ViewData["ActivePage"] as string) == "Agenda" ||
+                                                 (ViewData["ActivePage"] as string) == "Reservas" ? "true" : "false")">
                             <i class="bi bi-newspaper" style="padding-right:10px"></i>
                             Médico
                         </button>
-                        <div class="collapse @((ViewData["ActivePage"] as string) == "Agenda" ? "show" : "" )" id="collapse-medico">
+                        <div class="collapse @((ViewData["ActivePage"] as string) == "Agenda" ||
+                                               (ViewData["ActivePage"] as string) == "Reservas" ? "show" : "" )" id="collapse-medico">
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                                 <li><a asp-area="RES" asp-controller="ResAgenda" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Agenda" ? "active" : "")">Agenda</a></li>
+                                <li><a asp-area="RES" asp-controller="ResReserva" asp-action="ReservasMedico" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Reservas" ? "active" : "")">Reservas</a></li>
                             </ul>
                         </div>
                     </li>
