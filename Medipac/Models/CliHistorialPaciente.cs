@@ -30,9 +30,6 @@ public partial class CliHistorialPaciente
     /// </summary>
     public bool Estado { get; set; }
 
-    [InverseProperty("IdHistorialPacienteNavigation")]
-    public virtual ICollection<CliRecetaPaciente> CliRecetaPaciente { get; set; } = new List<CliRecetaPaciente>();
-
     [ForeignKey("IdMedico")]
     [InverseProperty("CliHistorialPaciente")]
     public virtual CliMedico IdMedicoNavigation { get; set; } = null!;

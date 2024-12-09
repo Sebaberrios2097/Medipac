@@ -26,7 +26,6 @@ public partial class DbMedipac : IdentityDbContext<ComUsuario, IdentityRole<int>
 
     public virtual DbSet<CliPacientes> CliPacientes { get; set; }
 
-    public virtual DbSet<CliRecetaPaciente> CliRecetaPaciente { get; set; }
 
     public virtual DbSet<ComEstadosUsuario> ComEstadosUsuario { get; set; }
 
@@ -91,15 +90,6 @@ public partial class DbMedipac : IdentityDbContext<ComUsuario, IdentityRole<int>
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.CliPacientes)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CLI_Pacientes_COM_Usuario");
-        });
-
-        modelBuilder.Entity<CliRecetaPaciente>(entity =>
-        {
-            entity.Property(e => e.Estado).HasComment("Columna que representa el borrado lógico del registro.");
-
-            entity.HasOne(d => d.IdHistorialPacienteNavigation).WithMany(p => p.CliRecetaPaciente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CLI_Receta_Paciente_CLI_Historial_Paciente");
         });
 
         modelBuilder.Entity<ComEstadosUsuario>(entity =>

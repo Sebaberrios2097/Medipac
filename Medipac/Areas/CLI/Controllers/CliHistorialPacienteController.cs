@@ -1,5 +1,6 @@
 using Medipac.Areas.CLI.Data.DTO;
 using Medipac.Areas.CLI.Data.Interfaces;
+using Medipac.Models;
 using Medipac.ReadOnly.DtoTransformation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,25 +29,47 @@ namespace Medipac.Areas.CLI.Controllers
             return View(Query.ToDto());
         }
 
-        public ActionResult Create()
-        {
-            return View();
-        }
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(DtoCliHistorialPaciente Dto)
+        public async Task<JsonResult> CrearHistorialMedico(int idMedico, int idPaciente)
         {
-            var Query = await clihistorialpaciente.Add(Dto.ToOriginal());
-            var Result = await clihistorialpaciente.Save();
-
-            if (Result > 0)
+            try
             {
-                return RedirectToAction(nameof(Index));
-            }
+                // Verificar si ya existe un historial médico para este médico y paciente
+                var historialExistente = await clihistorialpaciente.GetHistorialByIdMedicoYPaciente(idMedico, idPaciente);
 
-            return View(Query.ToDto());
+                if (historialExistente != null)
+                {
+                    return Json(new { success = false, message = "El historial médico ya existe para este médico y paciente." });
+                }
+
+                // Crear un nuevo historial médico
+                var nuevoHistorial = new CliHistorialPaciente
+                {
+                    IdMedico = idMedico,
+                    IdPaciente = idPaciente,
+                    FechaHistorial = DateTime.Now,
+                    FechaCreacion = DateTime.Now,
+                    Historial = "",
+                    Estado = true
+                };
+
+                await clihistorialpaciente.Add(nuevoHistorial);
+                var result = await clihistorialpaciente.Save();
+
+                if (result > 0)
+                {
+                    return Json(new { success = true, message = "Historial médico creado correctamente." });
+                }
+
+                return Json(new { success = false, message = "No se pudo crear el historial médico. Intente de nuevo." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Ocurrió un error al crear el historial médico.", error = ex.Message });
+            }
         }
+
+
 
         public async Task<IActionResult> Edit(int id)
         {

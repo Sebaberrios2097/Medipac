@@ -30,6 +30,7 @@ namespace Medipac.Areas.ADM.Controllers
             return PartialView(Query.Select(item => item.ToDto()).ToList());
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
             var noticia = await admnoticias.GetById(id);

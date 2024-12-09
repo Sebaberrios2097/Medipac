@@ -20,7 +20,6 @@ namespace Medipac.Framework
             _ = services.AddScoped<ICliHistorialPacienteRepository, CliHistorialPacienteRepository>();
             _ = services.AddScoped<ICliPacientesRepository, CliPacientesRepository>();
             _ = services.AddScoped<ICliMedicoRepository, CliMedicoRepository>();
-            _ = services.AddScoped<ICliRecetaPacienteRepository, CliRecetaPacienteRepository>();
             _ = services.AddScoped<IComEstadosUsuarioRepository, ComEstadosUsuarioRepository>();
             _ = services.AddScoped<IAdmNoticiasRepository, AdmNoticiasRepository>();
             _ = services.AddScoped<IAdmCarruselNoticiasRepository, AdmCarruselNoticiasRepository>();

@@ -17,6 +17,7 @@ namespace Medipac.Areas.RES.Controllers
         private readonly IResAgendaRepository resagenda;
         private readonly UserManager<ComUsuario> userManager;
         private readonly ICliPacientesRepository clipacientes;
+        private readonly ICliMedicoRepository climedicos;
         private readonly IResEspecialidadesRepository resespecialidades;
 
 
@@ -24,13 +25,15 @@ namespace Medipac.Areas.RES.Controllers
                                     IResAgendaRepository resagenda,
                                     UserManager<ComUsuario> userManager,
                                     ICliPacientesRepository clipacientes,
-                                    IResEspecialidadesRepository resespecialidades)
+                                    IResEspecialidadesRepository resespecialidades,
+                                    ICliMedicoRepository climedicos)
         {
             this.resreserva = resreserva;
             this.resagenda = resagenda;
             this.userManager = userManager;
             this.clipacientes = clipacientes;
             this.resespecialidades = resespecialidades;
+            this.climedicos = climedicos;
         }
 
         public async Task<ActionResult> Index()
@@ -187,9 +190,12 @@ namespace Medipac.Areas.RES.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult ReservasMedico()
+        public async Task<IActionResult> ReservasMedico()
         {
             ViewData["ActivePage"] = "Reservas";
+            var userId = userManager.GetUserId(User);
+            var medico = await climedicos.GetByUserId(userId);
+            ViewData["IdMedico"] = medico.IdMedico;
             return View();
         }
 
@@ -214,7 +220,8 @@ namespace Medipac.Areas.RES.Controllers
                 title = $"{r.IdPacienteNavigation.Nombres} {r.IdPacienteNavigation.ApPaterno} {r.IdPacienteNavigation.ApMaterno}",
                 start = r.Fecha.ToString("yyyy-MM-ddTHH:mm:ss"),
                 end = r.Fecha.AddMinutes(30).ToString("yyyy-MM-ddTHH:mm:ss"),
-                description = $"Reserva con {r.IdPacienteNavigation.Nombres}"
+                description = $"Reserva con {r.IdPacienteNavigation.Nombres}",
+                IdPaciente = r.IdPaciente
             });
 
             return Json(eventos);

@@ -45,6 +45,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
+        var medicoId = '@ViewData["IdMedico"]';
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
@@ -54,7 +55,7 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
-            events: '/RES/ResReserva/GetReservasPorMedico?medicoId=1',
+            events: `/RES/ResReserva/GetReservasPorMedico?medicoId=${medicoId}`,
             eventDisplay: 'block',
             eventColor: '#28a745',
             eventTextColor: '#ffffff',
@@ -79,7 +80,43 @@
             },
 
             eventClick: function (info) {
-                alert('Detalles de la Reserva:\n' + info.event.extendedProps.description);
+                const urlCrearHistorial = '@Url.Action("CrearHistorialMedico", "CliHistorialPaciente", new { area = "CLI" })';
+                Swal.fire({
+                    title: 'Detalles de la Reserva',
+                    html: `
+                        <p><strong>Fecha:</strong> ${info.event.start.toLocaleDateString()}</p>
+                        <p><strong>Hora:</strong> ${info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        <p><strong>Descripción:</strong> ${info.event.extendedProps.description || 'No hay descripción disponible.'}</p>
+                        <p><strong>Id Paciente:</strong> ${info.event.extendedProps.idPaciente || 'No hay ID disponible.'}</p>
+                    `,
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: 'Crear Ficha Médica',
+                    cancelButtonText: 'Cerrar',
+                    focusConfirm: false,
+                    focusCancel: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: urlCrearHistorial,
+                            type: 'POST',
+                            data: {
+                                idMedico: medicoId,
+                                idPaciente: info.event.extendedProps.idPaciente
+                            },
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire('¡Éxito!', response.message, 'success');
+                                } else {
+                                    Swal.fire('Error', response.message, 'error');
+                                }
+                            },
+                            error: function () {
+                                Swal.fire('Error', 'No se pudo crear el historial médico. Intenta nuevamente.', 'error');
+                            }
+                        });
+                    }
+                });
             }
         });
 

@@ -19,6 +19,11 @@ namespace Medipac.Data.Repositories
             return await db.CliHistorialPaciente.ToListAsync();
         }
 
+        public async Task<CliHistorialPaciente> GetHistorialByIdMedicoYPaciente(int idMedico, int idPaciente)
+        {
+            return await db.CliHistorialPaciente.FirstOrDefaultAsync(h => h.IdMedico == idMedico && h.IdPaciente == idPaciente);
+        }
+
         public async Task<CliHistorialPaciente> GetById(int id) => await db.CliHistorialPaciente
             .FirstOrDefaultAsync(a => a.IdHistorialPaciente == id) ?? new CliHistorialPaciente();
 

@@ -100,27 +100,5 @@ namespace Medipac.ReadOnly.DtoTransformation
                 Estado = dto.Estado
             };
         }
-
-        // Conversión modelo CliRecetaPaciente
-        public static DtoCliRecetaPaciente ToDto(this CliRecetaPaciente original)
-        {
-            return new()
-            {
-                IdHistorialPaciente = original.IdHistorialPaciente,
-                IdRecetaPaciente = original.IdRecetaPaciente,
-                Receta = original.Receta,
-                Estado = original.Estado
-            };
-        }
-        public static CliRecetaPaciente ToOriginal(this DtoCliRecetaPaciente dto)
-        {
-            return new()
-            {
-                IdHistorialPaciente = dto.IdHistorialPaciente,
-                IdRecetaPaciente = dto.IdRecetaPaciente,
-                Receta = dto.Receta,
-                Estado = dto.Estado
-            };
-        }
     }
 }
