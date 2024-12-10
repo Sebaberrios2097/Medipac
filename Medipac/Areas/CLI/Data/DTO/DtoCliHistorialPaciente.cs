@@ -20,10 +20,8 @@ namespace Medipac.Areas.CLI.Data.DTO
         [Column("Fecha_Historial", TypeName = "datetime")]
         public DateTime FechaHistorial { get; set; }
         public bool Estado { get; set; }
-
-        internal CliHistorialPaciente ToOriginal()
-        {
-            throw new NotImplementedException();
-        }
+        
+        public CliPacientes? CliPacientes { get; set; }
+        public CliMedico? CliMedico { get; set; }
     }
 }

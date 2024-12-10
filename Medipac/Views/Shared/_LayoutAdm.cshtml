@@ -5,12 +5,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Medipac</title>
-    
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" asp-append-version="true" />
+
+    <!-- FontAwesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css" asp-append-version="true" />
@@ -80,7 +84,6 @@
         @using Microsoft.AspNetCore.Identity
         @inject SignInManager<ComUsuario> SignInManager
         @inject UserManager<ComUsuario> UserManager
-        <!-- Botón para mostrar el sidebar en pantallas pequeñas -->
         <button class="navbar-toggler d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -95,15 +98,15 @@
                         <i class="bi bi-person-circle me-2"></i> Mi Perfil
                     </a>
                 </li>
-                
+
                 @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrador"))
                 {
                     <!-- Administración General -->
                     <li>
                         <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#collapse-admin"
-                                aria-expanded="@((ViewData["ActivePage"] as string) == "GestionarMedicos" ||
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-admin"
+                        aria-expanded="@((ViewData["ActivePage"] as string) == "GestionarMedicos" ||
                                  (ViewData["ActivePage"] as string) == "GestionarEspecialidades" ||
                                  (ViewData["ActivePage"] as string) == "GestionarRoles" ||
                                  (ViewData["ActivePage"] as string) == "GestionarSliders" ||
@@ -131,37 +134,47 @@
                 }
                 @if (SignInManager.IsSignedIn(User) && User.IsInRole("Medico"))
                 {
+                    string userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
                     <li>
                         <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover mt-2"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#collapse-medico"
                                 aria-expanded="@((ViewData["ActivePage"] as string) == "Agenda" ||
-                                                 (ViewData["ActivePage"] as string) == "Reservas" ? "true" : "false")">
+                                                 (ViewData["ActivePage"] as string) == "Reservas" ||
+                                                 (ViewData["ActivePage"] as string) == "Historiales" ? "true" : "false")">
                             <i class="bi bi-newspaper" style="padding-right:10px"></i>
                             Médico
                         </button>
                         <div class="collapse @((ViewData["ActivePage"] as string) == "Agenda" ||
-                                               (ViewData["ActivePage"] as string) == "Reservas" ? "show" : "" )" id="collapse-medico">
+                                               (ViewData["ActivePage"] as string) == "Reservas" ||
+                                               (ViewData["ActivePage"] as string) == "Historiales" ? "show" : "" )" id="collapse-medico">
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                                 <li><a asp-area="RES" asp-controller="ResAgenda" asp-action="Index" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Agenda" ? "active" : "")">Agenda</a></li>
                                 <li><a asp-area="RES" asp-controller="ResReserva" asp-action="ReservasMedico" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Reservas" ? "active" : "")">Reservas</a></li>
+                                <li><a asp-area="CLI" asp-controller="CliHistorialPaciente" asp-action="VerHistorialesMedico" asp-route-id="@userId" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Historiales" ? "active" : "")">Historiales Médicos</a></li>
                             </ul>
                         </div>
                     </li>
                 }
                 @if (SignInManager.IsSignedIn(User) && User.IsInRole("Paciente"))
                 {
+                    string userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
                     <li>
                         <button class="btn btn-toggle align-items-center rounded collapsed nav-link text-white nohover mt-2"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#collapse-medico"
-                                aria-expanded="@((ViewData["ActivePage"] as string) == "Agenda" ? "true" : "false")">
+                                aria-expanded="@((ViewData["ActivePage"] as string) == "Historiales" ||
+                                                 (ViewData["ActivePage"] as string) == "Reservas" ? "true" : "false")">
                             <i class="bi bi-newspaper" style="padding-right:10px"></i>
-                            Médico
+                            Historial Médico
                         </button>
-                        <div class="collapse @((ViewData["ActivePage"] as string) == "Agenda" ? "show" : "" )" id="collapse-medico">
+                        <div class="collapse @((ViewData["ActivePage"] as string) == "Historiales" ||
+                                               (ViewData["ActivePage"] as string) == "Reservas" ? "show" : "" )" id="collapse-medico">
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a asp-area="RES" asp-controller="ResReserva" asp-action="Create" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Agenda" ? "active" : "")">Agenda</a></li>
+                                <li><a asp-area="RES" asp-controller="ResReserva" asp-action="ReservasPaciente" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Reservas" ? "active" : "")">Reservas</a></li>
+                                <li><a asp-area="CLI" asp-controller="CliHistorialPaciente" asp-action="VerHistorialesPaciente" asp-route-id="@userId" class="nav-link text-white @((ViewData["ActivePage"] as string) == "Historiales" ? "active" : "")">Fichas Médicas</a></li>
                             </ul>
                         </div>
                     </li>

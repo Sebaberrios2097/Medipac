@@ -9,7 +9,7 @@ namespace Medipac.ReadOnly.DtoTransformation
         // Conversión modelo CliHistorialPaciente
         public static DtoCliHistorialPaciente ToDto(this CliHistorialPaciente original)
         {
-            return new()
+            var Query = new DtoCliHistorialPaciente()
             {
                 IdHistorialPaciente = original.IdHistorialPaciente,
                 IdMedico = original.IdMedico,
@@ -19,8 +19,20 @@ namespace Medipac.ReadOnly.DtoTransformation
                 FechaHistorial = original.FechaHistorial,
                 Historial = original.Historial,
             };
+
+            if (original.IdPacienteNavigation != null)
+            {
+                Query.CliMedico = original.IdMedicoNavigation;
+            }
+
+            if (original.IdMedicoNavigation != null)
+            {
+                Query.CliPacientes = original.IdPacienteNavigation;
+            }
+
+            return Query;
         }
-        public static CliHistorialPaciente ToDto(this DtoCliHistorialPaciente dto)
+        public static CliHistorialPaciente ToOriginal(this DtoCliHistorialPaciente dto)
         {
             return new()
             {

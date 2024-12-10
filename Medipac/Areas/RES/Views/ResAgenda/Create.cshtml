@@ -41,30 +41,39 @@
             </div>
         </div>
 
-        <!-- Selección de días de la semana -->
-        <div class="mb-3">
-            <label class="form-label">Días de la semana</label>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Monday" /> Lunes
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Tuesday" /> Martes
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Wednesday" /> Miércoles
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Thursday" /> Jueves
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Friday" /> Viernes
-            </div>
+        <!-- Opción para habilitar recurrencia -->
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="enableRecurrence" />
+            <label class="form-check-label" for="enableRecurrence">¿Habilitar recurrencia?</label>
         </div>
 
-        <!-- Fecha final de recurrencia -->
-        <div class="mb-3">
-            <label for="FechaFinRecurrente" class="form-label">Repetir hasta</label>
-            <input type="date" id="FechaFinRecurrente" name="FechaFinRecurrente" class="form-control" />
+        <!-- Opciones de recurrencia -->
+        <div id="recurrenceOptions" class="d-none">
+            <!-- Selección de días de la semana -->
+            <div class="mb-3">
+                <label class="form-label">Días de la semana</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Monday" /> Lunes
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Tuesday" /> Martes
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Wednesday" /> Miércoles
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Thursday" /> Jueves
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="DiasRecurrentes" value="Friday" /> Viernes
+                </div>
+            </div>
+
+            <!-- Fecha final de recurrencia -->
+            <div class="mb-3">
+                <label for="FechaFinRecurrente" class="form-label">Repetir hasta</label>
+                <input type="date" id="FechaFinRecurrente" name="FechaFinRecurrente" class="form-control" />
+            </div>
         </div>
 
         <div class="mb-3">
@@ -82,6 +91,15 @@
 
 <script>
     $(document).ready(function () {
+        // Mostrar/ocultar opciones de recurrencia según el estado del interruptor
+        $('#enableRecurrence').on('change', function () {
+            if ($(this).is(':checked')) {
+                $('#recurrenceOptions').removeClass('d-none');
+            } else {
+                $('#recurrenceOptions').addClass('d-none');
+            }
+        });
+
         $('#createForm').on('submit', function (e) {
             e.preventDefault();
 
@@ -90,9 +108,14 @@
             var horaFin = $('#HoraFinDisplay').val();
             var horaInicioInt = parseInt(horaInicio.replace(":", ""));
             var horaFinInt = parseInt(horaFin.replace(":", ""));
-            var diasRecurrentes = $('input[name="DiasRecurrentes"]:checked').map(function () {
-                return $(this).val();
-            }).get();
+            var diasRecurrentes = $('#enableRecurrence').is(':checked') 
+                ? $('input[name="DiasRecurrentes"]:checked').map(function () {
+                    return $(this).val();
+                }).get() 
+                : [];
+            var fechaFinRecurrente = $('#enableRecurrence').is(':checked') 
+                ? $('#FechaFinRecurrente').val() 
+                : null;
 
             $.ajax({
                 url: '@Url.Action("CreateRecurring", "ResAgenda", new { area = "RES" })',
@@ -105,14 +128,14 @@
                     Descripcion: $('#Descripcion').val(),
                     Disponible: $('#Disponible').is(':checked'),
                     DiasRecurrentes: diasRecurrentes,
-                    FechaFinRecurrente: $('#FechaFinRecurrente').val()
+                    FechaFinRecurrente: fechaFinRecurrente
                 },
                 success: function (response) {
                     if (response.success) {
                         $('#Mdl_General').modal('hide');
                         Swal.fire({
-                            title: '¡Disponibilidad Recurrente Creada!',
-                            text: 'La disponibilidad recurrente se ha creado exitosamente.',
+                            title: '¡Disponibilidad Creada!',
+                            text: 'La disponibilidad se ha creado exitosamente.',
                             icon: 'success',
                             confirmButtonText: 'Aceptar'
                         }).then((result) => {
@@ -122,8 +145,8 @@
                         });
                     } else {
                         Swal.fire({
-                            title: 'Conflicto de Horario',
-                            html: response.message, // Usa HTML para mostrar los mensajes con <br/>
+                            title: 'Error',
+                            html: response.message,
                             icon: 'error',
                             confirmButtonText: 'Cerrar'
                         });

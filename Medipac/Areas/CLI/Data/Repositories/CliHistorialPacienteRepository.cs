@@ -1,6 +1,7 @@
 using Medipac.Areas.CLI.Data.Interfaces;
 using Medipac.Context;
 using Medipac.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Medipac.Data.Repositories
@@ -19,12 +20,32 @@ namespace Medipac.Data.Repositories
             return await db.CliHistorialPaciente.ToListAsync();
         }
 
+        public async Task<List<CliHistorialPaciente>> GetHistorialesPorMedico(int idMedico)
+        {
+            return await db.CliHistorialPaciente
+                .Where(h => h.IdMedico == idMedico)
+                .Include(m => m.IdMedicoNavigation)
+                .Include(p => p.IdPacienteNavigation)
+                .ToListAsync();
+        }
+
+        public async Task<List<CliHistorialPaciente>> GetHistorialesPorPaciente(int idPaciente)
+        {
+            return await db.CliHistorialPaciente
+                .Where(h => h.IdPaciente == idPaciente && h.Estado == true)
+                .Include(m => m.IdMedicoNavigation)
+                .Include(p => p.IdPacienteNavigation)
+                .ToListAsync();
+        }
+
         public async Task<CliHistorialPaciente> GetHistorialByIdMedicoYPaciente(int idMedico, int idPaciente)
         {
             return await db.CliHistorialPaciente.FirstOrDefaultAsync(h => h.IdMedico == idMedico && h.IdPaciente == idPaciente);
         }
 
         public async Task<CliHistorialPaciente> GetById(int id) => await db.CliHistorialPaciente
+            .Include(p => p.IdPacienteNavigation)
+            .Include(m => m.IdMedicoNavigation)
             .FirstOrDefaultAsync(a => a.IdHistorialPaciente == id) ?? new CliHistorialPaciente();
 
         public async Task<CliHistorialPaciente> Add(CliHistorialPaciente clihistorialpaciente)

@@ -87,7 +87,6 @@
                         <p><strong>Fecha:</strong> ${info.event.start.toLocaleDateString()}</p>
                         <p><strong>Hora:</strong> ${info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                         <p><strong>Descripción:</strong> ${info.event.extendedProps.description || 'No hay descripción disponible.'}</p>
-                        <p><strong>Id Paciente:</strong> ${info.event.extendedProps.idPaciente || 'No hay ID disponible.'}</p>
                     `,
                     icon: 'info',
                     showCancelButton: true,
@@ -97,6 +96,7 @@
                     focusCancel: false
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        // Primera solicitud al servidor
                         $.ajax({
                             url: urlCrearHistorial,
                             type: 'POST',
@@ -106,8 +106,45 @@
                             },
                             success: function (response) {
                                 if (response.success) {
+                                    // Historial creado correctamente
                                     Swal.fire('¡Éxito!', response.message, 'success');
+                                } else if (response.confirmar) {
+                                    // El servidor pide confirmación para crear otro historial
+                                    Swal.fire({
+                                        title: 'Confirmación',
+                                        text: response.message,
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Sí, crear',
+                                        cancelButtonText: 'Cancelar',
+                                        focusConfirm: false,
+                                        focusCancel: false
+                                    }).then((confirmResult) => {
+                                        if (confirmResult.isConfirmed) {
+                                            // Enviar segunda solicitud con confirmación
+                                            $.ajax({
+                                                url: urlCrearHistorial,
+                                                type: 'POST',
+                                                data: {
+                                                    idMedico: medicoId,
+                                                    idPaciente: info.event.extendedProps.idPaciente,
+                                                    confirmarCreacion: true // Indicar que se confirma la creación
+                                                },
+                                                success: function (confirmResponse) {
+                                                    if (confirmResponse.success) {
+                                                        Swal.fire('¡Éxito!', confirmResponse.message, 'success');
+                                                    } else {
+                                                        Swal.fire('Error', confirmResponse.message, 'error');
+                                                    }
+                                                },
+                                                error: function () {
+                                                    Swal.fire('Error', 'No se pudo crear el historial médico. Intenta nuevamente.', 'error');
+                                                }
+                                            });
+                                        }
+                                    });
                                 } else {
+                                    // Otro tipo de error
                                     Swal.fire('Error', response.message, 'error');
                                 }
                             },
@@ -118,6 +155,7 @@
                     }
                 });
             }
+
         });
 
         calendar.render();

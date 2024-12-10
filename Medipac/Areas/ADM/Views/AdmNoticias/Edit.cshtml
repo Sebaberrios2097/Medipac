@@ -20,6 +20,7 @@
         <div class="card-body">
             @Html.AntiForgeryToken()
             @Html.HiddenFor(model => model.IdNoticia)
+            @Html.HiddenFor(model => model.IdUsuario)
 
             <div class="row mb-3">
                 <div class="form-group col-md-6">

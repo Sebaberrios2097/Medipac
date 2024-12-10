@@ -48,9 +48,10 @@ namespace Medipac.Areas.RES.Controllers
             return View(Query.ToDto());
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Especialidades = await resreserva.GetEspecialidades(); // Obtener lista de especialidades para dropdown
+            ViewBag.Especialidades = await resreserva.GetEspecialidades();
             return View();
         }
 
@@ -79,7 +80,6 @@ namespace Medipac.Areas.RES.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmReservation(int agendaId, int especialidadId)
         {
-            // Obtener la disponibilidad del médico (ResAgenda) según el agendaId
             var agenda = await resagenda.GetById(agendaId);
             if (agenda == null || !agenda.Disponible)
             {
@@ -199,8 +199,12 @@ namespace Medipac.Areas.RES.Controllers
             return View();
         }
 
-        public IActionResult ReservasPaciente()
+        public async Task<IActionResult> ReservasPaciente()
         {
+            ViewData["ActivePage"] = "Reservas";
+            var userId = userManager.GetUserId(User);
+            var paciente = await clipacientes.GetByUserId(userId);
+            ViewData["IdPaciente"] = paciente.IdPaciente;
             return View();
         }
 
@@ -222,6 +226,28 @@ namespace Medipac.Areas.RES.Controllers
                 end = r.Fecha.AddMinutes(30).ToString("yyyy-MM-ddTHH:mm:ss"),
                 description = $"Reserva con {r.IdPacienteNavigation.Nombres}",
                 IdPaciente = r.IdPaciente
+            });
+
+            return Json(eventos);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetReservasPorPaciente(int pacienteId)
+        {
+            var reservas = await resreserva.GetByPacienteId(pacienteId);
+
+            if (reservas == null)
+            {
+                return Json(new List<object>()); // Retornar un array vacío si no hay reservas
+            }
+
+            var eventos = reservas.Select(r => new
+            {
+                id = r.IdReserva.ToString(),
+                title = $"{r.IdMedicoNavigation.Nombres} {r.IdMedicoNavigation.ApPaterno} {r.IdMedicoNavigation.ApMaterno}",
+                start = r.Fecha.ToString("yyyy-MM-ddTHH:mm:ss"),
+                end = r.Fecha.AddMinutes(30).ToString("yyyy-MM-ddTHH:mm:ss"),
+                description = $"Reserva con {r.IdMedicoNavigation.Nombres} {r.IdMedicoNavigation.ApPaterno} {r.IdMedicoNavigation.ApMaterno}"
             });
 
             return Json(eventos);

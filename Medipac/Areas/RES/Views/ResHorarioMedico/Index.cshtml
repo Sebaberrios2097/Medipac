@@ -3,6 +3,20 @@
 @{
     ViewData["Title"] = "Horario Médico";
     Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+
+    var diasSemana = new Dictionary<int, string>
+    {
+        { 1, "Lunes" },
+        { 2, "Martes" },
+        { 3, "Miércoles" },
+        { 4, "Jueves" },
+        { 5, "Viernes" },
+        { 6, "Sábado" },
+        { 7, "Domingo" }
+    };
+
+    // Ordenar el modelo por el número del día de la semana
+    var horariosOrdenados = Model.OrderBy(horario => horario.DiaSemana);
 }
 
 <h1 class="mt-3 text-center display-4">@ViewData["Title"]</h1>
@@ -26,12 +40,18 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var horario in Model)
+                @foreach (var horario in horariosOrdenados)
                 {
                     <tr>
-                        <td class="text-center">@horario.DiaSemana</td>
-                        <td class="text-center">@((horario.HoraInicio / 100)):@((horario.HoraInicio % 100))</td>
-                        <td class="text-center">@((horario.HoraFin / 100)):@((horario.HoraFin % 100))</td>
+                        <td class="text-center">
+                            @(diasSemana.ContainsKey(horario.DiaSemana) ? diasSemana[horario.DiaSemana] : "Día desconocido")
+                        </td>
+                        <td class="text-center">
+                            @string.Format("{0:D2}:{1:D2}", horario.HoraInicio / 100, horario.HoraInicio % 100)
+                        </td>
+                        <td class="text-center">
+                            @string.Format("{0:D2}:{1:D2}", horario.HoraFin / 100, horario.HoraFin % 100)
+                        </td>
                         <td class="text-center">
                             <a href="javascript:void(0);"
                                onclick="ModalGeneral('Editar Horario', '@Url.Action("Edit", "ResHorarioMedico", new { id = @horario.IdHorario })');"
@@ -60,8 +80,3 @@
         language: {
             url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-CL.json',
         },
-    });
-    $("#BtnAgregarHorario").click(function () {
-        ModalGeneral('Crear Horario', '@Url.Action("Create", "ResHorarioMedico")');
-    });
-</script>

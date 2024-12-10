@@ -1,5 +1,100 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<dynamic>
+
 @{
+    ViewData["Title"] = "Mis Reservas";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
 }
+
+<div class="container-fluid">
+    <div class="card titAgenda">
+        <div class="card-header text-center">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <!-- Contenedor del calendario con reservas -->
+    <div id="calendarContainer" class="mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="fs-4">Calendario de Reservas</h2>
+        </div>
+        <div id="calendar"></div>
+    </div>
+</div>
+
+<style>
+    #calendarContainer {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .fc-event {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    .fc-day-today {
+        background-color: #e9f5ff;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var pacienteId = '@ViewData["IdPaciente"]';
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'es',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: `/RES/ResReserva/GetReservasPorPaciente?pacienteId=${pacienteId}`,
+            eventDisplay: 'block',
+            eventColor: '#28a745',
+            eventTextColor: '#ffffff',
+            dayMaxEvents: true,
+            height: 'auto',
+            contentHeight: 'auto',
+            expandRows: true,
+
+            eventContent: function (arg) {
+                var startTime = arg.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                var endTime = arg.event.end ? arg.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
+
+                let eventTitle = document.createElement('div');
+                eventTitle.innerHTML = `<b>${startTime} - ${endTime}</b><br>${arg.event.title}`;
+                return { domNodes: [eventTitle] };
+            },
+
+            eventDidMount: function (arg) {
+                if (arg.event.extendedProps.description) {
+                    arg.el.setAttribute('title', arg.event.extendedProps.description);
+                }
+            },
+
+            eventClick: function (info) {
+                Swal.fire({
+                    title: 'Detalles de la Reserva',
+                    html: `
+                        <p><strong>Fecha:</strong> ${info.event.start.toLocaleDateString()}</p>
+                        <p><strong>Hora:</strong> ${info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        <p><strong>Descripción:</strong> ${info.event.extendedProps.description || 'No hay descripción disponible.'}</p>
+                    `,
+                    icon: 'info',
+                    confirmButtonText: 'Cerrar',
+                    focusConfirm: true
+                });
+            }
+
+        });
+
+        calendar.render();
+    });
+</script>

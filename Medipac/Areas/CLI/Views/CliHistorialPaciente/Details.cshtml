@@ -1,0 +1,55 @@
+﻿@model Medipac.Areas.CLI.Data.DTO.DtoCliHistorialPaciente
+
+@{
+    ViewData["Title"] = "Detalles de Ficha Médica";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+    var nombreMedico = $"{Model.CliMedico.Nombres} {Model.CliMedico.ApPaterno} {Model.CliMedico.ApMaterno}";
+}
+
+<h1 class="mt-3 text-center display-4">@ViewData["Title"]</h1>
+<hr />
+
+<div class="card shadow-lg">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Detalles de la Ficha</h5>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="form-group col-md-6">
+                <label class="form-label">Nombre Médico</label>
+                <input class="form-control" type="text" value="@nombreMedico" disabled />
+            </div>
+            <div class="form-group col-md-6">
+                <label class="form-label">Fecha Creación Ficha</label>
+                <input class="form-control" type="text" value="@Model.FechaCreacion" disabled />
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Historial" class="form-label">Descripción</label>
+            <textarea class="form-control" id="tinyReadonly" rows="10" readonly>@Model.Historial</textarea>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a href="@Url.Action("VerHistorialesPaciente", "CliHistorialPaciente", new { area = "CLI", id = @ViewData["IdUsuario"] })" class="btn btn-primary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+    </div>
+    <div class="card-footer text-muted text-center">
+        Visualice los detalles de la ficha.
+    </div>
+</div>
+
+<script>
+    tinymce.init({
+        selector: '#tinyReadonly',
+        language: 'es',
+        readonly: true,
+        menubar: false, // Oculta la barra de menús
+        toolbar: false, // Oculta la barra de herramientas
+        plugins: [], // No carga plugins
+        content_css: false, // Usa el estilo predeterminado del navegador
+        height: 200 // Define la altura fija del campo
+    });
+</script>
